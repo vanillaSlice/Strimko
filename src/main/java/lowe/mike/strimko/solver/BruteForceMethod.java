@@ -1,6 +1,6 @@
 package lowe.mike.strimko.solver;
 
-import java.util.List;
+import java.util.Set;
 
 import lowe.mike.strimko.model.Cell;
 import lowe.mike.strimko.model.Difficulty;
@@ -29,10 +29,10 @@ final class BruteForceMethod {
 	 * @param grid
 	 *            the {@link Grid} to run method over
 	 * @param hints
-	 *            the {@link List} of hints to update
+	 *            the {@link Set} of hints to update
 	 * @return the {@link Result} of running the brute-force method
 	 */
-	static Result run(Grid grid, List<Position> hints) {
+	static Result run(Grid grid, Set<Position> hints) {
 		// used to keep note of information when running algorithm
 		Note note = new Note();
 
@@ -51,7 +51,7 @@ final class BruteForceMethod {
 	private static boolean runMethod(Grid grid, Note note) {
 		int size = grid.getSize();
 
-		for (List<Cell> row : grid.getRows()) {
+		for (Set<Cell> row : grid.getRows()) {
 			for (Cell cell : row) {
 
 				// only interested in cells that haven't been set yet
@@ -70,6 +70,7 @@ final class BruteForceMethod {
 						// we can try out this number
 						if (cell.getPossibleNumbers().contains(number)) {
 							cell.setNumber(number);
+							grid.updatePossibleNumbers();
 
 							// recursively call to see if cells after this can
 							// be set
@@ -83,6 +84,8 @@ final class BruteForceMethod {
 									note.solution = new Grid(grid);
 									// make sure we clear the number
 									cell.clearNumber();
+									grid.resetPossibleNumbers();
+									grid.updatePossibleNumbers();
 									return false;
 								}
 
@@ -93,6 +96,8 @@ final class BruteForceMethod {
 							}
 							// not this number, so clear it and try the next one
 							cell.clearNumber();
+							grid.resetPossibleNumbers();
+							grid.updatePossibleNumbers();
 						}
 					}
 					return false;

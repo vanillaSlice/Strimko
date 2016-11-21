@@ -3,10 +3,8 @@ package lowe.mike.strimko.solver;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 import org.junit.Test;
 
@@ -17,27 +15,26 @@ import lowe.mike.strimko.model.Position;
  * @author Mike Lowe
  */
 public final class NakedSingleMethodTest {
-	private static final Grid present;
+	private static final Grid GRID;
 
 	static {
-		int size = 4;
-		int[][] streams = new int[][] { { 1, 1, 2, 2 }, { 2, 2, 1, 1 }, { 3, 3, 4, 4 }, { 4, 4, 3, 3 } };
-		Map<Position, Integer> lockedNumbers = new HashMap<>();
-		lockedNumbers.put(new Position(1, 1, 2), 4);
-		lockedNumbers.put(new Position(1, 3, 1), 2);
-		lockedNumbers.put(new Position(2, 1, 3), 3);
-		lockedNumbers.put(new Position(2, 3, 4), 1);
+		int gridSize = 4;
+		int[][] gridStreams = new int[][] { { 1, 1, 2, 2 }, { 2, 2, 1, 1 }, { 3, 3, 4, 4 }, { 4, 4, 3, 3 } };
+		int[][] gridLockedNumbers = { { 0, 0, 0, 0 }, { 0, 4, 0, 2 }, { 0, 3, 0, 1 }, { 0, 0, 0, 0 } };
 
-		present = new Grid(size, streams, lockedNumbers);
+		GRID = new Grid(gridSize);
+		GRID.initStreams(gridStreams);
+		GRID.initLockedNumbers(gridLockedNumbers);
+		GRID.updatePossibleNumbers();
 	}
 
 	@Test
 	public void nakedSingleTest() {
-		List<Position> hints = new ArrayList<>();
-		boolean changed = NakedSingleMethod.run(present, hints);
+		Set<Position> hints = new LinkedHashSet<>();
+		boolean changed = NakedSingleMethod.run(GRID, hints);
 		assertTrue(changed);
-		Position changedPosition = new Position(0, 1, 1);
-		assertEquals(1, present.getCell(changedPosition).getNumber());
+		Position changedPosition = new Position(0, 1);
+		assertEquals(1, GRID.getCell(changedPosition).getNumber());
 		assertTrue(hints.contains(changedPosition));
 	}
 }

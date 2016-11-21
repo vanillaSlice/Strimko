@@ -1,7 +1,7 @@
 package lowe.mike.strimko.solver;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 import lowe.mike.strimko.model.Difficulty;
 import lowe.mike.strimko.model.Grid;
@@ -16,7 +16,14 @@ import lowe.mike.strimko.model.Position;
  * <ul>
  * <li>'Naked Singles'</li>
  * <li>'Hidden Singles'</li>
- * 
+ * <li>'Pointing Pairs'</li>
+ * <li>'Pointing Triples'</li>
+ * <li>'Naked Pairs'</li>
+ * <li>'Naked Triples'</li>
+ * <li>'Naked Quads'</li>
+ * <li>'Hidden Pairs'</li>
+ * <li>'Hidden Triples'</li>
+ * <li>'Hidden Quads'</li>
  * <li>Brute-force (as a last resort)</li>
  * </ul>
  * Details about each of these methods can be found online.
@@ -40,14 +47,15 @@ public final class Solver {
 
 	private static Result runSolvingMethods(Grid grid) {
 		Difficulty difficulty = Difficulty.EASY;
-		List<Position> hints = new ArrayList<>();
+		Set<Position> hints = new LinkedHashSet<>();
 
 		while (!grid.isSolved()) {
 			boolean changed = runEasyMethods(grid, hints);
 
 			if (!changed) {
-				difficulty = Difficulty.MEDIUM;
 				changed = runMediumMethods(grid);
+				if (difficulty == Difficulty.EASY)
+					difficulty = Difficulty.MEDIUM;
 			}
 
 			if (!changed) {
@@ -65,7 +73,7 @@ public final class Solver {
 		return Result.newSolvableInstance(difficulty, grid, hints);
 	}
 
-	private static boolean runEasyMethods(Grid grid, List<Position> hints) {
+	private static boolean runEasyMethods(Grid grid, Set<Position> hints) {
 		if (NakedSingleMethod.run(grid, hints))
 			return true;
 		if (HiddenSingleMethod.run(grid, hints))
@@ -75,10 +83,40 @@ public final class Solver {
 	}
 
 	private static boolean runMediumMethods(Grid grid) {
+		// pointing pairs
+		if (GroupInteractionsMethod.run(grid, 2))
+			return true;
+		// pointing triples
+		if (GroupInteractionsMethod.run(grid, 3))
+			return true;
+		if (GroupInteractionsMethod.runStreamLineReductionOverRows(grid, 2))
+			return true;
+		if (GroupInteractionsMethod.runStreamLineReductionOverColumns(grid, 2))
+			return true;
+		// naked pairs
+		if (NakedNMethod.run(grid, 2))
+			return true;
+
 		return false;
 	}
 
 	private static boolean runHardMethods(Grid grid) {
+		// naked triples
+		if (NakedNMethod.run(grid, 3))
+			return true;
+		// naked quads
+		if (NakedNMethod.run(grid, 4))
+			return true;
+		// hidden pairs
+		if (HiddenNMethod.run(grid, 2))
+			return true;
+		// hidden triples
+		if (HiddenNMethod.run(grid, 3))
+			return true;
+		// hidden quads
+		if (HiddenNMethod.run(grid, 4))
+			return true;
+
 		return false;
 	}
 }

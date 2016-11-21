@@ -1,23 +1,14 @@
 package lowe.mike.strimko.model;
 
-import static lowe.mike.strimko.model.StreamValidator.validate;
-
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Objects;
-import java.util.Observable;
-import java.util.Observer;
 import java.util.Set;
 
 import com.google.common.collect.ContiguousSet;
 import com.google.common.collect.DiscreteDomain;
-import com.google.common.collect.HashMultiset;
-import com.google.common.collect.Multiset;
 import com.google.common.collect.Range;
 
 /**
@@ -28,38 +19,22 @@ import com.google.common.collect.Range;
  * 
  * @author Mike Lowe
  */
-public final class Grid implements Observer, Serializable {
-	private static final long serialVersionUID = 9139586453735621725L;
+public final class Grid implements Serializable {
+	private static final long serialVersionUID = 7707032510798727615L;
 
 	private final int size;
 	private final Cell[][] cells;
 
 	/**
-	 * Create {@link List} of each group so that it's easy to iterate over
-	 * {@link Cell}s when solving.
-	 */
-	private final Map<Integer, List<Cell>> rows = new HashMap<>();
-	private final Map<Integer, List<Cell>> columns = new HashMap<>();
-	private final Map<Integer, List<Cell>> streams = new HashMap<>();
-
-	/**
-	 * Creates a new {@code Grid} instance given the size, the array of streams
-	 * and a {@link Map} of locked numbers.
+	 * Creates a new {@code Grid} instance given the size.
 	 * 
 	 * @param size
 	 *            the size of the {@code Grid}
-	 * @param streams
-	 *            the streams that make up the {@code Grid}
-	 * @param lockedNumbers
-	 *            the {@link Map} of numbers locked in the {@code Grid}
-	 * @throws IllegalArgumentException
-	 *             if the {@code streams} array is invalid
 	 */
-	public Grid(int size, int[][] streams, Map<Position, Integer> lockedNumbers) {
-		validate(streams);
+	public Grid(int size) {
 		this.size = size;
 		this.cells = new Cell[this.size][this.size];
-		init(streams, lockedNumbers);
+		initNewInstance();
 	}
 
 	/**
@@ -72,72 +47,65 @@ public final class Grid implements Observer, Serializable {
 	public Grid(Grid grid) {
 		this.size = grid.size;
 		this.cells = new Cell[this.size][this.size];
-		initCopy(grid.cells);
+		initCopyInstance(grid.cells);
 	}
 
-	private void init(int[][] streams, Map<Position, Integer> lockedNumbers) {
-		initCells(streams);
-		initMaps();
-		initCellNumbers(lockedNumbers);
-	}
-
-	private void initCells(int[][] streams) {
-		Set<Integer> possibleNumbers = getRangeOfPossibleNumbers();
-
+	private void initNewInstance() {
 		for (int row = 0; row < size; row++) {
 			for (int column = 0; column < size; column++) {
-				int stream = streams[row][column];
-				Position position = new Position(row, column, stream);
+				Position position = new Position(row, column);
 				Cell cell = new Cell(position);
-				cell.getPossibleNumbers().addAll(possibleNumbers);
+				cell.getPossibleNumbers().addAll(getRangeOfAllPossibleNumbers());
 				cells[row][column] = cell;
-				cell.addObserver(this);
 			}
 		}
 	}
 
-	private Set<Integer> getRangeOfPossibleNumbers() {
+	private Set<Integer> getRangeOfAllPossibleNumbers() {
 		return ContiguousSet.create(Range.closed(1, size), DiscreteDomain.integers());
 	}
 
-	private void initMaps() {
-		for (Cell[] row : cells) {
-			for (Cell cell : row) {
-				addToMap(cell.getPosition().getRow(), cell, rows);
-				addToMap(cell.getPosition().getColumn(), cell, columns);
-				addToMap(cell.getPosition().getStream(), cell, streams);
+	private void initCopyInstance(Cell[][] cells) {
+		for (int row = 0; row < cells.length; row++) {
+			for (int column = 0; column < cells.length; column++) {
+				Cell original = cells[row][column];
+				Cell copy = new Cell(original);
+				this.cells[row][column] = copy;
 			}
 		}
 	}
 
-	private void addToMap(int key, Cell value, Map<Integer, List<Cell>> map) {
-		List<Cell> cells = map.get(key);
-		if (cells == null)
-			cells = new ArrayList<>();
-		cells.add(value);
-		map.put(key, cells);
-	}
-
-	private void initCellNumbers(Map<Position, Integer> numbers) {
-		for (Position position : numbers.keySet()) {
-			int number = numbers.get(position);
-			Cell cell = getCell(position);
-			cell.setNumber(number);
-			cell.lock();
+	/**
+	 * Set up the streams for this {@code Grid} given an array of {@code int}s.
+	 * 
+	 * @param streams
+	 *            the array of streams
+	 */
+	public void initStreams(int[][] streams) {
+		for (int row = 0; row < size; row++) {
+			for (int column = 0; column < size; column++) {
+				int stream = streams[row][column];
+				Cell cell = cells[row][column];
+				cell.setStream(stream);
+			}
 		}
 	}
 
-	private void initCopy(Cell[][] cells) {
-		initCopyCells(cells);
-		initMaps();
-	}
-
-	private void initCopyCells(Cell[][] cells) {
-		for (int row = 0; row < cells.length; row++) {
-			for (int column = 0; column < cells.length; column++) {
-				Cell cell = new Cell(cells[row][column]);
-				this.cells[row][column] = cell;
-				cell.addObserver(this);
+	/**
+	 * Sets up the locked numbers in this {@code Grid} given an array of
+	 * {@code int}s.
+	 * 
+	 * @param lockedNumbers
+	 *            the array of locked numbers
+	 */
+	public void initLockedNumbers(int[][] lockedNumbers) {
+		for (int row = 0; row < size; row++) {
+			for (int column = 0; column < size; column++) {
+				int number = lockedNumbers[row][column];
+				if (number != 0) {
+					Cell cell = cells[row][column];
+					cell.setNumber(number);
+				}
 			}
 		}
 	}
@@ -151,9 +119,9 @@ public final class Grid implements Observer, Serializable {
 
 	/**
 	 * @param row
-	 *            row of the {@link Cell}
+	 *            row number of the {@link Cell}
 	 * @param column
-	 *            column of the {@link Cell}
+	 *            column number of the {@link Cell}
 	 * @return the {@link Cell} at the position indicated by the {@code row} and
 	 *         {@code column}
 	 */
@@ -171,61 +139,274 @@ public final class Grid implements Observer, Serializable {
 	}
 
 	/**
-	 * @return the {@link Collection} of rows
+	 * @return the {@link Set} of rows
 	 */
-	public Collection<List<Cell>> getRows() {
-		return rows.values();
+	public Set<Set<Cell>> getRows() {
+		Set<Set<Cell>> rows = new LinkedHashSet<>();
+
+		for (int row = 0; row < size; row++)
+			rows.add(getRow(row));
+
+		return rows;
 	}
 
 	/**
 	 * @param row
-	 *            row to get {@link Cell}s from
-	 * @return the {@link List} of {@link Cell}s in the given {@code row}
+	 *            row number to get {@link Cell}s from
+	 * @return the {@link Set} of {@link Cell}s in the given {@code row}
 	 */
-	public List<Cell> getRow(int row) {
-		return rows.get(row);
+	public Set<Cell> getRow(int row) {
+		return new LinkedHashSet<>(Arrays.asList(cells[row]));
 	}
 
 	/**
-	 * @return the {@link Collection} of columns
+	 * @return the {@link Set} of columns
 	 */
-	public Collection<List<Cell>> getColumns() {
-		return columns.values();
+	public Set<Set<Cell>> getColumns() {
+		Set<Set<Cell>> columns = new LinkedHashSet<>();
+
+		for (int column = 0; column < size; column++)
+			columns.add(getColumn(column));
+
+		return columns;
 	}
 
 	/**
 	 * @param column
-	 *            column to get {@link Cell}s from
-	 * @return the {@link List} of {@link Cell}s in the given {@code column}
+	 *            column number to get {@link Cell}s from
+	 * @return the {@link Set} of {@link Cell}s in the given {@code column}
 	 */
-	public List<Cell> getColumn(int column) {
-		return columns.get(column);
+	public Set<Cell> getColumn(int column) {
+		Set<Cell> columnCells = new LinkedHashSet<>();
+
+		for (int row = 0; row < size; row++) {
+			Cell cell = cells[row][column];
+			columnCells.add(cell);
+		}
+
+		return columnCells;
 	}
 
 	/**
-	 * @return the {@link Collection} of streams
+	 * @return the {@link Set} of streams
 	 */
-	public Collection<List<Cell>> getStreams() {
-		return streams.values();
+	public Set<Set<Cell>> getStreams() {
+		Set<Set<Cell>> streams = new LinkedHashSet<>();
+
+		for (int stream = 1; stream <= size; stream++)
+			streams.add(getStream(stream));
+
+		return streams;
 	}
 
 	/**
 	 * @param stream
-	 *            stream to get {@link Cell}s from
-	 * @return the {@link List} of {@link Cell}s in the given {@code stream}
+	 *            stream number to get {@link Cell}s from
+	 * @return the {@link Set} of {@link Cell}s in the given {@code stream}
 	 */
-	public List<Cell> getStream(int stream) {
-		return streams.get(stream);
+	public Set<Cell> getStream(int stream) {
+		Set<Cell> streamCells = new LinkedHashSet<>();
+
+		for (int row = 0; row < size; row++) {
+			for (int column = 0; column < size; column++) {
+				Cell cell = cells[row][column];
+				if (cell.getStream() == stream)
+					streamCells.add(cell);
+			}
+		}
+
+		return streamCells;
 	}
 
 	/**
-	 * Resets all of the {@link Cell}s, that have not been locked, in this
-	 * {@code Grid}.
+	 * Updates the possible numbers of each {@link Cell} in this {@code Grid}.
+	 * In other words, for every {@link Cell} that has a number, this number is
+	 * removed from the possible numbers of each other {@link Cell} in the same
+	 * row, column and stream.
 	 */
-	public void reset() {
-		for (Cell[] row : cells)
-			for (Cell cell : row)
-				cell.clearNumber();
+	public void updatePossibleNumbers() {
+		for (int row = 0; row < size; row++) {
+			for (int column = 0; column < size; column++) {
+				Cell cell = getCell(row, column);
+				if (cell.isSet()) {
+					int number = cell.getNumber();
+					int stream = cell.getStream();
+					cell.getPossibleNumbers().clear();
+					removePossibleFromRow(number, row);
+					removePossibleFromColumn(number, column);
+					removePossibleFromStream(number, stream);
+				}
+			}
+		}
+	}
+
+	/**
+	 * Resets the possible numbers of each {@link Cell} in this {@code Grid}.
+	 */
+	public void resetPossibleNumbers() {
+		for (int row = 0; row < size; row++) {
+			for (int column = 0; column < size; column++) {
+				Cell cell = getCell(row, column);
+				cell.getPossibleNumbers().clear();
+				cell.getPossibleNumbers().addAll(getRangeOfAllPossibleNumbers());
+			}
+		}
+	}
+
+	/**
+	 * Removes a possible number from the {@link Cell}s in a given row.
+	 * 
+	 * @param possible
+	 *            the possible number to remove
+	 * @param row
+	 *            the row to remove the number from
+	 * @return {@code true} if any changes occur; {@code false} otherwise
+	 */
+	public boolean removePossibleFromRow(int possible, int row) {
+		return removePossibleFromGroup(possible, getRow(row));
+	}
+
+	/**
+	 * Removes a possible number from the {@link Cell}s in a given row ignoring
+	 * a given {@link Set} of {@link Cell}s.
+	 * 
+	 * @param possible
+	 *            the possible number to remove
+	 * @param row
+	 *            the row to remove the number from
+	 * @param except
+	 *            the {@link Set} of {@link Cell}s to ignore
+	 * @return {@code true} if any changes occur; {@code false} otherwise
+	 */
+	public boolean removePossibleFromRowExcept(int possible, int row, Set<Cell> except) {
+		return removePossibleFromGroupExcept(possible, getRow(row), except);
+	}
+
+	/**
+	 * Removes a {@link Set} of possible numbers from the {@link Cell}s in a
+	 * given row ignoring a given {@link Set} of {@link Cell}s.
+	 * 
+	 * @param possibles
+	 *            the {@link Set} of possible numbers to remove
+	 * @param row
+	 *            the row to remove the numbers from
+	 * @param except
+	 *            the {@link Set} of {@link Cell}s to ignore
+	 * @return {@code true} if any changes occur; {@code false} otherwise
+	 */
+	public boolean removePossiblesFromRowExcept(Set<Integer> possibles, int row, Set<Cell> except) {
+		return removePossiblesFromGroupExcept(possibles, getRow(row), except);
+	}
+
+	/**
+	 * Removes a possible number from the {@link Cell}s in a given column.
+	 * 
+	 * @param possible
+	 *            the possible number to remove
+	 * @param column
+	 *            the column to remove the number from
+	 * @return {@code true} if any changes occur; {@code false} otherwise
+	 */
+	public boolean removePossibleFromColumn(int possible, int column) {
+		return removePossibleFromGroup(possible, getColumn(column));
+	}
+
+	/**
+	 * Removes a possible number from the {@link Cell}s in a given column
+	 * ignoring a given {@link Set} of {@link Cell}s.
+	 * 
+	 * @param possible
+	 *            the possible number to remove
+	 * @param column
+	 *            the column to remove the number from
+	 * @param except
+	 *            the {@link Set} of {@link Cell}s to ignore
+	 * @return {@code true} if any changes occur; {@code false} otherwise
+	 */
+	public boolean removePossibleFromColumnExcept(int possible, int column, Set<Cell> except) {
+		return removePossibleFromGroupExcept(possible, getColumn(column), except);
+	}
+
+	/**
+	 * Removes a {@link Set} of possible numbers from the {@link Cell}s in a
+	 * given column ignoring a given {@link Set} of {@link Cell}s.
+	 * 
+	 * @param possibles
+	 *            the {@link Set} of possible numbers to remove
+	 * @param column
+	 *            the column to remove the numbers from
+	 * @param except
+	 *            the {@link Set} of {@link Cell}s to ignore
+	 * @return {@code true} if any changes occur; {@code false} otherwise
+	 */
+	public boolean removePossiblesFromColumnExcept(Set<Integer> possibles, int column, Set<Cell> except) {
+		return removePossiblesFromGroupExcept(possibles, getColumn(column), except);
+	}
+
+	/**
+	 * Removes a possible number from the {@link Cell}s in a given stream.
+	 * 
+	 * @param possible
+	 *            the possible number to remove
+	 * @param stream
+	 *            the stream to remove the number from
+	 * @return {@code true} if any changes occur; {@code false} otherwise
+	 */
+	public boolean removePossibleFromStream(int possible, int stream) {
+		return removePossibleFromGroup(possible, getStream(stream));
+	}
+
+	/**
+	 * Removes a possible number from the {@link Cell}s in a given stream
+	 * ignoring a given {@link Set} of {@link Cell}s.
+	 * 
+	 * @param possible
+	 *            the possible number to remove
+	 * @param stream
+	 *            the stream to remove the number from
+	 * @param except
+	 *            the {@link Set} of {@link Cell}s to ignore
+	 * @return {@code true} if any changes occur; {@code false} otherwise
+	 */
+	public boolean removePossibleFromStreamExcept(int possible, int stream, Set<Cell> except) {
+		return removePossibleFromGroupExcept(possible, getStream(stream), except);
+	}
+
+	/**
+	 * Removes a {@link Set} of possible numbers from the {@link Cell}s in a
+	 * given stream ignoring a given {@link Set} of {@link Cell}s.
+	 * 
+	 * @param possibles
+	 *            the {@link Set} of possible numbers to remove
+	 * @param stream
+	 *            the stream to remove the numbers from
+	 * @param except
+	 *            the {@link Set} of {@link Cell}s to ignore
+	 * @return {@code true} if any changes occur; {@code false} otherwise
+	 */
+	public boolean removePossiblesFromStreamExcept(Set<Integer> possibles, int stream, Set<Cell> except) {
+		return removePossiblesFromGroupExcept(possibles, getStream(stream), except);
+	}
+
+	private boolean removePossibleFromGroup(int possible, Set<Cell> group) {
+		return removePossibleFromGroupExcept(possible, group, new HashSet<>());
+	}
+
+	private boolean removePossibleFromGroupExcept(int possible, Set<Cell> group, Set<Cell> except) {
+		Set<Integer> possibles = new HashSet<>();
+		possibles.add(possible);
+		return removePossiblesFromGroupExcept(possibles, group, except);
+	}
+
+	private boolean removePossiblesFromGroupExcept(Set<Integer> possibles, Set<Cell> group, Set<Cell> except) {
+		boolean changed = false;
+
+		for (Cell cell : group)
+			if (!except.contains(cell))
+				if (cell.getPossibleNumbers().removeAll(possibles))
+					changed = true;
+
+		return changed;
 	}
 
 	/**
@@ -233,68 +414,23 @@ public final class Grid implements Observer, Serializable {
 	 *         {@code false} otherwise
 	 */
 	public boolean isSolved() {
-		Multiset<Integer> numberCount = HashMultiset.create();
+		Set<Set<Cell>> rows = getRows();
+		Set<Set<Cell>> columns = getColumns();
+		Set<Set<Cell>> streams = getStreams();
+		return containsAllNumbers(rows) && containsAllNumbers(columns) && containsAllNumbers(streams);
+	}
 
-		for (List<Cell> row : getRows())
-			for (Cell cell : row)
-				numberCount.add(cell.getNumber());
-
-		for (int number = 1; number <= size; number++)
-			if (numberCount.count(number) != size)
-				return false;
-
+	private boolean containsAllNumbers(Set<Set<Cell>> group) {
+		for (Set<Cell> cells : group) {
+			Set<Integer> numbersInGroup = new HashSet<>();
+			for (Cell cell : cells) {
+				int number = cell.getNumber();
+				if (number == 0 || numbersInGroup.contains(number))
+					return false;
+				numbersInGroup.add(number);
+			}
+		}
 		return true;
-	}
-
-	@Override
-	public void update(Observable o, Object arg) {
-		Cell cell = (Cell) o;
-
-		if (cell.isEmpty()) {
-			resetPossibleNumbers();
-			updateAllPossibleNumbers();
-		} else
-			updateRelevantPossibleNumbers(cell);
-	}
-
-	private void resetPossibleNumbers() {
-		Set<Integer> possibleNumbers = getRangeOfPossibleNumbers();
-
-		for (Cell[] row : cells)
-			for (Cell cell : row)
-				cell.getPossibleNumbers().addAll(possibleNumbers);
-	}
-
-	private void updateAllPossibleNumbers() {
-		for (Cell[] row : cells)
-			for (Cell cell : row)
-				if (cell.isSet())
-					updateRelevantPossibleNumbers(cell);
-	}
-
-	private void updateRelevantPossibleNumbers(Cell cell) {
-		cell.getPossibleNumbers().clear();
-		int number = cell.getNumber();
-		removePossibleNumberFromRow(number, cell.getPosition().getRow());
-		removePossibleNumberFromColumn(number, cell.getPosition().getColumn());
-		removePossibleNumberFromStream(number, cell.getPosition().getStream());
-	}
-
-	private void removePossibleNumberFromRow(int number, int row) {
-		removePossibleNumberFromCells(number, getRow(row));
-	}
-
-	private void removePossibleNumberFromColumn(int number, int column) {
-		removePossibleNumberFromCells(number, getColumn(column));
-	}
-
-	private void removePossibleNumberFromStream(int number, int stream) {
-		removePossibleNumberFromCells(number, getStream(stream));
-	}
-
-	private void removePossibleNumberFromCells(int number, List<Cell> cells) {
-		for (Cell cell : cells)
-			cell.getPossibleNumbers().remove(number);
 	}
 
 	@Override

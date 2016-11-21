@@ -3,10 +3,8 @@ package lowe.mike.strimko.solver;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 import org.junit.Test;
 
@@ -17,70 +15,70 @@ import lowe.mike.strimko.model.Position;
  * @author Mike Lowe
  */
 public final class HiddenSingleMethodTest {
-	private static final Grid row;
-	private static final Grid column;
-	private static final Grid stream;
+	private static final Grid GRID_1;
+	private static final Grid GRID_2;
+	private static final Grid GRID_3;
 
 	static {
-		int rowSize = 4;
-		int[][] rowStreams = { { 1, 2, 1, 2 }, { 3, 1, 2, 4 }, { 1, 3, 4, 2 }, { 3, 4, 3, 4 } };
-		Map<Position, Integer> rowLockedNumbers = new HashMap<>();
-		rowLockedNumbers.put(new Position(1, 1, 1), 3);
-		rowLockedNumbers.put(new Position(1, 3, 4), 1);
-		rowLockedNumbers.put(new Position(2, 1, 3), 4);
+		int grid1Size = 4;
+		int[][] grid1Streams = { { 1, 2, 1, 2 }, { 3, 1, 2, 4 }, { 1, 3, 4, 2 }, { 3, 4, 3, 4 } };
+		int[][] grid1LockedNumbers = { { 0, 0, 0, 0 }, { 0, 3, 0, 1 }, { 0, 4, 0, 0 }, { 0, 0, 0, 0 } };
 
-		row = new Grid(rowSize, rowStreams, rowLockedNumbers);
+		GRID_1 = new Grid(grid1Size);
+		GRID_1.initStreams(grid1Streams);
+		GRID_1.initLockedNumbers(grid1LockedNumbers);
+		GRID_1.updatePossibleNumbers();
 
-		int columnSize = 5;
-		int[][] columnStreams = { { 1, 1, 1, 1, 1 }, { 2, 2, 3, 3, 4 }, { 2, 3, 3, 5, 4 }, { 2, 3, 5, 5, 4 },
+		int grid2Size = 5;
+		int[][] grid2Streams = { { 1, 1, 1, 1, 1 }, { 2, 2, 3, 3, 4 }, { 2, 3, 3, 5, 4 }, { 2, 3, 5, 5, 4 },
 				{ 2, 5, 5, 4, 4 } };
-		Map<Position, Integer> columnLockedNumbers = new HashMap<>();
-		columnLockedNumbers.put(new Position(1, 1, 2), 3);
-		columnLockedNumbers.put(new Position(1, 4, 4), 4);
-		columnLockedNumbers.put(new Position(4, 0, 2), 2);
-		columnLockedNumbers.put(new Position(4, 3, 4), 5);
+		int[][] grid2LockedNumbers = { { 0, 0, 0, 0, 0 }, { 0, 3, 0, 0, 4 }, { 0, 0, 0, 0, 0 }, { 0, 0, 0, 0, 0 },
+				{ 2, 0, 0, 5, 0 } };
 
-		column = new Grid(columnSize, columnStreams, columnLockedNumbers);
+		GRID_2 = new Grid(grid2Size);
+		GRID_2.initStreams(grid2Streams);
+		GRID_2.initLockedNumbers(grid2LockedNumbers);
+		GRID_2.updatePossibleNumbers();
 
-		int streamSize = 5;
-		int[][] streamStreams = { { 1, 2, 3, 4, 4 }, { 1, 3, 2, 2, 4 }, { 1, 3, 3, 2, 4 }, { 1, 1, 2, 3, 4 },
+		int grid3Size = 5;
+		int[][] grid3Streams = { { 1, 2, 3, 4, 4 }, { 1, 3, 2, 2, 4 }, { 1, 3, 3, 2, 4 }, { 1, 1, 2, 3, 4 },
 				{ 5, 5, 5, 5, 5 } };
-		Map<Position, Integer> streamLockedNumbers = new HashMap<>();
-		streamLockedNumbers.put(new Position(0, 0, 1), 1);
-		streamLockedNumbers.put(new Position(1, 1, 3), 2);
-		streamLockedNumbers.put(new Position(3, 3, 3), 4);
-		streamLockedNumbers.put(new Position(4, 4, 5), 5);
+		int[][] grid3LockedNumbers = { { 1, 0, 0, 0, 0 }, { 0, 2, 0, 0, 0 }, { 0, 0, 0, 0, 0 }, { 0, 0, 0, 4, 0 },
+				{ 0, 0, 0, 0, 5 } };
 
-		stream = new Grid(streamSize, streamStreams, streamLockedNumbers);
+		GRID_3 = new Grid(grid3Size);
+		GRID_3.initStreams(grid3Streams);
+		GRID_3.initLockedNumbers(grid3LockedNumbers);
+		GRID_3.updatePossibleNumbers();
 	}
 
 	@Test
-	public void hiddenSingleRowTest() {
-		List<Position> hints = new ArrayList<>();
-		boolean changed = HiddenSingleMethod.run(row, hints);
+	public void hiddenSingleInRowTest() {
+		Set<Position> hints = new LinkedHashSet<>();
+		boolean changed = HiddenSingleMethod.runOverRows(GRID_1, hints);
 		assertTrue(changed);
-		Position changedPosition = new Position(0, 3, 2);
-		assertEquals(3, row.getCell(changedPosition).getNumber());
+		Position changedPosition = new Position(0, 3);
+		assertEquals(3, GRID_1.getCell(changedPosition).getNumber());
 		assertTrue(hints.contains(changedPosition));
 	}
 
 	@Test
-	public void hiddenSingleColumnTest() {
-		List<Position> hints = new ArrayList<>();
-		boolean changed = HiddenSingleMethod.run(column, hints);
+	public void hiddenSingleInColumnTest() {
+		Set<Position> hints = new LinkedHashSet<>();
+		boolean changed = HiddenSingleMethod.runOverColumns(GRID_2, hints);
 		assertTrue(changed);
-		Position changedPosition = new Position(0, 0, 1);
-		assertEquals(3, column.getCell(changedPosition).getNumber());
+		Position changedPosition = new Position(0, 0);
+		assertEquals(3, GRID_2.getCell(changedPosition).getNumber());
 		assertTrue(hints.contains(changedPosition));
 	}
 
 	@Test
-	public void hiddenSingleStreamTest() {
-		List<Position> hints = new ArrayList<>();
-		boolean changed = HiddenSingleMethod.run(stream, hints);
+	public void hiddenSingleInStreamTest() {
+		Set<Position> hints = new LinkedHashSet<>();
+		boolean changed = HiddenSingleMethod.runOverStreams(GRID_3, hints);
 		assertTrue(changed);
-		Position changedPosition = new Position(0, 3, 4);
-		assertEquals(5, stream.getCell(changedPosition).getNumber());
+		Position changedPosition = new Position(0, 3);
+		assertEquals(5, GRID_3.getCell(changedPosition).getNumber());
 		assertTrue(hints.contains(changedPosition));
 	}
 }

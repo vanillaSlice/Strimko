@@ -13,9 +13,18 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
+ * {@code PuzzleFileHandler} provides useful methods for reading and writing
+ * puzzle files.
+ * <p>
+ * Instances of {@code PuzzleFileHandler} cannot be created.
+ * 
  * @author Mike Lowe
  */
 public final class PuzzleFileHandler {
+
+	// don't want instances
+	private PuzzleFileHandler() {
+	}
 
 	// move these to util
 

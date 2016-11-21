@@ -8,7 +8,7 @@ import com.google.common.collect.TreeMultiset;
 
 /**
  * {@code StreamValidator} provides a method {@link #validate(int[][])} to
- * validate steams. This ensures that:
+ * validate streams. This ensures that:
  * <ul>
  * <li>each {@link Cell} belongs to a stream</li>
  * <li>there are equal number of {@link Cell}s in each stream</li>
@@ -45,6 +45,7 @@ public final class StreamValidator {
 		for (int[] row : streams)
 			for (int stream : row)
 				streamsCount.add(stream);
+		
 		return streamsCount;
 	}
 

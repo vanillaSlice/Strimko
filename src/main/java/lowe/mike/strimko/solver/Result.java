@@ -1,8 +1,8 @@
 package lowe.mike.strimko.solver;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.LinkedHashSet;
 import java.util.Objects;
+import java.util.Set;
 
 import lowe.mike.strimko.model.Difficulty;
 import lowe.mike.strimko.model.Grid;
@@ -14,7 +14,7 @@ import lowe.mike.strimko.model.Puzzle;
  * {@link Solver} after attempting to solve a {@link Grid}.
  * <p>
  * Stored information includes whether a {@link Grid} could be solved, if it has
- * multiple solutions, the difficulty, the solution and a {@link List} of hints.
+ * multiple solutions, the difficulty, the solution and a {@link Set} of hints.
  * <p>
  * {@code Result} instances are immutable.
  * 
@@ -25,7 +25,7 @@ public final class Result {
 	private final boolean multipleSolutions;
 	private final Difficulty difficulty;
 	private final Grid solution;
-	private final List<Position> hints = new ArrayList<>();
+	private final Set<Position> hints = new LinkedHashSet<>();
 
 	/**
 	 * Creates a new unsolvable {@code Result} instance. This indicates that a
@@ -51,17 +51,17 @@ public final class Result {
 
 	/**
 	 * Creates a new solvable {@code Result} instance given the determined
-	 * {@link Difficulty}, the solved {@link Grid} and {@link List} of hints.
+	 * {@link Difficulty}, the solved {@link Grid} and {@link Set} of hints.
 	 * 
 	 * @param difficulty
 	 *            the determined {@link Difficulty}
 	 * @param solution
 	 *            the solved {@link Grid}
 	 * @param hints
-	 *            the {@link List} of hints
+	 *            the {@link Set} of hints
 	 * @return a new solvable {@code Result} instance
 	 */
-	public static Result newSolvableInstance(Difficulty difficulty, Grid solution, List<Position> hints) {
+	public static Result newSolvableInstance(Difficulty difficulty, Grid solution, Set<Position> hints) {
 		return new Result(difficulty, solution, hints);
 	}
 
@@ -83,7 +83,7 @@ public final class Result {
 		this.solution = null;
 	}
 
-	private Result(Difficulty difficulty, Grid grid, List<Position> hints) {
+	private Result(Difficulty difficulty, Grid grid, Set<Position> hints) {
 		this.solvable = true;
 		this.multipleSolutions = false;
 		this.difficulty = difficulty;
@@ -130,10 +130,10 @@ public final class Result {
 	}
 
 	/**
-	 * @return a {@link List} of hints
+	 * @return a {@link Set} of hints
 	 */
-	public List<Position> getHints() {
-		return new ArrayList<>(hints);
+	public Set<Position> getHints() {
+		return new LinkedHashSet<>(hints);
 	}
 
 	@Override

@@ -1,7 +1,9 @@
 package lowe.mike.strimko.model;
 
 /**
- * Enum representing the type of {@link Puzzle}
+ * {@code Type} enum represents the type of {@link Puzzle}.
+ * 
+ * @author Mike Lowe
  */
 public enum Type {
 	STRIMKO, SUDOKU;

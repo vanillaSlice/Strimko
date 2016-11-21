@@ -2,7 +2,6 @@ package lowe.mike.strimko.model;
 
 import java.io.Serializable;
 import java.util.Objects;
-import java.util.Observable;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -10,17 +9,18 @@ import java.util.TreeSet;
  * {@code Cell} instances are to intended to provide information about cells
  * that make up a {@link Grid}.
  * <p>
- * Information about the {@code Cell} includes the {@link Position}, the number
- * contained in the cell, a {@link Set} of possible numbers and if the
- * {@code Cell} is locked. If a {@code Cell} is locked, this means that the
- * number can no longer be changed.
+ * Information about the {@code Cell} includes the {@link Position}, the stream
+ * number, the number contained in the cell, a {@link Set} of possible numbers
+ * and if the {@code Cell} is locked. If a {@code Cell} is locked, this means
+ * that the number can no longer be changed.
  * 
  * @author Mike Lowe
  */
-public final class Cell extends Observable implements Serializable {
-	private static final long serialVersionUID = -5286952684477993384L;
+public final class Cell implements Serializable {
+	private static final long serialVersionUID = 7923143417490212837L;
 
 	private final Position position;
+	private int stream;
 	private int number;
 	private final Set<Integer> possibleNumbers = new TreeSet<>();
 	private boolean locked;
@@ -44,16 +44,34 @@ public final class Cell extends Observable implements Serializable {
 	 */
 	public Cell(Cell cell) {
 		this.position = cell.position;
+		this.stream = cell.stream;
 		this.number = cell.number;
 		this.possibleNumbers.addAll(cell.possibleNumbers);
 		this.locked = cell.locked;
 	}
 
 	/**
-	 * @return the {@link Position}
+	 * @return this {@code Cell}'s {@link Position}
 	 */
 	public Position getPosition() {
 		return position;
+	}
+
+	/**
+	 * @return this {@code Cell}'s stream number
+	 */
+	public int getStream() {
+		return stream;
+	}
+
+	/**
+	 * Sets this {@code Cell}'s stream number
+	 * 
+	 * @param stream
+	 *            the stream number
+	 */
+	public void setStream(int stream) {
+		this.stream = stream;
 	}
 
 	/**
@@ -71,11 +89,8 @@ public final class Cell extends Observable implements Serializable {
 	 *            the number to set
 	 */
 	public void setNumber(int number) {
-		if (!locked && this.number != number) {
+		if (!locked && this.number != number)
 			this.number = number;
-			setChanged();
-			notifyObservers();
-		}
 	}
 
 	/**
@@ -130,7 +145,7 @@ public final class Cell extends Observable implements Serializable {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(position, number, possibleNumbers, locked);
+		return Objects.hash(position, stream, number, possibleNumbers, locked);
 	}
 
 	@Override
@@ -156,12 +171,14 @@ public final class Cell extends Observable implements Serializable {
 				return false;
 		} else if (!possibleNumbers.equals(other.possibleNumbers))
 			return false;
+		if (stream != other.stream)
+			return false;
 		return true;
 	}
 
 	@Override
 	public String toString() {
-		return "Cell [position=" + position + ", number=" + number + ", possibleNumbers=" + possibleNumbers
-				+ ", locked=" + locked + "]";
+		return "Cell [position=" + position + ", stream=" + stream + ", number=" + number + ", possibleNumbers="
+				+ possibleNumbers + ", locked=" + locked + "]";
 	}
 }
