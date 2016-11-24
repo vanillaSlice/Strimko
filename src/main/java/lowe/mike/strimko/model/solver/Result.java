@@ -1,4 +1,4 @@
-package lowe.mike.strimko.solver;
+package lowe.mike.strimko.model.solver;
 
 import java.util.LinkedHashSet;
 import java.util.Objects;
@@ -65,17 +65,6 @@ public final class Result {
 		return new Result(difficulty, solution, hints);
 	}
 
-	/**
-	 * Creates a new {@code Result} instance given an existing instance.
-	 * 
-	 * @param result
-	 *            the existing {@code Result} instance
-	 * @return a new {@code Result} instance copied from the existing one
-	 */
-	public static Result copyOf(Result result) {
-		return new Result(result);
-	}
-
 	private Result(boolean multipleSolutions) {
 		this.solvable = multipleSolutions;
 		this.multipleSolutions = multipleSolutions;
@@ -89,14 +78,6 @@ public final class Result {
 		this.difficulty = difficulty;
 		this.solution = new Grid(grid);
 		this.hints.addAll(hints);
-	}
-
-	private Result(Result result) {
-		this.solvable = result.solvable;
-		this.multipleSolutions = result.multipleSolutions;
-		this.difficulty = result.difficulty;
-		this.solution = new Grid(result.solution);
-		this.hints.addAll(result.hints);
 	}
 
 	/**

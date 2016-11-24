@@ -7,4 +7,9 @@ package lowe.mike.strimko.model;
  */
 public enum Difficulty {
 	EASY, MEDIUM, HARD;
+
+	@Override
+	public String toString() {
+		return super.toString().toLowerCase();
+	}
 }

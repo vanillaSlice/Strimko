@@ -1,4 +1,4 @@
-package lowe.mike.strimko.solver;
+package lowe.mike.strimko.model.solver;
 
 import java.util.HashSet;
 import java.util.Iterator;

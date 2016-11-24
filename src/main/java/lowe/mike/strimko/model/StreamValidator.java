@@ -45,7 +45,7 @@ public final class StreamValidator {
 		for (int[] row : streams)
 			for (int stream : row)
 				streamsCount.add(stream);
-		
+
 		return streamsCount;
 	}
 

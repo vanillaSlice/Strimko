@@ -7,4 +7,9 @@ package lowe.mike.strimko.model;
  */
 public enum Type {
 	STRIMKO, SUDOKU;
+
+	@Override
+	public String toString() {
+		return super.toString().toLowerCase();
+	}
 }

@@ -1,0 +1,6 @@
+strimko/easy/strimko-1.ser
+strimko/medium/strimko-1.ser
+strimko/hard/strimko-1.ser
+sudoku/easy/sudoku-1.ser
+sudoku/medium/sudoku-1.ser
+sudoku/hard/sudoku-1.ser

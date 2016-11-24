@@ -1,5 +1,9 @@
-package lowe.mike.strimko.solver;
+package lowe.mike.strimko.model.solver;
 
+import static lowe.mike.strimko.model.solver.HiddenSingleMethod.runOverColumns;
+import static lowe.mike.strimko.model.solver.HiddenSingleMethod.runOverRows;
+import static lowe.mike.strimko.model.solver.HiddenSingleMethod.runOverStreams;
+import static lowe.mike.strimko.model.solver.TestHelper.newStrimkoGrid;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -24,10 +28,7 @@ public final class HiddenSingleMethodTest {
 		int[][] grid1Streams = { { 1, 2, 1, 2 }, { 3, 1, 2, 4 }, { 1, 3, 4, 2 }, { 3, 4, 3, 4 } };
 		int[][] grid1LockedNumbers = { { 0, 0, 0, 0 }, { 0, 3, 0, 1 }, { 0, 4, 0, 0 }, { 0, 0, 0, 0 } };
 
-		GRID_1 = new Grid(grid1Size);
-		GRID_1.initStreams(grid1Streams);
-		GRID_1.initLockedNumbers(grid1LockedNumbers);
-		GRID_1.updatePossibleNumbers();
+		GRID_1 = newStrimkoGrid(grid1Size, grid1Streams, grid1LockedNumbers);
 
 		int grid2Size = 5;
 		int[][] grid2Streams = { { 1, 1, 1, 1, 1 }, { 2, 2, 3, 3, 4 }, { 2, 3, 3, 5, 4 }, { 2, 3, 5, 5, 4 },
@@ -35,10 +36,7 @@ public final class HiddenSingleMethodTest {
 		int[][] grid2LockedNumbers = { { 0, 0, 0, 0, 0 }, { 0, 3, 0, 0, 4 }, { 0, 0, 0, 0, 0 }, { 0, 0, 0, 0, 0 },
 				{ 2, 0, 0, 5, 0 } };
 
-		GRID_2 = new Grid(grid2Size);
-		GRID_2.initStreams(grid2Streams);
-		GRID_2.initLockedNumbers(grid2LockedNumbers);
-		GRID_2.updatePossibleNumbers();
+		GRID_2 = newStrimkoGrid(grid2Size, grid2Streams, grid2LockedNumbers);
 
 		int grid3Size = 5;
 		int[][] grid3Streams = { { 1, 2, 3, 4, 4 }, { 1, 3, 2, 2, 4 }, { 1, 3, 3, 2, 4 }, { 1, 1, 2, 3, 4 },
@@ -46,39 +44,37 @@ public final class HiddenSingleMethodTest {
 		int[][] grid3LockedNumbers = { { 1, 0, 0, 0, 0 }, { 0, 2, 0, 0, 0 }, { 0, 0, 0, 0, 0 }, { 0, 0, 0, 4, 0 },
 				{ 0, 0, 0, 0, 5 } };
 
-		GRID_3 = new Grid(grid3Size);
-		GRID_3.initStreams(grid3Streams);
-		GRID_3.initLockedNumbers(grid3LockedNumbers);
-		GRID_3.updatePossibleNumbers();
+		GRID_3 = newStrimkoGrid(grid3Size, grid3Streams, grid3LockedNumbers);
 	}
 
 	@Test
 	public void hiddenSingleInRowTest() {
 		Set<Position> hints = new LinkedHashSet<>();
-		boolean changed = HiddenSingleMethod.runOverRows(GRID_1, hints);
-		assertTrue(changed);
+		boolean changed = runOverRows(GRID_1, hints);
 		Position changedPosition = new Position(0, 3);
-		assertEquals(3, GRID_1.getCell(changedPosition).getNumber());
-		assertTrue(hints.contains(changedPosition));
+		hiddenSingleTest(GRID_1, hints, changed, 3, changedPosition);
 	}
 
 	@Test
 	public void hiddenSingleInColumnTest() {
 		Set<Position> hints = new LinkedHashSet<>();
-		boolean changed = HiddenSingleMethod.runOverColumns(GRID_2, hints);
-		assertTrue(changed);
+		boolean changed = runOverColumns(GRID_2, hints);
 		Position changedPosition = new Position(0, 0);
-		assertEquals(3, GRID_2.getCell(changedPosition).getNumber());
-		assertTrue(hints.contains(changedPosition));
+		hiddenSingleTest(GRID_2, hints, changed, 3, changedPosition);
 	}
 
 	@Test
 	public void hiddenSingleInStreamTest() {
 		Set<Position> hints = new LinkedHashSet<>();
-		boolean changed = HiddenSingleMethod.runOverStreams(GRID_3, hints);
-		assertTrue(changed);
+		boolean changed = runOverStreams(GRID_3, hints);
 		Position changedPosition = new Position(0, 3);
-		assertEquals(5, GRID_3.getCell(changedPosition).getNumber());
+		hiddenSingleTest(GRID_3, hints, changed, 5, changedPosition);
+	}
+
+	private void hiddenSingleTest(Grid grid, Set<Position> hints, boolean changed, int number,
+			Position changedPosition) {
+		assertTrue(changed);
+		assertEquals(number, grid.getCell(changedPosition).getNumber());
 		assertTrue(hints.contains(changedPosition));
 	}
 }

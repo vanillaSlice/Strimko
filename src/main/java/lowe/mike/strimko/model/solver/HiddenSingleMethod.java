@@ -1,4 +1,7 @@
-package lowe.mike.strimko.solver;
+package lowe.mike.strimko.model.solver;
+
+import static lowe.mike.strimko.model.solver.Util.getCellsContainingPossible;
+import static lowe.mike.strimko.model.solver.Util.setNumberUpdateGridAndAddToHints;
 
 import java.util.Set;
 
@@ -59,36 +62,29 @@ final class HiddenSingleMethod {
 		int size = grid.getSize();
 
 		for (Set<Cell> group : groups)
-			// check if this possible number appears once in the group of cells
 			for (int number = 1; number <= size; number++)
-				if (runMethod(grid, hints, group, number))
+				if (groupContainsHiddenSingle(grid, hints, group, number))
 					return true;
 
 		return false;
 	}
 
-	private static boolean runMethod(Grid grid, Set<Position> hints, Set<Cell> group, int number) {
-		int count = 0;
-		Position position = null;
+	private static boolean groupContainsHiddenSingle(Grid grid, Set<Position> hints, Set<Cell> group, int number) {
+		Set<Cell> cellsContainingPossible = getCellsContainingPossible(group, number);
 
-		// count occurrences of number in the group
-		for (Cell cell : group) {
-			if (cell.getPossibleNumbers().contains(number)) {
-				count++;
-				position = cell.getPosition();
-			}
-		}
-
-		// if it occurs once, then we have found a hidden single
-		if (count == 1) {
-			// set number and add to hints
-			Cell cell = grid.getCell(position);
-			cell.setNumber(number);
-			grid.updatePossibleNumbers();
-			hints.add(position);
+		if (foundCellWithHiddenSingle(cellsContainingPossible)) {
+			setNumberUpdateGridAndAddToHints(getCell(cellsContainingPossible), number, grid, hints);
 			return true;
 		}
 
 		return false;
+	}
+
+	private static boolean foundCellWithHiddenSingle(Set<Cell> cellsContainingPossible) {
+		return cellsContainingPossible.size() == 1;
+	}
+
+	private static Cell getCell(Set<Cell> cellsContainingPossible) {
+		return cellsContainingPossible.iterator().next();
 	}
 }

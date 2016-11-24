@@ -1,4 +1,8 @@
-package lowe.mike.strimko.solver;
+package lowe.mike.strimko.model.solver;
+
+import static lowe.mike.strimko.model.Difficulty.EASY;
+import static lowe.mike.strimko.model.Difficulty.HARD;
+import static lowe.mike.strimko.model.Difficulty.MEDIUM;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -18,6 +22,8 @@ import lowe.mike.strimko.model.Position;
  * <li>'Hidden Singles'</li>
  * <li>'Pointing Pairs'</li>
  * <li>'Pointing Triples'</li>
+ * <li>'Stream Line Reduction Pairs'</li>
+ * <li>'Stream Line Reduction Triples'</li>
  * <li>'Naked Pairs'</li>
  * <li>'Naked Triples'</li>
  * <li>'Naked Quads'</li>
@@ -46,7 +52,7 @@ public final class Solver {
 	}
 
 	private static Result runSolvingMethods(Grid grid) {
-		Difficulty difficulty = Difficulty.EASY;
+		Difficulty difficulty = EASY;
 		Set<Position> hints = new LinkedHashSet<>();
 
 		while (!grid.isSolved()) {
@@ -54,12 +60,12 @@ public final class Solver {
 
 			if (!changed) {
 				changed = runMediumMethods(grid);
-				if (difficulty == Difficulty.EASY)
-					difficulty = Difficulty.MEDIUM;
+				if (difficulty == EASY)
+					difficulty = MEDIUM;
 			}
 
 			if (!changed) {
-				difficulty = Difficulty.HARD;
+				difficulty = HARD;
 				changed = runHardMethods(grid);
 			}
 
@@ -84,37 +90,39 @@ public final class Solver {
 
 	private static boolean runMediumMethods(Grid grid) {
 		// pointing pairs
-		if (GroupInteractionsMethod.run(grid, 2))
+		if (GroupInteractionsMethod.runPointingN(grid, 2))
 			return true;
-		// pointing triples
-		if (GroupInteractionsMethod.run(grid, 3))
-			return true;
-		if (GroupInteractionsMethod.runStreamLineReductionOverRows(grid, 2))
-			return true;
-		if (GroupInteractionsMethod.runStreamLineReductionOverColumns(grid, 2))
+		// stream line reduction pairs
+		if (GroupInteractionsMethod.runStreamLineReductionN(grid, 2))
 			return true;
 		// naked pairs
-		if (NakedNMethod.run(grid, 2))
+		if (NMethod.runNakedN(grid, 2))
 			return true;
 
 		return false;
 	}
 
 	private static boolean runHardMethods(Grid grid) {
+		// pointing triples
+		if (GroupInteractionsMethod.runPointingN(grid, 3))
+			return true;
+		// stream line reduction triples
+		if (GroupInteractionsMethod.runStreamLineReductionN(grid, 3))
+			return true;
 		// naked triples
-		if (NakedNMethod.run(grid, 3))
+		if (NMethod.runNakedN(grid, 3))
 			return true;
 		// naked quads
-		if (NakedNMethod.run(grid, 4))
+		if (NMethod.runNakedN(grid, 4))
 			return true;
 		// hidden pairs
-		if (HiddenNMethod.run(grid, 2))
+		if (NMethod.runHiddenN(grid, 2))
 			return true;
 		// hidden triples
-		if (HiddenNMethod.run(grid, 3))
+		if (NMethod.runHiddenN(grid, 3))
 			return true;
 		// hidden quads
-		if (HiddenNMethod.run(grid, 4))
+		if (NMethod.runHiddenN(grid, 4))
 			return true;
 
 		return false;

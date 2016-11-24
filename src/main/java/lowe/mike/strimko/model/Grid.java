@@ -131,8 +131,8 @@ public final class Grid implements Serializable {
 
 	/**
 	 * @param position
-	 *            {@link Position} of the {@link Cell}
-	 * @return the {@link Cell} at the specified {@link Position}
+	 *            the {@link Position} of the {@code Cell}
+	 * @return the {@code Cell} at the given {@link Position}
 	 */
 	public Cell getCell(Position position) {
 		return getCell(position.getRow(), position.getColumn());
@@ -232,9 +232,9 @@ public final class Grid implements Serializable {
 					int number = cell.getNumber();
 					int stream = cell.getStream();
 					cell.getPossibleNumbers().clear();
-					removePossibleFromRow(number, row);
-					removePossibleFromColumn(number, column);
-					removePossibleFromStream(number, stream);
+					removePossibleFromGroup(number, getRow(row));
+					removePossibleFromGroup(number, getColumn(column));
+					removePossibleFromGroup(number, getStream(stream));
 				}
 			}
 		}
@@ -253,158 +253,12 @@ public final class Grid implements Serializable {
 		}
 	}
 
-	/**
-	 * Removes a possible number from the {@link Cell}s in a given row.
-	 * 
-	 * @param possible
-	 *            the possible number to remove
-	 * @param row
-	 *            the row to remove the number from
-	 * @return {@code true} if any changes occur; {@code false} otherwise
-	 */
-	public boolean removePossibleFromRow(int possible, int row) {
-		return removePossibleFromGroup(possible, getRow(row));
-	}
-
-	/**
-	 * Removes a possible number from the {@link Cell}s in a given row ignoring
-	 * a given {@link Set} of {@link Cell}s.
-	 * 
-	 * @param possible
-	 *            the possible number to remove
-	 * @param row
-	 *            the row to remove the number from
-	 * @param except
-	 *            the {@link Set} of {@link Cell}s to ignore
-	 * @return {@code true} if any changes occur; {@code false} otherwise
-	 */
-	public boolean removePossibleFromRowExcept(int possible, int row, Set<Cell> except) {
-		return removePossibleFromGroupExcept(possible, getRow(row), except);
-	}
-
-	/**
-	 * Removes a {@link Set} of possible numbers from the {@link Cell}s in a
-	 * given row ignoring a given {@link Set} of {@link Cell}s.
-	 * 
-	 * @param possibles
-	 *            the {@link Set} of possible numbers to remove
-	 * @param row
-	 *            the row to remove the numbers from
-	 * @param except
-	 *            the {@link Set} of {@link Cell}s to ignore
-	 * @return {@code true} if any changes occur; {@code false} otherwise
-	 */
-	public boolean removePossiblesFromRowExcept(Set<Integer> possibles, int row, Set<Cell> except) {
-		return removePossiblesFromGroupExcept(possibles, getRow(row), except);
-	}
-
-	/**
-	 * Removes a possible number from the {@link Cell}s in a given column.
-	 * 
-	 * @param possible
-	 *            the possible number to remove
-	 * @param column
-	 *            the column to remove the number from
-	 * @return {@code true} if any changes occur; {@code false} otherwise
-	 */
-	public boolean removePossibleFromColumn(int possible, int column) {
-		return removePossibleFromGroup(possible, getColumn(column));
-	}
-
-	/**
-	 * Removes a possible number from the {@link Cell}s in a given column
-	 * ignoring a given {@link Set} of {@link Cell}s.
-	 * 
-	 * @param possible
-	 *            the possible number to remove
-	 * @param column
-	 *            the column to remove the number from
-	 * @param except
-	 *            the {@link Set} of {@link Cell}s to ignore
-	 * @return {@code true} if any changes occur; {@code false} otherwise
-	 */
-	public boolean removePossibleFromColumnExcept(int possible, int column, Set<Cell> except) {
-		return removePossibleFromGroupExcept(possible, getColumn(column), except);
-	}
-
-	/**
-	 * Removes a {@link Set} of possible numbers from the {@link Cell}s in a
-	 * given column ignoring a given {@link Set} of {@link Cell}s.
-	 * 
-	 * @param possibles
-	 *            the {@link Set} of possible numbers to remove
-	 * @param column
-	 *            the column to remove the numbers from
-	 * @param except
-	 *            the {@link Set} of {@link Cell}s to ignore
-	 * @return {@code true} if any changes occur; {@code false} otherwise
-	 */
-	public boolean removePossiblesFromColumnExcept(Set<Integer> possibles, int column, Set<Cell> except) {
-		return removePossiblesFromGroupExcept(possibles, getColumn(column), except);
-	}
-
-	/**
-	 * Removes a possible number from the {@link Cell}s in a given stream.
-	 * 
-	 * @param possible
-	 *            the possible number to remove
-	 * @param stream
-	 *            the stream to remove the number from
-	 * @return {@code true} if any changes occur; {@code false} otherwise
-	 */
-	public boolean removePossibleFromStream(int possible, int stream) {
-		return removePossibleFromGroup(possible, getStream(stream));
-	}
-
-	/**
-	 * Removes a possible number from the {@link Cell}s in a given stream
-	 * ignoring a given {@link Set} of {@link Cell}s.
-	 * 
-	 * @param possible
-	 *            the possible number to remove
-	 * @param stream
-	 *            the stream to remove the number from
-	 * @param except
-	 *            the {@link Set} of {@link Cell}s to ignore
-	 * @return {@code true} if any changes occur; {@code false} otherwise
-	 */
-	public boolean removePossibleFromStreamExcept(int possible, int stream, Set<Cell> except) {
-		return removePossibleFromGroupExcept(possible, getStream(stream), except);
-	}
-
-	/**
-	 * Removes a {@link Set} of possible numbers from the {@link Cell}s in a
-	 * given stream ignoring a given {@link Set} of {@link Cell}s.
-	 * 
-	 * @param possibles
-	 *            the {@link Set} of possible numbers to remove
-	 * @param stream
-	 *            the stream to remove the numbers from
-	 * @param except
-	 *            the {@link Set} of {@link Cell}s to ignore
-	 * @return {@code true} if any changes occur; {@code false} otherwise
-	 */
-	public boolean removePossiblesFromStreamExcept(Set<Integer> possibles, int stream, Set<Cell> except) {
-		return removePossiblesFromGroupExcept(possibles, getStream(stream), except);
-	}
-
 	private boolean removePossibleFromGroup(int possible, Set<Cell> group) {
-		return removePossibleFromGroupExcept(possible, group, new HashSet<>());
-	}
-
-	private boolean removePossibleFromGroupExcept(int possible, Set<Cell> group, Set<Cell> except) {
-		Set<Integer> possibles = new HashSet<>();
-		possibles.add(possible);
-		return removePossiblesFromGroupExcept(possibles, group, except);
-	}
-
-	private boolean removePossiblesFromGroupExcept(Set<Integer> possibles, Set<Cell> group, Set<Cell> except) {
 		boolean changed = false;
 
 		for (Cell cell : group)
-			if (!except.contains(cell))
-				if (cell.getPossibleNumbers().removeAll(possibles))
-					changed = true;
+			if (cell.getPossibleNumbers().remove(possible))
+				changed = true;
 
 		return changed;
 	}
@@ -414,10 +268,7 @@ public final class Grid implements Serializable {
 	 *         {@code false} otherwise
 	 */
 	public boolean isSolved() {
-		Set<Set<Cell>> rows = getRows();
-		Set<Set<Cell>> columns = getColumns();
-		Set<Set<Cell>> streams = getStreams();
-		return containsAllNumbers(rows) && containsAllNumbers(columns) && containsAllNumbers(streams);
+		return containsAllNumbers(getRows()) && containsAllNumbers(getColumns()) && containsAllNumbers(getStreams());
 	}
 
 	private boolean containsAllNumbers(Set<Set<Cell>> group) {

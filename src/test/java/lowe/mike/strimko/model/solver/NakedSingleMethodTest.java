@@ -1,5 +1,7 @@
-package lowe.mike.strimko.solver;
+package lowe.mike.strimko.model.solver;
 
+import static lowe.mike.strimko.model.solver.NakedSingleMethod.run;
+import static lowe.mike.strimko.model.solver.TestHelper.newStrimkoGrid;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -18,20 +20,17 @@ public final class NakedSingleMethodTest {
 	private static final Grid GRID;
 
 	static {
-		int gridSize = 4;
-		int[][] gridStreams = new int[][] { { 1, 1, 2, 2 }, { 2, 2, 1, 1 }, { 3, 3, 4, 4 }, { 4, 4, 3, 3 } };
-		int[][] gridLockedNumbers = { { 0, 0, 0, 0 }, { 0, 4, 0, 2 }, { 0, 3, 0, 1 }, { 0, 0, 0, 0 } };
+		int size = 4;
+		int[][] streams = new int[][] { { 1, 1, 2, 2 }, { 2, 2, 1, 1 }, { 3, 3, 4, 4 }, { 4, 4, 3, 3 } };
+		int[][] lockedNumbers = { { 0, 0, 0, 0 }, { 0, 4, 0, 2 }, { 0, 3, 0, 1 }, { 0, 0, 0, 0 } };
 
-		GRID = new Grid(gridSize);
-		GRID.initStreams(gridStreams);
-		GRID.initLockedNumbers(gridLockedNumbers);
-		GRID.updatePossibleNumbers();
+		GRID = newStrimkoGrid(size, streams, lockedNumbers);
 	}
 
 	@Test
 	public void nakedSingleTest() {
 		Set<Position> hints = new LinkedHashSet<>();
-		boolean changed = NakedSingleMethod.run(GRID, hints);
+		boolean changed = run(GRID, hints);
 		assertTrue(changed);
 		Position changedPosition = new Position(0, 1);
 		assertEquals(1, GRID.getCell(changedPosition).getNumber());
