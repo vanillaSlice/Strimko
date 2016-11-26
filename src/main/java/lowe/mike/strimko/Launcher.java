@@ -1,18 +1,22 @@
 package lowe.mike.strimko;
 
-import static lowe.mike.strimko.model.PuzzleFileHandler.syncPuzzlesToUserDirectory;
-
-import java.io.IOException;
+import javafx.application.Application;
+import lowe.mike.strimko.controller.Controller;
 
 /**
+ * Entry point for Strimko application.
+ * <p>
+ * Instances of {@link Launcher} cannot be created.
+ * 
  * @author Mike Lowe
  */
 public final class Launcher {
+
+	// don't want instances
+	private Launcher() {
+	}
+
 	public static void main(String[] args) {
-		try {
-			syncPuzzlesToUserDirectory();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		Application.launch(Controller.class);
 	}
 }

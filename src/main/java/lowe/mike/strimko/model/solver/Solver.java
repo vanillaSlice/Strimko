@@ -44,6 +44,14 @@ public final class Solver {
 	private Solver() {
 	}
 
+	/**
+	 * Attempts to solve the given {@link Grid} and returns a {@link Result}
+	 * object.
+	 * 
+	 * @param grid
+	 *            the {@link Grid} to solve
+	 * @return the {@link Result} containing useful information from solving
+	 */
 	public static Result solve(Grid grid) {
 		// create a copy so we don't alter the original
 		grid = new Grid(grid);
