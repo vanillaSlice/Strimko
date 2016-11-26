@@ -20,16 +20,16 @@ TODO:
 ### Running
 1. Clone the project
 2. Navigate to the project directory in your terminal/command prompt
-3. a) If you have Gradle installed locally run the Gradle Daemon:
+3. If you have Gradle installed locally run the Gradle Daemon:
 
     ```
     gradle clean fatjar
     ```
-   b) If you don't have Gradle installed locally and are running on a Unix-like platform such as Linux or Mac OS X:
+   If you don't have Gradle installed locally and are running on a Unix-like platform such as Linux or Mac OS X:
     ```
     ./gradlew clean fatjar
     ```
-   c) If you don't have Gradle installed locally and are running on Windows:
+   If you don't have Gradle installed locally and are running on Windows:
     ```
     gradlew clean fatjar
     ```   
