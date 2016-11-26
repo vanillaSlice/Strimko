@@ -25,7 +25,7 @@ TODO:
     ```
     gradle clean fatjar
     ```
-   b) If you don't have Gradle installed locally and are running on a Unix-like platform such as Linux and Mac OS X:
+   b) If you don't have Gradle installed locally and are running on a Unix-like platform such as Linux or Mac OS X:
     ```
     ./gradlew clean fatjar
     ```
@@ -35,7 +35,7 @@ TODO:
     ```   
 4. Go to build/libs and run:
     ```
-    java -jar Strimko-all-1.0.jar
+    java -jar Strimko-all-X.X.jar
     ```
 
 ## License
