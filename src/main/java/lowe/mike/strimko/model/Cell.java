@@ -1,104 +1,152 @@
 package lowe.mike.strimko.model;
 
-import java.io.Serializable;
-import java.util.Objects;
-import java.util.Set;
-import java.util.TreeSet;
+import static java.util.Objects.hash;
+import static javafx.collections.FXCollections.observableSet;
+import static lowe.mike.strimko.model.Constants.NO_NUMBER;
+
+import java.util.Collection;
+import java.util.HashSet;
+
+import javafx.beans.binding.BooleanBinding;
+import javafx.beans.property.ReadOnlyBooleanProperty;
+import javafx.beans.property.ReadOnlyBooleanWrapper;
+import javafx.beans.property.ReadOnlyIntegerProperty;
+import javafx.beans.property.ReadOnlyIntegerWrapper;
+import javafx.collections.ObservableSet;
 
 /**
  * {@code Cell} instances are to intended to provide information about cells
  * that make up a {@link Grid}.
  * <p>
- * Information about the {@code Cell} includes the {@link Position}, the stream
- * number, the number contained in the cell, a {@link Set} of possible numbers
- * and if the {@code Cell} is locked. If a {@code Cell} is locked, this means
- * that the number can no longer be changed.
+ * Information about the {@code Cell} includes the row index, the column index,
+ * the stream index, the number contained in the {@code Cell}, if the
+ * {@code Cell} is set, an {@link ObservableSet} of possible numbers and if the
+ * {@code Cell} is locked.
  * 
  * @author Mike Lowe
  */
-public final class Cell implements Serializable {
-	private static final long serialVersionUID = 7923143417490212837L;
+public final class Cell {
 
-	private final Position position;
-	private int stream;
-	private int number;
-	private final Set<Integer> possibleNumbers = new TreeSet<>();
-	private boolean locked;
+	private final int rowIndex;
+	private final int columnIndex;
+	private final int streamIndex;
+	private final ReadOnlyIntegerWrapper number = new ReadOnlyIntegerWrapper();
+	private final ReadOnlyBooleanWrapper isSet = new ReadOnlyBooleanWrapper();
+	private final ObservableSet<Integer> possibleNumbers = observableSet(new HashSet<>());
+	private final boolean isLocked;
 
 	/**
-	 * Creates a new {@code Cell} instance given the {@link Position}.
+	 * Creates a new {@code Cell} instance given the row index, the column
+	 * index, the stream index, the number and a {@link Collection} of possible
+	 * numbers.
 	 * 
-	 * @param position
-	 *            the {@link Position}
+	 * @param rowIndex
+	 *            the row index
+	 * @param columnIndex
+	 *            the column index
+	 * @param streamIndex
+	 *            the stream index
+	 * @param number
+	 *            the number
+	 * @param possibleNumbers
+	 *            a {@link Collection} of possible numbers
+	 * @return a {@code Cell} instance
 	 */
-	public Cell(Position position) {
-		this.position = position;
+	public static Cell newInstance(int rowIndex, int columnIndex, int streamIndex, int number,
+			Collection<Integer> possibleNumbers) {
+		return new Cell(rowIndex, columnIndex, streamIndex, number, possibleNumbers);
 	}
 
 	/**
-	 * Copy constructor creates a new instance of a {@code Cell} given an
-	 * existing instance.
+	 * Creates a new {@code Cell} instance from an existing instance.
 	 * 
 	 * @param cell
 	 *            the existing {@code Cell} instance
+	 * @return a new {@code Cell} instance copied from an existing instance
 	 */
-	public Cell(Cell cell) {
-		this.position = cell.position;
-		this.stream = cell.stream;
-		this.number = cell.number;
-		this.possibleNumbers.addAll(cell.possibleNumbers);
-		this.locked = cell.locked;
+	public static Cell copyOf(Cell cell) {
+		return new Cell(cell);
+	}
+
+	private Cell(int rowIndex, int columnIndex, int streamIndex, int number, Collection<Integer> possibleNumbers) {
+		this.rowIndex = rowIndex;
+		this.columnIndex = columnIndex;
+		this.streamIndex = streamIndex;
+		this.number.set(number);
+		bindIsSetPropertyToNumberProperty();
+		this.possibleNumbers.addAll(possibleNumbers);
+		this.isLocked = isSet();
+	}
+
+	private void bindIsSetPropertyToNumberProperty() {
+		isSet.bind(isNumberSet());
+	}
+
+	private BooleanBinding isNumberSet() {
+		return number.greaterThan(NO_NUMBER);
+	}
+
+	private Cell(Cell cell) {
+		this.rowIndex = cell.getRowIndex();
+		this.columnIndex = cell.getColumnIndex();
+		this.streamIndex = cell.getStreamIndex();
+		this.number.set(cell.getNumber());
+		bindIsSetPropertyToNumberProperty();
+		this.possibleNumbers.addAll(cell.getPossibleNumbers());
+		this.isLocked = cell.isLocked;
 	}
 
 	/**
-	 * @return this {@code Cell}'s {@link Position}
+	 * @return this {@code Cell}'s row index
 	 */
-	public Position getPosition() {
-		return position;
+	public int getRowIndex() {
+		return rowIndex;
 	}
 
 	/**
-	 * @return this {@code Cell}'s stream number
+	 * @return this {@code Cell}'s column index
 	 */
-	public int getStream() {
-		return stream;
+	public int getColumnIndex() {
+		return columnIndex;
 	}
 
 	/**
-	 * Sets this {@code Cell}'s stream number
-	 * 
-	 * @param stream
-	 *            the stream number
+	 * @return this {@code Cell}'s stream index
 	 */
-	public void setStream(int stream) {
-		this.stream = stream;
+	public int getStreamIndex() {
+		return streamIndex;
 	}
 
 	/**
-	 * @return this {@code Cell}'s number, 0 if it is empty
+	 * @return this {@code Cell}'s number, 0 if it is not set
 	 */
 	public int getNumber() {
-		return number;
+		return number.get();
 	}
 
 	/**
-	 * Sets the number of this {@code Cell}, if it is not locked. If this
-	 * {@code Cell} is locked, then the current number will not be changed.
+	 * Sets the number of this {@code Cell}, if it is not locked.
 	 * 
 	 * @param number
 	 *            the number to set
 	 */
 	public void setNumber(int number) {
-		if (!locked && this.number != number)
-			this.number = number;
+		if (!isLocked)
+			this.number.set(number);
 	}
 
 	/**
-	 * Clears the number from this {@code Cell}, if it is not locked. If this
-	 * {@code Cell} is locked, then the current number will remain.
+	 * @return this {@code Cell}'s number as an {@link ReadOnlyIntegerProperty}
+	 */
+	public ReadOnlyIntegerProperty numberProperty() {
+		return number.getReadOnlyProperty();
+	}
+
+	/**
+	 * Clears the number from this {@code Cell}, if it is not locked.
 	 */
 	public void clearNumber() {
-		setNumber(0);
+		setNumber(NO_NUMBER);
 	}
 
 	/**
@@ -106,46 +154,35 @@ public final class Cell implements Serializable {
 	 *         {@code false} otherwise
 	 */
 	public boolean isSet() {
-		return number != 0;
+		return isSet.get();
 	}
 
 	/**
-	 * @return {@code true} if this {@code Cell}'s number has not been set;
-	 *         {@code false} otherwise
+	 * @return this {@code Cell}'s {@link ReadOnlyBooleanProperty} indicating if
+	 *         the number has been set
 	 */
-	public boolean isEmpty() {
-		return !isSet();
+	public ReadOnlyBooleanProperty setProperty() {
+		return isSet.getReadOnlyProperty();
 	}
 
 	/**
-	 * @return this {@code Cell}'s {@link Set} of possible numbers
+	 * @return this {@code Cell}'s {@link ObservableSet} of possible numbers
 	 */
-	public Set<Integer> getPossibleNumbers() {
+	public ObservableSet<Integer> getPossibleNumbers() {
 		return possibleNumbers;
 	}
 
 	/**
-	 * If this {@code Cell} is locked, this means that no further changes can be
-	 * made to it.
-	 * 
 	 * @return {@code true} if this {@code Cell} is locked; {@code false}
 	 *         otherwise
 	 */
 	public boolean isLocked() {
-		return locked;
-	}
-
-	/**
-	 * Locks this {@code Cell}, meaning that no further changes can be made once
-	 * this method has been called.
-	 */
-	public void lock() {
-		locked = true;
+		return isLocked;
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(position, stream, number, possibleNumbers, locked);
+		return hash(getRowIndex(), getColumnIndex(), getStreamIndex(), getNumber(), getPossibleNumbers(), isLocked());
 	}
 
 	@Override
@@ -157,28 +194,29 @@ public final class Cell implements Serializable {
 		if (getClass() != obj.getClass())
 			return false;
 		Cell other = (Cell) obj;
-		if (locked != other.locked)
+		if (getRowIndex() != other.getRowIndex())
 			return false;
-		if (number != other.number)
+		if (getColumnIndex() != other.getColumnIndex())
 			return false;
-		if (position == null) {
-			if (other.position != null)
+		if (getStreamIndex() != other.getStreamIndex())
+			return false;
+		if (getNumber() != other.getNumber())
+			return false;
+		if (getPossibleNumbers() == null) {
+			if (other.getPossibleNumbers() != null)
 				return false;
-		} else if (!position.equals(other.position))
+		} else if (!getPossibleNumbers().equals(other.getPossibleNumbers()))
 			return false;
-		if (possibleNumbers == null) {
-			if (other.possibleNumbers != null)
-				return false;
-		} else if (!possibleNumbers.equals(other.possibleNumbers))
-			return false;
-		if (stream != other.stream)
+		if (isLocked() != other.isLocked())
 			return false;
 		return true;
 	}
 
 	@Override
 	public String toString() {
-		return "Cell [position=" + position + ", stream=" + stream + ", number=" + number + ", possibleNumbers="
-				+ possibleNumbers + ", locked=" + locked + "]";
+		return "Cell [rowIndex=" + getRowIndex() + ", columnIndex=" + getColumnIndex() + ", streamIndex="
+				+ getStreamIndex() + ", number=" + getNumber() + ", possibleNumbers=" + getPossibleNumbers()
+				+ ", isLocked=" + isLocked() + "]";
 	}
+
 }

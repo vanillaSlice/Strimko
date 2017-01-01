@@ -1,64 +1,88 @@
 package lowe.mike.strimko.model;
 
-import java.io.Serializable;
+import static java.util.Objects.hash;
+import static lowe.mike.strimko.model.solver.Solver.solve;
+
+import java.util.Collection;
 import java.util.LinkedHashSet;
-import java.util.Objects;
-import java.util.Set;
+
+import javafx.beans.property.ReadOnlyObjectProperty;
+import javafx.beans.property.ReadOnlyObjectWrapper;
+import lowe.mike.strimko.model.solver.SolvingResult;
 
 /**
  * {@code Puzzle} instances are intended to represent Strimko and Sudoku
  * puzzles.
  * <p>
  * Instance information includes the {@code Puzzle}'s {@link Type},
- * {@link Difficulty}, {@link Grid}, solution and a {@link Set} of hints.
+ * {@link Difficulty}, {@link Grid} and solution.
  * 
  * @author Mike Lowe
  */
-public final class Puzzle implements Serializable {
-	private static final long serialVersionUID = 1440568892047817063L;
+public final class Puzzle {
 
 	private final Type type;
 	private final Difficulty difficulty;
 	private final Grid grid;
-	private final Grid solution;
-	private final Set<Position> hints = new LinkedHashSet<>();
+	private final int[][] solution;
+	private final Collection<Position> hints = new LinkedHashSet<>();
+	private final ReadOnlyObjectWrapper<Cell> nextHint = new ReadOnlyObjectWrapper<>();
 
 	/**
-	 * Creates a new {@code Puzzle} given the {@link Type}, {@link Difficulty},
-	 * {@link Grid}, solution {@link Grid} and {@link Set} of hints.
-	 * 
+	 * Creates a new {@code Puzzle} given the {@link Type} and {@link Grid}.
+	 *
 	 * @param type
 	 *            the {@link Type}
-	 * @param difficulty
-	 *            the {@link Difficulty}
 	 * @param grid
 	 *            the {@link Grid}
-	 * @param solution
-	 *            the solution {@link Grid}
-	 * @param hints
-	 *            the {@link Set} of hints
+	 * @throws IllegalArgumentException
+	 *             if {@code grid} is not solvable or has multiple solutions
 	 */
-	public Puzzle(Type type, Difficulty difficulty, Grid grid, Grid solution, Set<Position> hints) {
+	public Puzzle(Type type, Grid grid) {
 		this.type = type;
-		this.difficulty = difficulty;
-		this.grid = new Grid(grid);
-		this.solution = new Grid(solution);
-		this.hints.addAll(hints);
+		this.grid = grid;
+		SolvingResult result = solve(this.grid);
+		this.difficulty = result.getDifficulty();
+		this.solution = result.getSolution();
+		this.hints.addAll(result.getHints());
+		initialize();
 	}
 
-	/**
-	 * Copy constructor creates a new {@code Puzzle} from an existing instance.
-	 * 
-	 * @param puzzle
-	 *            the existing {@code Puzzle} instance to create the new
-	 *            instance from
-	 */
-	public Puzzle(Puzzle puzzle) {
-		this.type = puzzle.type;
-		this.difficulty = puzzle.difficulty;
-		this.grid = new Grid(puzzle.grid);
-		this.solution = new Grid(puzzle.solution);
-		this.hints.addAll(puzzle.hints);
+	private void initialize() {
+		addCellChangeListeners();
+		initializeNextHint();
+	}
+
+	private void addCellChangeListeners() {
+		for (Cell cell : grid.getCells())
+			addCellChangeListener(cell);
+	}
+
+	private void addCellChangeListener(Cell cell) {
+		cell.numberProperty().addListener((observable) -> updateNextHint());
+	}
+
+	private void initializeNextHint() {
+		updateNextHint();
+	}
+
+	private void updateNextHint() {
+		nextHint.set(findNextHint());
+	}
+
+	private Cell findNextHint() {
+		for (Position position : hints) {
+			Cell cell = grid.getCell(position);
+			if (isCellUnsolved(cell))
+				return cell;
+		}
+		return null;
+	}
+
+	private boolean isCellUnsolved(Cell cell) {
+		int number = cell.getNumber();
+		int solutionNumber = getSolutionForCell(cell);
+		return number != solutionNumber;
 	}
 
 	/**
@@ -83,23 +107,32 @@ public final class Puzzle implements Serializable {
 	}
 
 	/**
-	 * @return this {@code Puzzle}'s solution {@link Grid}
+	 * @param cell
+	 *            the {@link Cell}
+	 * @return the solution for the {@link Cell}
 	 */
-	public Grid getSolution() {
-		return new Grid(solution);
+	public int getSolutionForCell(Cell cell) {
+		return solution[cell.getRowIndex()][cell.getColumnIndex()];
 	}
 
 	/**
-	 * @return this {@code Puzzle}'s {@link Set} of {@link Position}s which act
-	 *         as hints
+	 * @return the next {@link Cell} hint or {@code null} if there are no hints
+	 *         left
 	 */
-	public Set<Position> getHints() {
-		return new LinkedHashSet<>(hints);
+	public Cell getNextHint() {
+		return nextHint.get();
+	}
+
+	/**
+	 * @return the next hint {@link ReadOnlyObjectProperty}
+	 */
+	public ReadOnlyObjectProperty<Cell> nextHintProperty() {
+		return nextHint.getReadOnlyProperty();
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(type, difficulty, grid, solution, hints);
+		return hash(type, grid);
 	}
 
 	@Override
@@ -111,31 +144,19 @@ public final class Puzzle implements Serializable {
 		if (getClass() != obj.getClass())
 			return false;
 		Puzzle other = (Puzzle) obj;
-		if (difficulty != other.difficulty)
+		if (type != other.type)
 			return false;
 		if (grid == null) {
 			if (other.grid != null)
 				return false;
 		} else if (!grid.equals(other.grid))
 			return false;
-		if (hints == null) {
-			if (other.hints != null)
-				return false;
-		} else if (!hints.equals(other.hints))
-			return false;
-		if (solution == null) {
-			if (other.solution != null)
-				return false;
-		} else if (!solution.equals(other.solution))
-			return false;
-		if (type != other.type)
-			return false;
 		return true;
 	}
 
 	@Override
 	public String toString() {
-		return "Puzzle [type=" + type + ", difficulty=" + difficulty + ", grid=" + grid + ", solution=" + solution
-				+ ", hints=" + hints + "]";
+		return "Puzzle [type=" + type + ", grid=" + grid + "]";
 	}
+
 }

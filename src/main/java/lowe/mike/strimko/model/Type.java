@@ -6,10 +6,18 @@ package lowe.mike.strimko.model;
  * @author Mike Lowe
  */
 public enum Type {
-	STRIMKO, SUDOKU;
+
+	STRIMKO("Strimko"), SUDOKU("Sudoku");
+
+	private final String displayName;
+
+	private Type(String displayName) {
+		this.displayName = displayName;
+	}
 
 	@Override
 	public String toString() {
-		return super.toString().toLowerCase();
+		return displayName;
 	}
+
 }

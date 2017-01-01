@@ -1,9 +1,7 @@
 package lowe.mike.strimko.model.solver;
 
-import static lowe.mike.strimko.model.solver.Util.getCellsContainingPossible;
-
+import java.util.Collection;
 import java.util.HashSet;
-import java.util.Set;
 
 import lowe.mike.strimko.model.Cell;
 import lowe.mike.strimko.model.Grid;
@@ -28,7 +26,8 @@ import lowe.mike.strimko.model.Grid;
  * 
  * @author Mike Lowe
  */
-final class GroupInteractionsMethod {
+final class GroupInteractionsMethod extends SolvingMethod {
+
 	private enum Mode {
 		POINTING, STREAM_LINE_REDUCTION;
 	}
@@ -102,10 +101,10 @@ final class GroupInteractionsMethod {
 		return runOverColumns(Mode.STREAM_LINE_REDUCTION, grid, n);
 	}
 
-	private static boolean run(Mode mode, Set<Set<Cell>> groups, Grid grid, int n, int size) {
-		for (Set<Cell> group : groups) {
+	private static boolean run(Mode mode, Collection<Collection<Cell>> groups, Grid grid, int n, int size) {
+		for (Collection<Cell> group : groups) {
 			for (int number = 1; number <= size; number++) {
-				Set<Cell> cellsContainingNumber = getCellsContainingPossible(group, number);
+				Collection<Cell> cellsContainingNumber = getCellsContainingPossible(group, number);
 
 				if (foundGroupInteraction(cellsContainingNumber, n))
 					if (removeFromCells(mode, number, grid, n, cellsContainingNumber))
@@ -115,39 +114,40 @@ final class GroupInteractionsMethod {
 		return false;
 	}
 
-	private static boolean foundGroupInteraction(Set<Cell> cellsContainingNumber, int n) {
+	private static boolean foundGroupInteraction(Collection<Cell> cellsContainingNumber, int n) {
 		return cellsContainingNumber.size() == n;
 	}
 
-	private static boolean removeFromCells(Mode mode, int number, Grid grid, int n, Set<Cell> cellsContainingNumber) {
-		Set<Integer> rowNumbers = new HashSet<>();
-		Set<Integer> columnNumbers = new HashSet<>();
-		Set<Integer> streamNumbers = new HashSet<>();
+	private static boolean removeFromCells(Mode mode, int number, Grid grid, int n,
+			Collection<Cell> cellsContainingNumber) {
+		Collection<Integer> rowNumbers = new HashSet<>();
+		Collection<Integer> columnNumbers = new HashSet<>();
+		Collection<Integer> streamNumbers = new HashSet<>();
 
 		countNumberOfCellsInEachGroup(cellsContainingNumber, rowNumbers, columnNumbers, streamNumbers);
 
 		return removeNumber(mode, grid, cellsContainingNumber, number, rowNumbers, columnNumbers, streamNumbers);
 	}
 
-	private static void countNumberOfCellsInEachGroup(Set<Cell> cellsContainingNumber, Set<Integer> rowNumbers,
-			Set<Integer> columnNumbers, Set<Integer> streamNumbers) {
+	private static void countNumberOfCellsInEachGroup(Collection<Cell> cellsContainingNumber,
+			Collection<Integer> rowNumbers, Collection<Integer> columnNumbers, Collection<Integer> streamNumbers) {
 		for (Cell cell : cellsContainingNumber) {
-			rowNumbers.add(cell.getPosition().getRow());
-			columnNumbers.add(cell.getPosition().getColumn());
-			streamNumbers.add(cell.getStream());
+			rowNumbers.add(cell.getRowIndex());
+			columnNumbers.add(cell.getColumnIndex());
+			streamNumbers.add(cell.getStreamIndex());
 		}
 	}
 
-	private static boolean removeNumber(Mode mode, Grid grid, Set<Cell> cellsContainingNumber, int number,
-			Set<Integer> rowNumbers, Set<Integer> columnNumbers, Set<Integer> streamNumbers) {
+	private static boolean removeNumber(Mode mode, Grid grid, Collection<Cell> cellsContainingNumber, int number,
+			Collection<Integer> rowNumbers, Collection<Integer> columnNumbers, Collection<Integer> streamNumbers) {
 		if (mode == Mode.STREAM_LINE_REDUCTION)
 			return removeNumberFromStream(grid, cellsContainingNumber, number, streamNumbers);
 		else
 			return removeNumberFromRowAndColumn(grid, cellsContainingNumber, number, rowNumbers, columnNumbers);
 	}
 
-	private static boolean removeNumberFromStream(Grid grid, Set<Cell> cellsContainingNumber, int number,
-			Set<Integer> streamNumbers) {
+	private static boolean removeNumberFromStream(Grid grid, Collection<Cell> cellsContainingNumber, int number,
+			Collection<Integer> streamNumbers) {
 		if (streamNumbers.size() == 1)
 			if (removePossibleFromGroupExcept(number, grid.getStream(getGroupNumber(streamNumbers)),
 					cellsContainingNumber))
@@ -155,8 +155,8 @@ final class GroupInteractionsMethod {
 		return false;
 	}
 
-	private static boolean removeNumberFromRowAndColumn(Grid grid, Set<Cell> cellsContainingNumber, int number,
-			Set<Integer> rowNumbers, Set<Integer> columnNumbers) {
+	private static boolean removeNumberFromRowAndColumn(Grid grid, Collection<Cell> cellsContainingNumber, int number,
+			Collection<Integer> rowNumbers, Collection<Integer> columnNumbers) {
 		if (rowNumbers.size() == 1)
 			if (removePossibleFromGroupExcept(number, grid.getRow(getGroupNumber(rowNumbers)), cellsContainingNumber))
 				return true;
@@ -169,7 +169,7 @@ final class GroupInteractionsMethod {
 		return false;
 	}
 
-	static boolean removePossibleFromGroupExcept(int possible, Set<Cell> group, Set<Cell> except) {
+	static boolean removePossibleFromGroupExcept(int possible, Collection<Cell> group, Collection<Cell> except) {
 		boolean changed = false;
 
 		for (Cell cell : group)
@@ -180,7 +180,8 @@ final class GroupInteractionsMethod {
 		return changed;
 	}
 
-	private static int getGroupNumber(Set<Integer> groupNumbers) {
+	private static int getGroupNumber(Collection<Integer> groupNumbers) {
 		return groupNumbers.iterator().next();
 	}
+
 }

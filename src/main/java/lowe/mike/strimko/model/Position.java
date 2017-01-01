@@ -1,52 +1,51 @@
 package lowe.mike.strimko.model;
 
-import java.io.Serializable;
-import java.util.Objects;
+import static java.util.Objects.hash;
 
 /**
- * {@code Position} instances contain the row and column numbers for a
+ * {@code Position} instances contain the row index and the column index for a
  * {@link Cell}.
  * <p>
  * {@code Position} instances are immutable.
  * 
  * @author Mike Lowe
  */
-public final class Position implements Serializable {
-	private static final long serialVersionUID = -4025052816744893697L;
+public final class Position {
 
-	private final int row;
-	private final int column;
+	private final int rowIndex;
+	private final int columnIndex;
 
 	/**
-	 * Creates a new {@code Position} instance given the row and column numbers.
+	 * Creates a new {@code Position} instance given the row index and column
+	 * index.
 	 * 
-	 * @param row
-	 *            the row number
-	 * @param column
-	 *            the column number
+	 * @param rowIndex
+	 *            the row index
+	 * @param columnIndex
+	 *            the column index
 	 */
-	public Position(int row, int column) {
-		this.row = row;
-		this.column = column;
+	public Position(int rowIndex, int columnIndex) {
+		this.rowIndex = rowIndex;
+		this.columnIndex = columnIndex;
 	}
 
 	/**
-	 * @return the row number
+	 * @return the row index
 	 */
-	public int getRow() {
-		return row;
+	public int getRowIndex() {
+		return rowIndex;
 	}
 
 	/**
-	 * @return the column number
+	 * @return the column index
 	 */
-	public int getColumn() {
-		return column;
+	public int getColumnIndex() {
+		return columnIndex;
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(row, column);
+		return hash(rowIndex, columnIndex);
 	}
 
 	@Override
@@ -58,15 +57,16 @@ public final class Position implements Serializable {
 		if (getClass() != obj.getClass())
 			return false;
 		Position other = (Position) obj;
-		if (column != other.column)
+		if (rowIndex != other.rowIndex)
 			return false;
-		if (row != other.row)
+		if (columnIndex != other.columnIndex)
 			return false;
 		return true;
 	}
 
 	@Override
 	public String toString() {
-		return "Position [row=" + row + ", column=" + column + "]";
+		return "Position [rowIndex=" + rowIndex + ", columnIndex=" + columnIndex + "]";
 	}
+
 }

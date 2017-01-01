@@ -1,14 +1,10 @@
 package lowe.mike.strimko.model.solver;
 
-import static lowe.mike.strimko.model.Difficulty.HARD;
-import static lowe.mike.strimko.model.solver.Util.cellContainsPossible;
-import static lowe.mike.strimko.model.solver.Util.setNumberAndUpdateGrid;
-
-import java.util.Set;
+import static com.google.common.base.Preconditions.checkArgument;
+import static lowe.mike.strimko.model.Grid.copyOf;
 
 import lowe.mike.strimko.model.Cell;
 import lowe.mike.strimko.model.Grid;
-import lowe.mike.strimko.model.Position;
 
 /**
  * {@code BruteForceMethod} represents a brute-force solving method.
@@ -20,7 +16,7 @@ import lowe.mike.strimko.model.Position;
  * 
  * @author Mike Lowe
  */
-final class BruteForceMethod {
+final class BruteForceMethod extends SolvingMethod {
 
 	// don't want instances
 	private BruteForceMethod() {
@@ -31,33 +27,28 @@ final class BruteForceMethod {
 	 * 
 	 * @param grid
 	 *            the {@link Grid} to run method over
-	 * @param hints
-	 *            the {@link Set} of hints to return in the {@link Result}
-	 * @return the {@link Result} of running the brute-force method
+	 * @return the solved {@link Grid}
+	 * @throws IllegalArgumentException
+	 *             if {@code grid} is not solvable or has multiple solutions
 	 */
-	static Result run(Grid grid, Set<Position> hints) {
+	static Grid run(Grid grid) {
 		// used to keep note of information when running algorithm
 		Note note = new Note();
 
 		run(grid, note);
 
-		if (isUnsolvable(note))
-			return Result.newUnsolvableInstance();
+		checkArgument(!isUnsolvable(note), "Grid is unsolvable");
+		checkArgument(!note.foundMultipleSolutions, "Grid has multiple solutions");
 
-		if (note.foundMultipleSolutions)
-			return Result.newMultipleSolutionsInstance();
-
-		return Result.newSolvableInstance(HARD, note.solution, hints);
+		return note.solution;
 	}
 
 	private static boolean run(Grid grid, Note note) {
-		for (Set<Cell> row : grid.getRows()) {
-			for (Cell cell : row) {
-				if (shouldTryAndSet(cell)) {
-					if (noMorePossibles(cell))
-						return false;
-					return tryAndSetNumbers(grid, cell, note);
-				}
+		for (Cell cell : grid.getCells()) {
+			if (shouldTryAndSet(cell)) {
+				if (noMorePossibles(cell))
+					return false;
+				return tryAndSetNumbers(grid, cell, note);
 			}
 		}
 
@@ -65,7 +56,7 @@ final class BruteForceMethod {
 	}
 
 	private static boolean shouldTryAndSet(Cell cell) {
-		return cell.isEmpty();
+		return !cell.isSet();
 	}
 
 	private static boolean noMorePossibles(Cell cell) {
@@ -77,13 +68,13 @@ final class BruteForceMethod {
 
 		for (int number = 1; number <= size; number++) {
 			if (cellContainsPossible(cell, number)) {
-				setNumberAndUpdateGrid(cell, number, grid);
+				cell.setNumber(number);
 
 				if (foundSolution(grid, note)) {
 
 					if (isFirstSolution(note)) {
 						updateNote(note, grid);
-						clearNumberAndUpdateGrid(cell, grid);
+						cell.clearNumber();
 						return false;
 					} else {
 						note.foundMultipleSolutions = true;
@@ -91,7 +82,7 @@ final class BruteForceMethod {
 					}
 
 				} else
-					clearNumberAndUpdateGrid(cell, grid);
+					cell.clearNumber();
 			}
 		}
 		return false;
@@ -107,13 +98,7 @@ final class BruteForceMethod {
 
 	private static void updateNote(Note note, Grid grid) {
 		note.foundSolution = true;
-		note.solution = new Grid(grid);
-	}
-
-	private static void clearNumberAndUpdateGrid(Cell cell, Grid grid) {
-		cell.clearNumber();
-		grid.resetPossibleNumbers();
-		grid.updatePossibleNumbers();
+		note.solution = copyOf(grid);
 	}
 
 	private static boolean isUnsolvable(Note note) {
@@ -125,4 +110,5 @@ final class BruteForceMethod {
 		private boolean foundMultipleSolutions;
 		private Grid solution;
 	}
+
 }

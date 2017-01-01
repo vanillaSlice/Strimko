@@ -1,8 +1,8 @@
 package lowe.mike.strimko.model.solver;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.Set;
 
 import lowe.mike.strimko.model.Grid;
 
@@ -15,18 +15,21 @@ import lowe.mike.strimko.model.Grid;
  * 
  * @author Mike Lowe
  */
-final class CombinationIterator implements Iterator<Set<Integer>> {
+final class CombinationIterator implements Iterator<Collection<Integer>> {
+
 	private final int n;
 	private final int size;
 	private final int numberOfSubsets;
-	private int current = 1;
+	private int cursor = 1;
+	private Collection<Integer> currentCombination;
+	private Collection<Integer> nextCombination;
 
 	/**
-	 * Creates a new {@code CombinationIterator} given the size of combinations
-	 * and size of the {@link Grid}.
+	 * Creates a new {@code CombinationIterator} given the size of each
+	 * combination and size of the {@link Grid}.
 	 * 
 	 * @param n
-	 *            size of combinations
+	 *            size of each combination
 	 * @param size
 	 *            size of the {@link Grid}
 	 */
@@ -34,27 +37,39 @@ final class CombinationIterator implements Iterator<Set<Integer>> {
 		this.n = n;
 		this.size = size;
 		this.numberOfSubsets = 1 << this.size;
+		this.nextCombination = getNextCombination();
 	}
 
 	@Override
 	public boolean hasNext() {
-		return current < numberOfSubsets;
+		return nextCombination != null;
 	}
 
 	@Override
-	public Set<Integer> next() {
-		Set<Integer> subset = new HashSet<>();
+	public Collection<Integer> next() {
+		currentCombination = nextCombination;
+		nextCombination = getNextCombination();
+		return currentCombination;
+	}
+
+	private Collection<Integer> getNextCombination() {
+		Collection<Integer> nextCombination = new HashSet<>();
 
 		for (int i = 0; i < size; i++)
-			if ((current & (1 << i)) > 0)
-				subset.add(i + 1);
+			if ((cursor & (1 << i)) > 0)
+				nextCombination.add(i + 1);
 
-		current++;
+		cursor++;
+
+		// no more combinations left
+		if (cursor > numberOfSubsets)
+			return null;
 
 		// if combination is not the correct size, find the next one
-		if (subset.size() != n)
-			return next();
+		if (nextCombination.size() != n)
+			return getNextCombination();
 
-		return subset;
+		return nextCombination;
 	}
+
 }

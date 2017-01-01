@@ -1,8 +1,9 @@
 package lowe.mike.strimko.model.solver;
 
-import java.util.Collections;
+import static java.util.Collections.disjoint;
+
+import java.util.Collection;
 import java.util.HashSet;
-import java.util.Set;
 
 import lowe.mike.strimko.model.Cell;
 import lowe.mike.strimko.model.Grid;
@@ -27,6 +28,7 @@ import lowe.mike.strimko.model.Grid;
  * @author Mike Lowe
  */
 final class NMethod {
+
 	private enum Mode {
 		NAKED, HIDDEN;
 	}
@@ -110,11 +112,11 @@ final class NMethod {
 		return runOverStreams(Mode.HIDDEN, grid, n);
 	}
 
-	private static boolean run(Mode mode, Set<Set<Cell>> groups, int n, int size) {
+	private static boolean run(Mode mode, Collection<Collection<Cell>> groups, int n, int size) {
 		CombinationIterator iterator = new CombinationIterator(n, size);
 
 		while (iterator.hasNext()) {
-			Set<Integer> combination = iterator.next();
+			Collection<Integer> combination = iterator.next();
 			if (groupContainsN(mode, groups, n, size, combination))
 				return true;
 		}
@@ -122,10 +124,11 @@ final class NMethod {
 		return false;
 	}
 
-	private static boolean groupContainsN(Mode mode, Set<Set<Cell>> groups, int n, int size, Set<Integer> combination) {
-		for (Set<Cell> group : groups) {
-			Set<Integer> foundNumbers = new HashSet<>();
-			Set<Cell> cellsContainingCombination = new HashSet<>();
+	private static boolean groupContainsN(Mode mode, Collection<Collection<Cell>> groups, int n, int size,
+			Collection<Integer> combination) {
+		for (Collection<Cell> group : groups) {
+			Collection<Integer> foundNumbers = new HashSet<>();
+			Collection<Cell> cellsContainingCombination = new HashSet<>();
 
 			findCellsContainingCombination(mode, group, cellsContainingCombination, combination, foundNumbers);
 
@@ -136,8 +139,9 @@ final class NMethod {
 		return false;
 	}
 
-	private static void findCellsContainingCombination(Mode mode, Set<Cell> group, Set<Cell> cellsContainingCombination,
-			Set<Integer> combination, Set<Integer> foundNumbers) {
+	private static void findCellsContainingCombination(Mode mode, Collection<Cell> group,
+			Collection<Cell> cellsContainingCombination, Collection<Integer> combination,
+			Collection<Integer> foundNumbers) {
 		for (Cell cell : group) {
 			if (shouldAddToCombination(mode, cell, combination)) {
 				cellsContainingCombination.add(cell);
@@ -146,37 +150,38 @@ final class NMethod {
 		}
 	}
 
-	private static boolean shouldAddToCombination(Mode mode, Cell cell, Set<Integer> combination) {
+	private static boolean shouldAddToCombination(Mode mode, Cell cell, Collection<Integer> combination) {
 		return (mode == Mode.NAKED && cellContainsOnly(cell, combination))
 				|| (mode == Mode.HIDDEN && cellContainsOneOf(cell, combination));
 	}
 
-	private static boolean cellContainsOnly(Cell cell, Set<Integer> combination) {
-		Set<Integer> original = new HashSet<>(cell.getPossibleNumbers());
+	private static boolean cellContainsOnly(Cell cell, Collection<Integer> combination) {
+		Collection<Integer> original = new HashSet<>(cell.getPossibleNumbers());
 		if (original.size() == 0)
 			return false;
 		original.removeAll(combination);
 		return original.size() == 0;
 	}
 
-	private static boolean cellContainsOneOf(Cell cell, Set<Integer> combination) {
-		return !Collections.disjoint(cell.getPossibleNumbers(), combination);
+	private static boolean cellContainsOneOf(Cell cell, Collection<Integer> combination) {
+		return !disjoint(cell.getPossibleNumbers(), combination);
 	}
 
-	private static boolean foundN(Set<Cell> cellsContainingCombination, int n, Set<Integer> foundNumbers,
-			Set<Integer> combination) {
+	private static boolean foundN(Collection<Cell> cellsContainingCombination, int n, Collection<Integer> foundNumbers,
+			Collection<Integer> combination) {
 		return cellsContainingCombination.size() == n && foundNumbers.containsAll(combination);
 	}
 
-	private static boolean removePossibles(Mode mode, Set<Integer> combination, Set<Cell> group,
-			Set<Cell> cellsContainingCombination) {
+	private static boolean removePossibles(Mode mode, Collection<Integer> combination, Collection<Cell> group,
+			Collection<Cell> cellsContainingCombination) {
 		if (mode == Mode.NAKED)
 			return removePossiblesFromGroupExcept(combination, group, cellsContainingCombination);
 		else
 			return removeNumbersOutsideOfCombination(cellsContainingCombination, combination);
 	}
 
-	private static boolean removePossiblesFromGroupExcept(Set<Integer> combination, Set<Cell> group, Set<Cell> cells) {
+	private static boolean removePossiblesFromGroupExcept(Collection<Integer> combination, Collection<Cell> group,
+			Collection<Cell> cells) {
 		boolean changed = false;
 
 		for (Cell cell : group)
@@ -187,16 +192,16 @@ final class NMethod {
 		return changed;
 	}
 
-	private static boolean shouldRemove(Cell cell, Set<Cell> cells) {
+	private static boolean shouldRemove(Cell cell, Collection<Cell> cells) {
 		return !cells.contains(cell);
 	}
 
-	private static boolean removeNumbers(Cell cell, Set<Integer> combination) {
+	private static boolean removeNumbers(Cell cell, Collection<Integer> combination) {
 		return cell.getPossibleNumbers().removeAll(combination);
 	}
 
-	private static boolean removeNumbersOutsideOfCombination(Set<Cell> cellsContainingCombination,
-			Set<Integer> combination) {
+	private static boolean removeNumbersOutsideOfCombination(Collection<Cell> cellsContainingCombination,
+			Collection<Integer> combination) {
 		boolean changed = false;
 
 		for (Cell cellContainingCombination : cellsContainingCombination)
@@ -205,4 +210,5 @@ final class NMethod {
 
 		return changed;
 	}
+
 }

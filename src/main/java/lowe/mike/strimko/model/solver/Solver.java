@@ -3,9 +3,10 @@ package lowe.mike.strimko.model.solver;
 import static lowe.mike.strimko.model.Difficulty.EASY;
 import static lowe.mike.strimko.model.Difficulty.HARD;
 import static lowe.mike.strimko.model.Difficulty.MEDIUM;
+import static lowe.mike.strimko.model.Grid.copyOf;
 
+import java.util.Collection;
 import java.util.LinkedHashSet;
-import java.util.Set;
 
 import lowe.mike.strimko.model.Difficulty;
 import lowe.mike.strimko.model.Grid;
@@ -13,8 +14,8 @@ import lowe.mike.strimko.model.Position;
 
 /**
  * {@code Solver} class provides a single method {@link #solve(Grid)} which
- * attempts to solve a given {@link Grid} and returns a {@link Result} object
- * which contains details about the solution etc.
+ * attempts to solve a given {@link Grid} and returns a {@link SolvingResult}
+ * object which contains details about the solution etc.
  * <p>
  * Various methods are used to attempt to solve a {@link Grid}, these include:
  * <ul>
@@ -45,23 +46,26 @@ public final class Solver {
 	}
 
 	/**
-	 * Attempts to solve the given {@link Grid} and returns a {@link Result}
-	 * object.
+	 * Attempts to solve the given {@link Grid} and returns a
+	 * {@link SolvingResult} object.
 	 * 
 	 * @param grid
 	 *            the {@link Grid} to solve
-	 * @return the {@link Result} containing useful information from solving
+	 * @return the {@link SolvingResult} containing useful information from
+	 *         solving
+	 * @throws IllegalArgumentException
+	 *             if {@code grid} is not solvable or has multiple solutions
 	 */
-	public static Result solve(Grid grid) {
+	public static SolvingResult solve(Grid grid) {
 		// create a copy so we don't alter the original
-		grid = new Grid(grid);
-		Result result = runSolvingMethods(grid);
+		grid = copyOf(grid);
+		SolvingResult result = runSolvingMethods(grid);
 		return result;
 	}
 
-	private static Result runSolvingMethods(Grid grid) {
+	private static SolvingResult runSolvingMethods(Grid grid) {
 		Difficulty difficulty = EASY;
-		Set<Position> hints = new LinkedHashSet<>();
+		Collection<Position> hints = new LinkedHashSet<>();
 
 		while (!grid.isSolved()) {
 			boolean changed = runEasyMethods(grid, hints);
@@ -77,17 +81,16 @@ public final class Solver {
 				changed = runHardMethods(grid);
 			}
 
-			// last resort - return result from brute-force method
 			if (!changed) {
-				Result result = BruteForceMethod.run(grid, hints);
-				return result;
+				grid = BruteForceMethod.run(grid);
+				break;
 			}
 		}
 
-		return Result.newSolvableInstance(difficulty, grid, hints);
+		return new SolvingResult(difficulty, getSolution(grid), hints);
 	}
 
-	private static boolean runEasyMethods(Grid grid, Set<Position> hints) {
+	private static boolean runEasyMethods(Grid grid, Collection<Position> hints) {
 		if (NakedSingleMethod.run(grid, hints))
 			return true;
 		if (HiddenSingleMethod.run(grid, hints))
@@ -135,4 +138,17 @@ public final class Solver {
 
 		return false;
 	}
+
+	private static int[][] getSolution(Grid grid) {
+		int size = grid.getSize();
+		int[][] solution = new int[size][size];
+		for (int rowIndex = 0; rowIndex < size; rowIndex++) {
+			for (int columnIndex = 0; columnIndex < size; columnIndex++) {
+				int number = grid.getCell(rowIndex, columnIndex).getNumber();
+				solution[rowIndex][columnIndex] = number;
+			}
+		}
+		return solution;
+	}
+
 }

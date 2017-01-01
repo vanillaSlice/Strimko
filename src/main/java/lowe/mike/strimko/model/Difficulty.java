@@ -6,10 +6,18 @@ package lowe.mike.strimko.model;
  * @author Mike Lowe
  */
 public enum Difficulty {
-	EASY, MEDIUM, HARD;
+
+	EASY("Easy"), MEDIUM("Medium"), HARD("Hard");
+
+	private final String displayName;
+
+	private Difficulty(String displayName) {
+		this.displayName = displayName;
+	}
 
 	@Override
 	public String toString() {
-		return super.toString().toLowerCase();
+		return displayName;
 	}
+
 }
