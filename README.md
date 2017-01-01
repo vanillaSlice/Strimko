@@ -67,7 +67,7 @@ If you want to build the project yourself:
     ```
 
 ## Technology Used
-For those of you that are interested, the technology used in this projects includes:
+For those of you that are interested, the technology used in this project includes:
 
 * Java 8
 * JavaFX (for the GUI)
