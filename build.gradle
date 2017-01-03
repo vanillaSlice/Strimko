@@ -18,7 +18,7 @@ task fatJar(type: Jar) {
 			'Implementation-Version': version,
 			'Main-Class': 'lowe.mike.strimko.StrimkoApplication'	
 	}
-	baseName = project.name + '-all'
+	baseName = 'Strimko-all'
 	from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
 	with jar
 }
