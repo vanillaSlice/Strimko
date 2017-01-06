@@ -11,6 +11,7 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import lowe.mike.strimko.controller.MainViewController;
 import lowe.mike.strimko.model.FileHandlingException;
@@ -25,6 +26,7 @@ public final class StrimkoApplication extends Application {
 
 	private static final String APP_NAME = "Strimko";
 	private static final String MAIN_VIEW_RESOURCE_PATH = "/view/MainView.fxml";
+	private static final Image ICON = new Image("/view/icon.png");
 
 	private GameState gameState;
 	private Stage primaryStage;
@@ -36,6 +38,7 @@ public final class StrimkoApplication extends Application {
 			initializeGameState();
 			initializePrimaryStage(primaryStage);
 			initializeMainView();
+			addIcon();
 			showScene();
 		}
 	}
@@ -59,6 +62,7 @@ public final class StrimkoApplication extends Application {
 		this.primaryStage.setTitle(APP_NAME);
 		this.primaryStage.setOnCloseRequest(event -> exit());
 		this.primaryStage.setResizable(false);
+		this.primaryStage.sizeToScene();
 	}
 
 	private void initializeMainView() {
@@ -76,6 +80,10 @@ public final class StrimkoApplication extends Application {
 		} catch (IOException e) {
 			throw new AssertionError("Must always be able to load FXML resource");
 		}
+	}
+
+	private void addIcon() {
+		primaryStage.getIcons().add(ICON);
 	}
 
 	private void showScene() {

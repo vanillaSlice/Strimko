@@ -1,6 +1,10 @@
 package lowe.mike.strimko.controller;
 
+import static java.lang.Double.MAX_VALUE;
 import static java.lang.Integer.parseInt;
+import static javafx.scene.layout.GridPane.setFillWidth;
+import static javafx.scene.layout.GridPane.setHgrow;
+import static javafx.scene.layout.Priority.SOMETIMES;
 import static lowe.mike.strimko.controller.Alerts.showErrorAndWait;
 
 import java.util.Iterator;
@@ -52,7 +56,6 @@ public abstract class ModeViewController {
 	private static final String STREAM_STYLE_CLASS_PREFIX = "stream-";
 	private static final String NUMBER_LABEL_STYLE_CLASS = "numberLabel";
 	private static final String SOLUTION_LABEL_STYLE_CLASS = "solutionLabel";
-	private static final String NUMBERED_BUTTON_STYLE_CLASS = "numberedButton";
 
 	/**
 	 * Set the state of the controller.
@@ -348,22 +351,19 @@ public abstract class ModeViewController {
 	 *            the number of the {@link ToggleButton}
 	 * @param toggleGroup
 	 *            the {@link ToggleGroup}
-	 * @param width
-	 *            the width of the {@link ToggleButton}
 	 * @param occurrenceProperty
 	 *            the number or stream occurrence property
 	 * @return a new numbered {@link ToggleButton}
 	 */
-	protected static ToggleButton newNumberedToggleButton(int size, int number, ToggleGroup toggleGroup, double width,
+	protected static ToggleButton newNumberedToggleButton(int size, int number, ToggleGroup toggleGroup,
 			ObservableIntegerValue occurrenceProperty) {
 		ToggleButton numberedButton = new ToggleButton(Integer.toString(number));
 
 		numberedButton.setToggleGroup(toggleGroup);
-		numberedButton.setPrefWidth(width);
 
 		setNumberedToggleButtonDisableProperty(numberedButton, size, occurrenceProperty);
 		addOccurrencePropertyChangeListener(numberedButton, size, occurrenceProperty);
-		numberedButton.getStyleClass().add(NUMBERED_BUTTON_STYLE_CLASS);
+		addNumberedButtonStyle(numberedButton);
 
 		return numberedButton;
 	}
@@ -381,6 +381,13 @@ public abstract class ModeViewController {
 			ObservableIntegerValue occurrenceProperty) {
 		occurrenceProperty.addListener(
 				(observable) -> setNumberedToggleButtonDisableProperty(numberedButton, size, occurrenceProperty));
+	}
+
+	private static void addNumberedButtonStyle(ToggleButton numberedButton) {
+		numberedButton.setMaxWidth(MAX_VALUE);
+		numberedButton.setMaxHeight(MAX_VALUE);
+		setHgrow(numberedButton, SOMETIMES);
+		setFillWidth(numberedButton, true);
 	}
 
 	/**

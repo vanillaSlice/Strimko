@@ -353,16 +353,14 @@ public final class PlayModeViewController extends ModeViewController {
 	private void addNumberButtons() {
 		Grid grid = gameState.getPuzzle().getGrid();
 		int size = grid.getSize();
-		double width = numbersPane.getPrefWidth() / size;
 
 		for (int number = 1; number <= size; number++)
-			addNumberButton(grid, size, number, width);
+			addNumberButton(grid, size, number);
 	}
 
-	private void addNumberButton(Grid grid, int size, int number, double width) {
+	private void addNumberButton(Grid grid, int size, int number) {
 		ObservableIntegerValue occurrenceProperty = grid.numberOccurrenceProperty(number);
-		ToggleButton numberButton = newNumberedToggleButton(size, number, controlsToggleGroup, width,
-				occurrenceProperty);
+		ToggleButton numberButton = newNumberedToggleButton(size, number, controlsToggleGroup, occurrenceProperty);
 		numbersPane.addColumn(number - 1, numberButton);
 	}
 

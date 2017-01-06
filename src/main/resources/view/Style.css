@@ -1,23 +1,26 @@
+.root {
+	-fx-font-size: 12.0px;
+}
+
 .refreshButton {
 	-fx-background-image: url("refresh.png");
-	-fx-background-size: 23.0 23.0;
- 	-fx-background-repeat: no-repeat;
+	-fx-background-size: 23.0px 23.0px;
+	-fx-background-repeat: no-repeat;
 	-fx-background-position: center;   
 }
 
 .numberLabel,
 .solutionLabel {
-	-fx-font-size: 32.0;
+	-fx-font-size: 32.0px;
 	-fx-alignment: center;
 }
 
 .pencilMarkLabel {
-	-fx-font-size: 12.0;
+	-fx-font-size: 12.0px;
 	-fx-alignment: center;
 }
 
 .pencilMarksPane {
-	-fx-font-size: 32.0;
 	-fx-alignment: top-left;
 }
 			
@@ -62,11 +65,11 @@
 	-fx-alignment: center;
 }
 
-.numberedButton {
-	-fx-font-size: 12.0;
+.streamButton {
+	-fx-border-radius: 3.0px, 3.0px, 2.0px, 1.0px;
+	-fx-border-color: transparent;
 }
 
 .streamButton:selected {
 	-fx-border-color: #000000;
-	-fx-border-radius: 3.0px, 3.0px, 2.0px, 1.0px;
 }

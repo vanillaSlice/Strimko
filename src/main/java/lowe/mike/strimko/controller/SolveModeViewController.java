@@ -240,16 +240,14 @@ public final class SolveModeViewController extends ModeViewController {
 	private void addStreamButtons() {
 		GridBuilder gridBuilder = gameState.getGridBuilder();
 		int size = gridBuilder.getSize();
-		double width = streamsPane.getPrefWidth() / size;
 
 		for (int streamIndex = 1; streamIndex <= size; streamIndex++)
-			addStreamButton(gridBuilder, size, streamIndex, width);
+			addStreamButton(gridBuilder, size, streamIndex);
 	}
 
-	private void addStreamButton(GridBuilder gridBuilder, int size, int streamIndex, double width) {
+	private void addStreamButton(GridBuilder gridBuilder, int size, int streamIndex) {
 		ObservableIntegerValue occurrenceProperty = gridBuilder.streamIndexOccurrenceProperty(streamIndex);
-		ToggleButton streamButton = newNumberedToggleButton(size, streamIndex, controlsToggleGroup, width,
-				occurrenceProperty);
+		ToggleButton streamButton = newNumberedToggleButton(size, streamIndex, controlsToggleGroup, occurrenceProperty);
 		addStreamButtonStyle(streamButton, streamIndex);
 		streamsPane.addColumn(streamIndex - 1, streamButton);
 	}
@@ -262,16 +260,14 @@ public final class SolveModeViewController extends ModeViewController {
 	private void addNumberButtons() {
 		GridBuilder gridBuilder = gameState.getGridBuilder();
 		int size = gridBuilder.getSize();
-		double width = numbersPane.getPrefWidth() / size;
 
 		for (int number = 1; number <= size; number++)
-			addNumberButton(gridBuilder, size, number, width);
+			addNumberButton(gridBuilder, size, number);
 	}
 
-	private void addNumberButton(GridBuilder gridBuilder, int size, int number, double width) {
+	private void addNumberButton(GridBuilder gridBuilder, int size, int number) {
 		ObservableIntegerValue occurrenceProperty = gridBuilder.numberOccurrenceProperty(number);
-		ToggleButton numberButton = newNumberedToggleButton(size, number, controlsToggleGroup, width,
-				occurrenceProperty);
+		ToggleButton numberButton = newNumberedToggleButton(size, number, controlsToggleGroup, occurrenceProperty);
 		numbersPane.addColumn(number - 1, numberButton);
 	}
 
