@@ -54,10 +54,10 @@ To build the project:
     ```
 
 ### Running
-Once built, to run the application go to build/libs and double-click Strimko-all-<version>.jar or from your terminal/command prompt
+Once built, to run the application go to build/libs and double-click Strimko-all-[version].jar or from your terminal/command prompt
 run:
 ```
-java -jar Strimko-all-<version>.jar
+java -jar Strimko-all-[version].jar
 ```
 
 ## Technology Used
