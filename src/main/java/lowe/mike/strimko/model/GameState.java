@@ -1,99 +1,97 @@
 package lowe.mike.strimko.model;
 
-import static java.util.Objects.hash;
-
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import lowe.mike.strimko.model.Grid.GridBuilder;
 
+import static java.util.Objects.hash;
+
 /**
  * {@code GameState} instances contain information about the current state of
  * the game.
- * 
+ *
  * @author Mike Lowe
  */
 public final class GameState {
 
-	private final ReadOnlyObjectWrapper<Puzzle> puzzle = new ReadOnlyObjectWrapper<>();
-	private final ReadOnlyObjectWrapper<GridBuilder> gridBuilder = new ReadOnlyObjectWrapper<>();
+    private final ReadOnlyObjectWrapper<Puzzle> puzzle = new ReadOnlyObjectWrapper<>();
+    private final ReadOnlyObjectWrapper<GridBuilder> gridBuilder = new ReadOnlyObjectWrapper<>();
 
-	/**
-	 * @return the {@link Puzzle} being played
-	 */
-	public Puzzle getPuzzle() {
-		return puzzle.get();
-	}
+    /**
+     * @return the {@link Puzzle} being played
+     */
+    public Puzzle getPuzzle() {
+        return puzzle.get();
+    }
 
-	/**
-	 * @param puzzle
-	 *            the {@link Puzzle} being played
-	 */
-	public void setPuzzle(Puzzle puzzle) {
-		if (puzzle != null)
-			this.puzzle.set(puzzle);
-	}
+    /**
+     * @param puzzle the {@link Puzzle} being played
+     */
+    public void setPuzzle(Puzzle puzzle) {
+        if (puzzle != null)
+            this.puzzle.set(puzzle);
+    }
 
-	/**
-	 * @return the {@link ReadOnlyObjectProperty} of the {@link Puzzle} being
-	 *         played
-	 */
-	public ReadOnlyObjectProperty<Puzzle> puzzleProperty() {
-		return puzzle.getReadOnlyProperty();
-	}
+    /**
+     * @return the {@link ReadOnlyObjectProperty} of the {@link Puzzle} being
+     * played
+     */
+    public ReadOnlyObjectProperty<Puzzle> puzzleProperty() {
+        return puzzle.getReadOnlyProperty();
+    }
 
-	/**
-	 * @return the {@link GridBuilder}
-	 */
-	public GridBuilder getGridBuilder() {
-		return gridBuilder.get();
-	}
+    /**
+     * @return the {@link GridBuilder}
+     */
+    public GridBuilder getGridBuilder() {
+        return gridBuilder.get();
+    }
 
-	/**
-	 * @param gridBuilder
-	 *            the {@link GridBuilder}
-	 */
-	public void setGridBuilder(GridBuilder gridBuilder) {
-		if (gridBuilder != null)
-			this.gridBuilder.set(gridBuilder);
-	}
+    /**
+     * @param gridBuilder the {@link GridBuilder}
+     */
+    public void setGridBuilder(GridBuilder gridBuilder) {
+        if (gridBuilder != null)
+            this.gridBuilder.set(gridBuilder);
+    }
 
-	/**
-	 * @return the {@link ReadOnlyObjectProperty} of the {@link GridBuilder}
-	 */
-	public ReadOnlyObjectProperty<GridBuilder> gridBuilderProperty() {
-		return gridBuilder.getReadOnlyProperty();
-	}
+    /**
+     * @return the {@link ReadOnlyObjectProperty} of the {@link GridBuilder}
+     */
+    public ReadOnlyObjectProperty<GridBuilder> gridBuilderProperty() {
+        return gridBuilder.getReadOnlyProperty();
+    }
 
-	@Override
-	public int hashCode() {
-		return hash(puzzle, gridBuilder);
-	}
+    @Override
+    public int hashCode() {
+        return hash(puzzle, gridBuilder);
+    }
 
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		GameState other = (GameState) obj;
-		if (getPuzzle() == null) {
-			if (other.getPuzzle() != null)
-				return false;
-		} else if (!getPuzzle().equals(other.getPuzzle()))
-			return false;
-		if (getGridBuilder() == null) {
-			if (other.getGridBuilder() != null)
-				return false;
-		} else if (!getGridBuilder().equals(other.getGridBuilder()))
-			return false;
-		return true;
-	}
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        GameState other = (GameState) obj;
+        if (getPuzzle() == null) {
+            if (other.getPuzzle() != null)
+                return false;
+        } else if (!getPuzzle().equals(other.getPuzzle()))
+            return false;
+        if (getGridBuilder() == null) {
+            if (other.getGridBuilder() != null)
+                return false;
+        } else if (!getGridBuilder().equals(other.getGridBuilder()))
+            return false;
+        return true;
+    }
 
-	@Override
-	public String toString() {
-		return "GameState [puzzle=" + getPuzzle() + ", gridBuilder=" + getGridBuilder() + "]";
-	}
+    @Override
+    public String toString() {
+        return "GameState [puzzle=" + getPuzzle() + ", gridBuilder=" + getGridBuilder() + "]";
+    }
 
 }
