@@ -1,24 +1,25 @@
 apply plugin: 'java'
 
-version='1.0.1'
+version = '1.0.1'
 
 repositories {
-	mavenCentral()
+  mavenCentral()
 }
 
 dependencies {
-	compile group: 'org.slf4j', name: 'slf4j-api', version: '1.7.22'
-	compile group: 'junit', name: 'junit', version: '4.12'
-	compile group: 'com.google.guava', name: 'guava', version: '20.0'
+  compile group: 'junit', name: 'junit', version: '4.12'
+  compile group: 'com.google.guava', name: 'guava', version: '20.0'
 }
 
-task fatJar(type: Jar) {
-	manifest {
-		attributes 'Implementation-Title': 'Strimko', 
-			'Implementation-Version': version,
-			'Main-Class': 'lowe.mike.strimko.StrimkoApplication'	
-	}
-	baseName = 'Strimko-all'
-	from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
-	with jar
+task buildFatJar(type: Jar) {
+  manifest {
+    attributes 'Implementation-Title': 'Strimko',
+        'Implementation-Version': version,
+        'Main-Class': 'lowe.mike.strimko.StrimkoApplication'
+  }
+  baseName = 'Strimko-all'
+  from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+  with jar
 }
+
+build.finalizedBy(buildFatJar)
