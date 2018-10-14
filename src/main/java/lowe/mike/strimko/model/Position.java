@@ -12,59 +12,61 @@ import static java.util.Objects.hash;
  */
 public final class Position {
 
-    private final int rowIndex;
-    private final int columnIndex;
+  private final int rowIndex;
+  private final int columnIndex;
 
-    /**
-     * Creates a new {@code Position} instance given the row index and column
-     * index.
-     *
-     * @param rowIndex    the row index
-     * @param columnIndex the column index
-     */
-    public Position(int rowIndex, int columnIndex) {
-        this.rowIndex = rowIndex;
-        this.columnIndex = columnIndex;
-    }
+  /**
+   * Creates a new {@code Position} instance given the row index and column
+   * index.
+   *
+   * @param rowIndex    the row index
+   * @param columnIndex the column index
+   */
+  public Position(int rowIndex, int columnIndex) {
+    this.rowIndex = rowIndex;
+    this.columnIndex = columnIndex;
+  }
 
-    /**
-     * @return the row index
-     */
-    public int getRowIndex() {
-        return rowIndex;
-    }
+  /**
+   * @return the row index
+   */
+  public int getRowIndex() {
+    return rowIndex;
+  }
 
-    /**
-     * @return the column index
-     */
-    public int getColumnIndex() {
-        return columnIndex;
-    }
+  /**
+   * @return the column index
+   */
+  public int getColumnIndex() {
+    return columnIndex;
+  }
 
-    @Override
-    public int hashCode() {
-        return hash(rowIndex, columnIndex);
-    }
+  @Override
+  public int hashCode() {
+    return hash(rowIndex, columnIndex);
+  }
 
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
-        Position other = (Position) obj;
-        if (rowIndex != other.rowIndex)
-            return false;
-        if (columnIndex != other.columnIndex)
-            return false;
-        return true;
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj) {
+      return true;
     }
+    if (obj == null) {
+      return false;
+    }
+    if (getClass() != obj.getClass()) {
+      return false;
+    }
+    Position other = (Position) obj;
+    if (rowIndex != other.rowIndex) {
+      return false;
+    }
+    return columnIndex == other.columnIndex;
+  }
 
-    @Override
-    public String toString() {
-        return "Position [rowIndex=" + rowIndex + ", columnIndex=" + columnIndex + "]";
-    }
+  @Override
+  public String toString() {
+    return "Position [rowIndex=" + rowIndex + ", columnIndex=" + columnIndex + "]";
+  }
 
 }

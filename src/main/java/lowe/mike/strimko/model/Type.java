@@ -7,17 +7,17 @@ package lowe.mike.strimko.model;
  */
 public enum Type {
 
-    STRIMKO("Strimko"), SUDOKU("Sudoku");
+  STRIMKO("Strimko"), SUDOKU("Sudoku");
 
-    private final String displayName;
+  private final String displayName;
 
-    Type(String displayName) {
-        this.displayName = displayName;
-    }
+  Type(String displayName) {
+    this.displayName = displayName;
+  }
 
-    @Override
-    public String toString() {
-        return displayName;
-    }
+  @Override
+  public String toString() {
+    return displayName;
+  }
 
 }

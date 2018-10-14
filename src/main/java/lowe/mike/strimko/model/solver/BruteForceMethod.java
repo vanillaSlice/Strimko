@@ -18,95 +18,97 @@ import static lowe.mike.strimko.model.Grid.copyOf;
  */
 final class BruteForceMethod extends SolvingMethod {
 
-    // don't want instances
-    private BruteForceMethod() {
-    }
+  // don't want instances
+  private BruteForceMethod() {
+  }
 
-    /**
-     * Runs brute-force method.
-     *
-     * @param grid the {@link Grid} to run method over
-     * @return the solved {@link Grid}
-     * @throws IllegalArgumentException if {@code grid} is not solvable or has multiple solutions
-     */
-    static Grid run(Grid grid) {
-        // used to keep note of information when running algorithm
-        Note note = new Note();
+  /**
+   * Runs brute-force method.
+   *
+   * @param grid the {@link Grid} to run method over
+   * @return the solved {@link Grid}
+   * @throws IllegalArgumentException if {@code grid} is not solvable or has multiple solutions
+   */
+  static Grid run(Grid grid) {
+    // used to keep note of information when running algorithm
+    Note note = new Note();
 
-        run(grid, note);
+    run(grid, note);
 
-        checkArgument(!isUnsolvable(note), "Grid is unsolvable");
-        checkArgument(!note.foundMultipleSolutions, "Grid has multiple solutions");
+    checkArgument(!isUnsolvable(note), "Grid is unsolvable");
+    checkArgument(!note.foundMultipleSolutions, "Grid has multiple solutions");
 
-        return note.solution;
-    }
+    return note.solution;
+  }
 
-    private static boolean run(Grid grid, Note note) {
-        for (Cell cell : grid.getCells()) {
-            if (shouldTryAndSet(cell)) {
-                if (noMorePossibles(cell))
-                    return false;
-                return tryAndSetNumbers(grid, cell, note);
-            }
+  private static boolean run(Grid grid, Note note) {
+    for (Cell cell : grid.getCells()) {
+      if (shouldTryAndSet(cell)) {
+        if (noMorePossibles(cell)) {
+          return false;
         }
-
-        return true;
+        return tryAndSetNumbers(grid, cell, note);
+      }
     }
 
-    private static boolean shouldTryAndSet(Cell cell) {
-        return !cell.isSet();
-    }
+    return true;
+  }
 
-    private static boolean noMorePossibles(Cell cell) {
-        return cell.getPossibleNumbers().isEmpty();
-    }
+  private static boolean shouldTryAndSet(Cell cell) {
+    return !cell.isSet();
+  }
 
-    private static boolean tryAndSetNumbers(Grid grid, Cell cell, Note note) {
-        int size = grid.getSize();
+  private static boolean noMorePossibles(Cell cell) {
+    return cell.getPossibleNumbers().isEmpty();
+  }
 
-        for (int number = 1; number <= size; number++) {
-            if (cellContainsPossible(cell, number)) {
-                cell.setNumber(number);
+  private static boolean tryAndSetNumbers(Grid grid, Cell cell, Note note) {
+    int size = grid.getSize();
 
-                if (foundSolution(grid, note)) {
+    for (int number = 1; number <= size; number++) {
+      if (cellContainsPossible(cell, number)) {
+        cell.setNumber(number);
 
-                    if (isFirstSolution(note)) {
-                        updateNote(note, grid);
-                        cell.clearNumber();
-                        return false;
-                    } else {
-                        note.foundMultipleSolutions = true;
-                        return true;
-                    }
+        if (foundSolution(grid, note)) {
 
-                } else
-                    cell.clearNumber();
-            }
+          if (isFirstSolution(note)) {
+            updateNote(note, grid);
+            cell.clearNumber();
+            return false;
+          } else {
+            note.foundMultipleSolutions = true;
+            return true;
+          }
+
+        } else {
+          cell.clearNumber();
         }
-        return false;
+      }
     }
+    return false;
+  }
 
-    private static boolean foundSolution(Grid grid, Note note) {
-        return run(grid, note);
-    }
+  private static boolean foundSolution(Grid grid, Note note) {
+    return run(grid, note);
+  }
 
-    private static boolean isFirstSolution(Note note) {
-        return !note.foundSolution;
-    }
+  private static boolean isFirstSolution(Note note) {
+    return !note.foundSolution;
+  }
 
-    private static void updateNote(Note note, Grid grid) {
-        note.foundSolution = true;
-        note.solution = copyOf(grid);
-    }
+  private static void updateNote(Note note, Grid grid) {
+    note.foundSolution = true;
+    note.solution = copyOf(grid);
+  }
 
-    private static boolean isUnsolvable(Note note) {
-        return !note.foundSolution || !note.solution.isSolved();
-    }
+  private static boolean isUnsolvable(Note note) {
+    return !note.foundSolution || !note.solution.isSolved();
+  }
 
-    private static class Note {
-        private boolean foundSolution;
-        private boolean foundMultipleSolutions;
-        private Grid solution;
-    }
+  private static class Note {
+    private boolean foundSolution;
+    private boolean foundMultipleSolutions;
+    private Grid solution;
+  }
 
 }

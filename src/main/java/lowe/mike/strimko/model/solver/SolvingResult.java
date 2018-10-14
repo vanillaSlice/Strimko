@@ -22,75 +22,79 @@ import static java.util.Objects.hash;
  */
 public final class SolvingResult {
 
-    private final Difficulty difficulty;
-    private final int[][] solution;
-    private final Collection<Position> hints;
+  private final Difficulty difficulty;
+  private final int[][] solution;
+  private final Collection<Position> hints;
 
-    /**
-     * Creates a new {@code SolvingResult} given the {@link Difficulty}, the
-     * solution and a {@link Collection} of hints.
-     *
-     * @param difficulty the {@link Difficulty}
-     * @param solution   the solution
-     * @param hints      the {@link Collection} of hints
-     */
-    public SolvingResult(Difficulty difficulty, int[][] solution, Collection<Position> hints) {
-        this.difficulty = difficulty;
-        this.solution = solution;
-        this.hints = hints;
-    }
+  /**
+   * Creates a new {@code SolvingResult} given the {@link Difficulty}, the
+   * solution and a {@link Collection} of hints.
+   *
+   * @param difficulty the {@link Difficulty}
+   * @param solution   the solution
+   * @param hints      the {@link Collection} of hints
+   */
+  public SolvingResult(Difficulty difficulty, int[][] solution, Collection<Position> hints) {
+    this.difficulty = difficulty;
+    this.solution = solution;
+    this.hints = hints;
+  }
 
-    /**
-     * @return the determined {@link Difficulty} of the {@link Puzzle}
-     */
-    public Difficulty getDifficulty() {
-        return difficulty;
-    }
+  /**
+   * @return the determined {@link Difficulty} of the {@link Puzzle}
+   */
+  public Difficulty getDifficulty() {
+    return difficulty;
+  }
 
-    /**
-     * @return the solution to the {@link Puzzle}
-     */
-    public int[][] getSolution() {
-        return solution;
-    }
+  /**
+   * @return the solution to the {@link Puzzle}
+   */
+  public int[][] getSolution() {
+    return solution;
+  }
 
-    /**
-     * @return a {@link Collection} of hints
-     */
-    public Collection<Position> getHints() {
-        return hints;
-    }
+  /**
+   * @return a {@link Collection} of hints
+   */
+  public Collection<Position> getHints() {
+    return hints;
+  }
 
-    @Override
-    public int hashCode() {
-        return hash(difficulty, solution, hints);
-    }
+  @Override
+  public int hashCode() {
+    return hash(difficulty, solution, hints);
+  }
 
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
-        SolvingResult other = (SolvingResult) obj;
-        if (difficulty != other.difficulty)
-            return false;
-        if (!deepEquals(solution, other.solution))
-            return false;
-        if (hints == null) {
-            if (other.hints != null)
-                return false;
-        } else if (!hints.equals(other.hints))
-            return false;
-        return true;
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj) {
+      return true;
     }
+    if (obj == null) {
+      return false;
+    }
+    if (getClass() != obj.getClass()) {
+      return false;
+    }
+    SolvingResult other = (SolvingResult) obj;
+    if (difficulty != other.difficulty) {
+      return false;
+    }
+    if (!deepEquals(solution, other.solution)) {
+      return false;
+    }
+    if (hints == null) {
+      return other.hints == null;
+    } else {
+      return hints.equals(other.hints);
+    }
+  }
 
-    @Override
-    public String toString() {
-        return "SolvingResult [difficulty=" + difficulty + ", solution=" + Arrays.toString(solution) + ", hints="
-                + hints + "]";
-    }
+  @Override
+  public String toString() {
+    return "SolvingResult [difficulty=" + difficulty + ", solution=" + Arrays.toString(solution) + ", hints="
+        + hints + "]";
+  }
 
 }

@@ -16,50 +16,50 @@ import static org.junit.Assert.assertTrue;
  */
 public final class CombinationIteratorTests {
 
-    private static final int N = 2;
-    private static final int SIZE = 4;
-    private CombinationIterator iterator;
+  private static final int N = 2;
+  private static final int SIZE = 4;
+  private CombinationIterator iterator;
 
-    @Before
-    public void setup() {
-        iterator = new CombinationIterator(N, SIZE);
+  @Before
+  public void setup() {
+    iterator = new CombinationIterator(N, SIZE);
+  }
+
+  @Test
+  public void test_hasNext() {
+    // setup
+    int expectedCombinations = 6;
+
+    // execution
+    int numberOfCombinations = 0;
+    while (iterator.hasNext()) {
+      iterator.next();
+      numberOfCombinations++;
     }
 
-    @Test
-    public void test_hasNext() {
-        // setup
-        int expectedCombinations = 6;
+    // verification
+    assertEquals(expectedCombinations, numberOfCombinations);
+  }
 
-        // execution
-        int numberOfCombinations = 0;
-        while (iterator.hasNext()) {
-            iterator.next();
-            numberOfCombinations++;
-        }
+  @Test
+  public void test_get() {
+    // setup
+    List<Collection<Integer>> expectedCombinations = new ArrayList<>();
+    expectedCombinations.add(asList(1, 2));
+    expectedCombinations.add(asList(1, 3));
+    expectedCombinations.add(asList(2, 3));
+    expectedCombinations.add(asList(1, 4));
+    expectedCombinations.add(asList(2, 4));
+    expectedCombinations.add(asList(3, 4));
 
-        // verification
-        assertEquals(expectedCombinations, numberOfCombinations);
+    // execution and verification
+    int index = 0;
+    while (iterator.hasNext()) {
+      Collection<Integer> expectedCombination = expectedCombinations.get(index);
+      Collection<Integer> actualCombination = iterator.next();
+      assertTrue(actualCombination.containsAll(expectedCombination));
+      index++;
     }
-
-    @Test
-    public void test_get() {
-        // setup
-        List<Collection<Integer>> expectedCombinations = new ArrayList<>();
-        expectedCombinations.add(asList(1, 2));
-        expectedCombinations.add(asList(1, 3));
-        expectedCombinations.add(asList(2, 3));
-        expectedCombinations.add(asList(1, 4));
-        expectedCombinations.add(asList(2, 4));
-        expectedCombinations.add(asList(3, 4));
-
-        // execution and verification
-        int index = 0;
-        while (iterator.hasNext()) {
-            Collection<Integer> expectedCombination = expectedCombinations.get(index);
-            Collection<Integer> actualCombination = iterator.next();
-            assertTrue(actualCombination.containsAll(expectedCombination));
-            index++;
-        }
-    }
+  }
 
 }
