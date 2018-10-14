@@ -2,7 +2,9 @@
 
 [![Build Status](https://travis-ci.org/vanillaSlice/Strimko.svg?branch=master)](https://travis-ci.org/vanillaSlice/Strimko)
 
-Strimko is a logic puzzle similar to Sudoku. The objective of the game, given a grid of size *n*, is to fill in the grid with missing numbers such that each:
+Strimko is a logic puzzle similar to Sudoku. The objective of the game, given a grid of size *n*, is to fill in the grid
+with missing numbers such that each:
+
 * row contains numbers 1 to *n*
 * column contains numbers 1 to *n*
 * stream contains numbers 1 to *n*
@@ -13,6 +15,7 @@ See [Strimko™](http://www.strimko.com/index.htm) for more details.
 ![screenshot](/screenshots/screenshot-1.png)
 
 There are two modes in the application:
+
 * Play mode
 * Solve mode
 
@@ -42,22 +45,25 @@ To build the project:
 3. If you have Gradle installed locally, run the Gradle Daemon:
 
     ```
-    gradle clean fatjar
+    gradle clean build
     ```
+
    If you don't have Gradle installed locally and are running on a Unix-like platform such as Linux or Mac OS X, run:
 
     ```
-    ./gradlew clean fatjar
+    ./gradlew clean build
     ```
+
    If you don't have Gradle installed locally and are running on Windows, run:
 
     ```
-    gradlew clean fatjar
+    gradlew clean build
     ```
 
 ### Running
-Once built, to run the application go to build/libs and double-click Strimko-all-[version].jar or from your terminal/command prompt
-run:
+Once built, to run the application go to `build/libs` and double-click Strimko-all-[version].jar or from your
+terminal/command prompt run:
+
 ```
 java -jar Strimko-all-[version].jar
 ```
@@ -82,4 +88,4 @@ Resources useful for the completion of this project:
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
