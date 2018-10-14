@@ -1,5 +1,7 @@
 # Strimko
 
+[![Build Status](https://travis-ci.org/vanillaSlice/Strimko.svg?branch=master)](https://travis-ci.org/vanillaSlice/Strimko)
+
 Strimko is a logic puzzle similar to Sudoku. The objective of the game, given a grid of size *n*, is to fill in the grid with missing numbers such that each:
 * row contains numbers 1 to *n*
 * column contains numbers 1 to *n*
