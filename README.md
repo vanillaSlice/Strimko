@@ -1,6 +1,9 @@
 # Strimko
 
-[![Build Status](https://travis-ci.org/vanillaSlice/Strimko.svg?branch=master)](https://travis-ci.org/vanillaSlice/Strimko)
+[![Latest Release](https://img.shields.io/github/release/vanillaSlice/Strimko.svg)](https://github.com/vanillaSlice/Strimko/releases/latest)
+[![Build Status](https://img.shields.io/travis/vanillaSlice/Strimko/master.svg)](https://travis-ci.org/vanillaSlice/Strimko)
+[![Coverage Status](https://img.shields.io/coveralls/github/vanillaSlice/Strimko/master.svg)](https://coveralls.io/github/vanillaSlice/Strimko?branch=master)
+[![License](https://img.shields.io/github/license/mashape/apistatus.svg)](LICENSE)
 
 Strimko is a logic puzzle similar to Sudoku. The objective of the game, given a grid of size *n*, is to fill in the grid
 with missing numbers such that each:
