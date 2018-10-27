@@ -164,9 +164,4 @@ public final class Puzzle {
     }
   }
 
-  @Override
-  public String toString() {
-    return "Puzzle [type=" + type + ", grid=" + grid + "]";
-  }
-
 }

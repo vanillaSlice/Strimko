@@ -105,9 +105,4 @@ public final class GameState {
     }
   }
 
-  @Override
-  public String toString() {
-    return "GameState [puzzle=" + getPuzzle() + ", gridBuilder=" + getGridBuilder() + "]";
-  }
-
 }

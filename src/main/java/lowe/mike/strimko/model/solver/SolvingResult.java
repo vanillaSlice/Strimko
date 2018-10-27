@@ -96,11 +96,4 @@ public final class SolvingResult {
     }
   }
 
-  @Override
-  public String toString() {
-    return "SolvingResult [difficulty=" + difficulty + ", solution=" + Arrays.toString(solution)
-        + ", hints="
-        + hints + "]";
-  }
-
 }

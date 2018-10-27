@@ -406,11 +406,6 @@ public final class Grid {
     return cells.equals(other.cells);
   }
 
-  @Override
-  public String toString() {
-    return "Grid [cells=" + cells + "]";
-  }
-
   /**
    * {@code GridBuilder} instances are used to create {@link Grid} objects. Validation is carried
    * out on the streams when the {@link #build()} method is called to ensure that a valid {@link
@@ -733,12 +728,6 @@ public final class Grid {
         return false;
       }
       return deepEquals(numbers, other.numbers);
-    }
-
-    @Override
-    public String toString() {
-      return "GridBuilder [streams=" + Arrays.toString(streams) + ", numbers=" + Arrays
-          .toString(numbers) + "]";
     }
 
   }
