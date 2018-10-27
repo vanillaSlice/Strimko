@@ -1,12 +1,12 @@
 package lowe.mike.strimko.model;
 
 import static lowe.mike.strimko.model.Type.STRIMKO;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 import lowe.mike.strimko.model.Grid.GridBuilder;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 /**
  * {@link Puzzle} tests.
@@ -20,7 +20,7 @@ public final class PuzzleTests {
   /**
    * Test setup.
    */
-  @Before
+  @BeforeEach
   public void setup() {
     int size = 3;
     int[][] streams = {{1, 1, 2}, {1, 2, 3}, {2, 3, 3}};

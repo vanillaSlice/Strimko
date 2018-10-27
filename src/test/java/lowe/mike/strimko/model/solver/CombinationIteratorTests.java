@@ -1,14 +1,14 @@
 package lowe.mike.strimko.model.solver;
 
 import static java.util.Arrays.asList;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 /**
  * {@link CombinationIterator} tests.
@@ -21,7 +21,7 @@ public final class CombinationIteratorTests {
   private static final int SIZE = 4;
   private CombinationIterator iterator;
 
-  @Before
+  @BeforeEach
   public void setup() {
     iterator = new CombinationIterator(N, SIZE);
   }

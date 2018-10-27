@@ -8,11 +8,11 @@ import static lowe.mike.strimko.model.Validation.checkGridSize;
 import static lowe.mike.strimko.model.Validation.checkNumber;
 import static lowe.mike.strimko.model.Validation.checkStreamIndex;
 import static lowe.mike.strimko.model.Validation.checkStreams;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import lowe.mike.strimko.model.Grid.GridBuilder;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.ExpectedException;
+import org.junit.jupiter.api.Test;
 
 /**
  * {@link Validation} tests.
@@ -21,20 +21,14 @@ import org.junit.rules.ExpectedException;
  */
 public final class ValidationTests {
 
-  @Rule
-  public final ExpectedException expectedException = ExpectedException.none();
-
   @Test
   public void test_checkGridSize_lessThanMin() {
     test_checkGridSize_invalid(MIN_GRID_SIZE - 1);
   }
 
   private void test_checkGridSize_invalid(int size) {
-    // setup
-    expectedException.expect(IllegalArgumentException.class);
-
-    // execution
-    checkGridSize(size);
+    assertThrows(IllegalArgumentException.class,
+        () -> checkGridSize(size));
   }
 
   @Test
@@ -58,11 +52,8 @@ public final class ValidationTests {
   }
 
   private void test_checkStreamIndex_invalid(int streamIndex, int size) {
-    // setup
-    expectedException.expect(IllegalArgumentException.class);
-
-    // execution
-    checkStreamIndex(streamIndex, size);
+    assertThrows(IllegalArgumentException.class,
+        () -> checkStreamIndex(streamIndex, size));
   }
 
   @Test
@@ -87,11 +78,8 @@ public final class ValidationTests {
   }
 
   private void test_checkNumber_invalid(int number, int size) {
-    // setup
-    expectedException.expect(IllegalArgumentException.class);
-
-    // execution
-    checkNumber(number, size);
+    assertThrows(IllegalArgumentException.class,
+        () -> checkNumber(number, size));
   }
 
   @Test
@@ -121,12 +109,9 @@ public final class ValidationTests {
   }
 
   private void test_checkStreams_invalid(int[][] streams, String message) {
-    // setup
-    expectedException.expect(IllegalArgumentException.class);
-    expectedException.expectMessage(message);
-
-    // execution
-    checkStreams(streams);
+    IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+        () -> checkStreams(streams));
+    assertEquals(message, exception.getMessage());
   }
 
   @Test
@@ -183,12 +168,9 @@ public final class ValidationTests {
   }
 
   private void test_checkUniqueNumbersInGroups_invalid(int[][] numbers, String message) {
-    // setup
-    expectedException.expect(IllegalArgumentException.class);
-    expectedException.expectMessage(message);
-
-    // execution
-    newGridBuilder().setNumbers(numbers).build();
+    IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+        () -> newGridBuilder().setNumbers(numbers).build());
+    assertEquals(message, exception.getMessage());
   }
 
   private GridBuilder newGridBuilder() {

@@ -2,10 +2,11 @@ package lowe.mike.strimko.model;
 
 import static lowe.mike.strimko.model.Constants.NO_NUMBER;
 import static lowe.mike.strimko.model.Constants.NO_STREAM_INDEX;
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import lowe.mike.strimko.model.Grid.GridBuilder;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 /**
  * {@link GridBuilder} tests.
@@ -17,9 +18,10 @@ public final class GridBuilderTests {
   private static final int SIZE = 4;
   private static final int TOTAL_OCCURRENCES = SIZE * SIZE;
 
-  @Test(expected = IllegalArgumentException.class)
+  @Test
   public void test_constructor_invalidSize() {
-    new GridBuilder(-1);
+    assertThrows(IllegalArgumentException.class,
+        () -> new GridBuilder(-1));
   }
 
   @Test
@@ -114,9 +116,10 @@ public final class GridBuilderTests {
     assertEquals(TOTAL_OCCURRENCES, gridBuilder.getNumberOccurrences(NO_NUMBER));
   }
 
-  @Test(expected = IllegalArgumentException.class)
+  @Test
   public void test_build_invalidStreams() {
-    new GridBuilder(SIZE).build();
+    assertThrows(IllegalArgumentException.class,
+        () -> new GridBuilder(SIZE).build());
   }
 
   @Test

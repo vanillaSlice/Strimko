@@ -3,16 +3,16 @@ package lowe.mike.strimko.model;
 import static java.util.Arrays.asList;
 import static lowe.mike.strimko.model.Constants.NO_NUMBER;
 import static lowe.mike.strimko.model.Grid.copyOf;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertNotSame;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotSame;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Collection;
 import lowe.mike.strimko.model.Grid.GridBuilder;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 /**
  * {@link Grid} tests.
@@ -28,7 +28,7 @@ public final class GridTests {
   private static final int[][] SOLUTION = {{3, 2, 1}, {1, 3, 2}, {2, 1, 3}};
   private static final int TOTAL_OCCURRENCES = SIZE * SIZE;
 
-  @Before
+  @BeforeEach
   public void setup() {
     grid = new GridBuilder(SIZE).setStreams(STREAMS).setNumbers(NUMBERS).build();
   }

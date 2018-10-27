@@ -2,7 +2,7 @@ package lowe.mike.strimko.model.solver;
 
 import static lowe.mike.strimko.model.Constants.SUDOKU_SIZE;
 import static lowe.mike.strimko.model.Constants.getSudokuStreams;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Collection;
 import java.util.Map;
