@@ -51,10 +51,10 @@ public abstract class ModeViewController {
   @FXML
   protected Button restartButton;
 
-  private static final String CELL_PANE_STYLE_CLASS = "cellPane";
+  private static final String CELL_PANE_STYLE_CLASS = "cell-pane";
   private static final String STREAM_STYLE_CLASS_PREFIX = "stream-";
-  private static final String NUMBER_LABEL_STYLE_CLASS = "numberLabel";
-  private static final String SOLUTION_LABEL_STYLE_CLASS = "solutionLabel";
+  private static final String NUMBER_LABEL_STYLE_CLASS = "number-label";
+  private static final String SOLUTION_LABEL_STYLE_CLASS = "solution-label";
 
   /**
    * Set the state of the controller.

@@ -47,7 +47,7 @@
                   GridPane.columnIndex="2"/>
         <Button id="refreshButton" maxHeight="1.7976931348623157E308"
                 maxWidth="1.7976931348623157E308" mnemonicParsing="false"
-                onAction="#refreshButtonAction" prefWidth="23.0" styleClass="refreshButton"
+                onAction="#refreshButtonAction" prefWidth="23.0" styleClass="refresh-button"
                 GridPane.columnIndex="3">
           <font>
             <Font size="12.0"/>
