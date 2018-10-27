@@ -4,11 +4,11 @@ import static lowe.mike.strimko.model.Difficulty.EASY;
 import static lowe.mike.strimko.model.Difficulty.HARD;
 import static lowe.mike.strimko.model.Difficulty.MEDIUM;
 import static lowe.mike.strimko.model.solver.Solver.solve;
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import lowe.mike.strimko.model.Difficulty;
 import lowe.mike.strimko.model.Grid;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 /**
  * {@link Solver} tests.

@@ -8,14 +8,14 @@ import static lowe.mike.strimko.model.solver.GroupInteractionsMethod.runPointing
 import static lowe.mike.strimko.model.solver.GroupInteractionsMethod.runStreamLineReductionN;
 import static lowe.mike.strimko.model.solver.GroupInteractionsMethod.runStreamLineReductionNOverColumns;
 import static lowe.mike.strimko.model.solver.GroupInteractionsMethod.runStreamLineReductionNOverRows;
-import static org.junit.Assert.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import lowe.mike.strimko.model.Cell;
 import lowe.mike.strimko.model.Grid;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 /**
  * {@link GroupInteractionsMethod} tests.

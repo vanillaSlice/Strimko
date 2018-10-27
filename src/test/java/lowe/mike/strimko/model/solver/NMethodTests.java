@@ -10,14 +10,14 @@ import static lowe.mike.strimko.model.solver.NMethod.runNakedN;
 import static lowe.mike.strimko.model.solver.NMethod.runNakedNOverColumns;
 import static lowe.mike.strimko.model.solver.NMethod.runNakedNOverRows;
 import static lowe.mike.strimko.model.solver.NMethod.runNakedNOverStreams;
-import static org.junit.Assert.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import lowe.mike.strimko.model.Cell;
 import lowe.mike.strimko.model.Grid;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 /**
  * {@link NMethod} tests.

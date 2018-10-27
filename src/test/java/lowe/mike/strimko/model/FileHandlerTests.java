@@ -12,16 +12,17 @@ import static lowe.mike.strimko.model.FileHandler.readPathsToPuzzles;
 import static lowe.mike.strimko.model.FileHandler.write;
 import static lowe.mike.strimko.model.Type.STRIMKO;
 import static lowe.mike.strimko.model.Type.SUDOKU;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.util.Collection;
 import lowe.mike.strimko.model.Grid.GridBuilder;
-import org.junit.BeforeClass;
-import org.junit.ClassRule;
-import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
 /**
  * {@link FileHandler} tests.
@@ -30,8 +31,6 @@ import org.junit.rules.TemporaryFolder;
  */
 public final class FileHandlerTests {
 
-  @ClassRule
-  public static final TemporaryFolder FOLDER = new TemporaryFolder();
   private static String TEST_PUZZLE_DIRECTORY;
 
   // for loading puzzle resources
@@ -64,9 +63,9 @@ public final class FileHandlerTests {
       .setNumbers(SUDOKU_NUMBERS).build();
   private static final Puzzle SUDOKU_PUZZLE = new Puzzle(SUDOKU, SUDOKU_GRID);
 
-  @BeforeClass
-  public static void setup() throws FileHandlingException {
-    TEST_PUZZLE_DIRECTORY = FOLDER.getRoot().getAbsolutePath();
+  @BeforeAll
+  public static void setup() throws IOException, FileHandlingException {
+    TEST_PUZZLE_DIRECTORY = Files.createTempDirectory("strimko").toAbsolutePath().toString();
     copyPuzzlesToDirectory(TEST_PUZZLE_DIRECTORY, PATHS_TO_PUZZLES);
   }
 
@@ -118,9 +117,10 @@ public final class FileHandlerTests {
     assertTrue(result.containsAll(expected));
   }
 
-  @Test(expected = FileHandlingException.class)
-  public void test_read_invalid() throws FileHandlingException {
-    read(TEST_PUZZLE_DIRECTORY, STRIMKO, MEDIUM, "Test-Invalid-Strimko-1");
+  @Test
+  public void test_read_invalid() {
+    assertThrows(FileHandlingException.class,
+        () -> read(TEST_PUZZLE_DIRECTORY, STRIMKO, MEDIUM, "Test-Invalid-Strimko-1"));
   }
 
   @Test

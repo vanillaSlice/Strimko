@@ -1,10 +1,11 @@
 package lowe.mike.strimko.model.solver;
 
 import static lowe.mike.strimko.model.solver.BruteForceMethod.run;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import lowe.mike.strimko.model.Grid;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 /**
  * {@link BruteForceMethod} tests.
@@ -30,7 +31,7 @@ public final class BruteForceMethodTests extends SolvingMethodTests {
     assertTrue(solvedGrid.isSolved());
   }
 
-  @Test(expected = IllegalArgumentException.class)
+  @Test
   public void test_run_multipleSolutions() {
     // setup
     int size = 3;
@@ -39,35 +40,39 @@ public final class BruteForceMethodTests extends SolvingMethodTests {
     Grid grid = newStrimkoGrid(size, streams, numbers);
 
     // execution
-    run(grid);
+    assertThrows(IllegalArgumentException.class,
+        () -> run(grid));
   }
 
-  @Test(expected = IllegalArgumentException.class)
+  @Test
   public void test_run_unsolvable() {
     // setup
     int size = 4;
     int[][] streams = {{1, 2, 2, 3}, {2, 1, 3, 2}, {4, 3, 1, 4}, {3, 4, 4, 1}};
-    int[][] numbers = {{2, 0, 2, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}};
+    int[][] numbers = {{2, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}};
     Grid grid = newStrimkoGrid(size, streams, numbers);
+    grid.getCell(0, 1).setNumber(2);
 
     // execution
-    run(grid);
+    assertThrows(IllegalArgumentException.class,
+        () -> run(grid));
   }
 
-  @Test(expected = IllegalArgumentException.class)
+  @Test
   public void test_run_filled() {
     // setup
     int size = 6;
     int[][] streams = {{1, 2, 3, 4, 5, 6}, {1, 2, 3, 4, 5, 6}, {1, 2, 3, 4, 5, 6},
         {1, 2, 3, 4, 5, 6},
         {1, 2, 3, 4, 5, 6}, {1, 2, 3, 4, 5, 6}};
-    int[][] numbers = {{1, 2, 3, 4, 5, 6}, {1, 2, 3, 4, 5, 6}, {1, 2, 3, 4, 5, 6},
-        {1, 2, 3, 4, 5, 6},
-        {1, 2, 3, 4, 5, 6}, {1, 2, 3, 4, 5, 6}};
+    int[][] numbers = {{1, 2, 3, 4, 5, 6}, {2, 3, 4, 5, 6, 1}, {3, 4, 5, 6, 1, 2},
+        {4, 5, 6, 1, 2, 3},
+        {5, 6, 1, 2, 3, 4}, {6, 1, 2, 3, 4, 5}};
     Grid grid = newStrimkoGrid(size, streams, numbers);
 
     // execution
-    run(grid);
+    assertThrows(IllegalArgumentException.class,
+        () -> run(grid));
   }
 
 }
