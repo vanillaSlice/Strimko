@@ -1,29 +1,27 @@
 package lowe.mike.strimko.model.solver;
 
-import lowe.mike.strimko.model.Cell;
-import lowe.mike.strimko.model.Grid;
+import static java.util.Collections.disjoint;
 
 import java.util.Collection;
 import java.util.HashSet;
-
-import static java.util.Collections.disjoint;
+import lowe.mike.strimko.model.Cell;
+import lowe.mike.strimko.model.Grid;
 
 /**
  * {@code NMethod} represents the 'Naked N' and 'Hidden N' solving methods.
- * <p>
- * The 'Naked N' solving method is as follows:
- * <p>
- * If there are N number of {@link Cell}s in a group that have a combined number
- * of possibles equal to N, then we can remove these numbers from all other
- * {@link Cell}s in the group.
- * <p>
- * The 'Hidden N' solving method is as follows:
- * <p>
- * If there are N number of {@link Cell}s with N candidates between them that
- * don't appear elsewhere in the same group, then the other possible numbers can
- * be removed from these {@link Cell}s.
- * <p>
- * Instances of {@code NMethod} cannot be created.
+ *
+ * <p>The 'Naked N' solving method is as follows:
+ *
+ * <p>If there are N number of {@link Cell}s in a group that have a combined number of possibles
+ * equal to N, then we can remove these numbers from all other {@link Cell}s in the group.
+ *
+ * <p>The 'Hidden N' solving method is as follows:
+ *
+ * <p>If there are N number of {@link Cell}s with N candidates between them that don't appear
+ * elsewhere in the same group, then the other possible numbers can be removed from these {@link
+ * Cell}s.
+ *
+ * <p>Instances of {@code NMethod} cannot be created.
  *
  * @author Mike Lowe
  */
@@ -41,9 +39,8 @@ final class NMethod {
    * Runs 'Naked N' method.
    *
    * @param grid the {@link Grid} to run method over
-   * @param n    number of possible numbers that must be shared
-   * @return {@code true} if any changes where made to the {@link Grid},
-   * {@code false} otherwise
+   * @param n number of possible numbers that must be shared
+   * @return {@code true} if any changes where made to the {@link Grid}, {@code false} otherwise
    */
   static boolean runNakedN(Grid grid, int n) {
     return run(Mode.NAKED, grid, n);
@@ -53,22 +50,11 @@ final class NMethod {
    * Runs 'Hidden N' method.
    *
    * @param grid the {@link Grid} to run method over
-   * @param n    number of possible numbers that must be shared
-   * @return {@code true} if any changes where made to the {@link Grid},
-   * {@code false} otherwise
+   * @param n number of possible numbers that must be shared
+   * @return {@code true} if any changes where made to the {@link Grid}, {@code false} otherwise
    */
   static boolean runHiddenN(Grid grid, int n) {
     return run(Mode.HIDDEN, grid, n);
-  }
-
-  private static boolean run(Mode mode, Grid grid, int n) {
-    if (runOverRows(mode, grid, n)) {
-      return true;
-    }
-    if (runOverColumns(mode, grid, n)) {
-      return true;
-    }
-    return runOverStreams(mode, grid, n);
   }
 
   private static boolean runOverRows(Mode mode, Grid grid, int n) {
@@ -107,6 +93,16 @@ final class NMethod {
     return runOverStreams(Mode.HIDDEN, grid, n);
   }
 
+  private static boolean run(Mode mode, Grid grid, int n) {
+    if (runOverRows(mode, grid, n)) {
+      return true;
+    }
+    if (runOverColumns(mode, grid, n)) {
+      return true;
+    }
+    return runOverStreams(mode, grid, n);
+  }
+
   private static boolean run(Mode mode, Collection<Collection<Cell>> groups, int n, int size) {
     CombinationIterator iterator = new CombinationIterator(n, size);
 
@@ -126,7 +122,8 @@ final class NMethod {
       Collection<Integer> foundNumbers = new HashSet<>();
       Collection<Cell> cellsContainingCombination = new HashSet<>();
 
-      findCellsContainingCombination(mode, group, cellsContainingCombination, combination, foundNumbers);
+      findCellsContainingCombination(mode, group, cellsContainingCombination, combination,
+          foundNumbers);
 
       if (foundN(cellsContainingCombination, n, foundNumbers, combination)) {
         if (removePossibles(mode, combination, group, cellsContainingCombination)) {
@@ -148,7 +145,8 @@ final class NMethod {
     }
   }
 
-  private static boolean shouldAddToCombination(Mode mode, Cell cell, Collection<Integer> combination) {
+  private static boolean shouldAddToCombination(Mode mode, Cell cell,
+      Collection<Integer> combination) {
     return (mode == Mode.NAKED && cellContainsOnly(cell, combination))
         || (mode == Mode.HIDDEN && cellContainsOneOf(cell, combination));
   }
@@ -166,12 +164,14 @@ final class NMethod {
     return !disjoint(cell.getPossibleNumbers(), combination);
   }
 
-  private static boolean foundN(Collection<Cell> cellsContainingCombination, int n, Collection<Integer> foundNumbers,
+  private static boolean foundN(Collection<Cell> cellsContainingCombination, int n,
+      Collection<Integer> foundNumbers,
       Collection<Integer> combination) {
     return cellsContainingCombination.size() == n && foundNumbers.containsAll(combination);
   }
 
-  private static boolean removePossibles(Mode mode, Collection<Integer> combination, Collection<Cell> group,
+  private static boolean removePossibles(Mode mode, Collection<Integer> combination,
+      Collection<Cell> group,
       Collection<Cell> cellsContainingCombination) {
     if (mode == Mode.NAKED) {
       return removePossiblesFromGroupExcept(combination, group, cellsContainingCombination);
@@ -180,7 +180,8 @@ final class NMethod {
     }
   }
 
-  private static boolean removePossiblesFromGroupExcept(Collection<Integer> combination, Collection<Cell> group,
+  private static boolean removePossiblesFromGroupExcept(Collection<Integer> combination,
+      Collection<Cell> group,
       Collection<Cell> cells) {
     boolean changed = false;
 
@@ -203,7 +204,8 @@ final class NMethod {
     return cell.getPossibleNumbers().removeAll(combination);
   }
 
-  private static boolean removeNumbersOutsideOfCombination(Collection<Cell> cellsContainingCombination,
+  private static boolean removeNumbersOutsideOfCombination(
+      Collection<Cell> cellsContainingCombination,
       Collection<Integer> combination) {
     boolean changed = false;
 

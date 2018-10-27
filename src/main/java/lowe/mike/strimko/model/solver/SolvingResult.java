@@ -1,22 +1,21 @@
 package lowe.mike.strimko.model.solver;
 
+import static java.util.Arrays.deepEquals;
+import static java.util.Objects.hash;
+
+import java.util.Arrays;
+import java.util.Collection;
 import lowe.mike.strimko.model.Difficulty;
 import lowe.mike.strimko.model.Grid;
 import lowe.mike.strimko.model.Position;
 import lowe.mike.strimko.model.Puzzle;
 
-import java.util.Arrays;
-import java.util.Collection;
-
-import static java.util.Arrays.deepEquals;
-import static java.util.Objects.hash;
-
 /**
- * {@code SolvingResult} instances are intended to provide information from the
- * {@link Solver} after solving a {@link Grid}.
- * <p>
- * Stored information includes a {@link Grid}'s {@link Difficulty}, the solution
- * and a {@link Collection} of hints.
+ * {@code SolvingResult} instances are intended to provide information from the {@link Solver} after
+ * solving a {@link Grid}.
+ *
+ * <p>Stored information includes a {@link Grid}'s {@link Difficulty}, the solution and a {@link
+ * Collection} of hints.
  *
  * @author Mike Lowe
  */
@@ -27,12 +26,12 @@ public final class SolvingResult {
   private final Collection<Position> hints;
 
   /**
-   * Creates a new {@code SolvingResult} given the {@link Difficulty}, the
-   * solution and a {@link Collection} of hints.
+   * Creates a new {@code SolvingResult} given the {@link Difficulty}, the solution and a {@link
+   * Collection} of hints.
    *
    * @param difficulty the {@link Difficulty}
-   * @param solution   the solution
-   * @param hints      the {@link Collection} of hints
+   * @param solution the solution
+   * @param hints the {@link Collection} of hints
    */
   public SolvingResult(Difficulty difficulty, int[][] solution, Collection<Position> hints) {
     this.difficulty = difficulty;
@@ -41,6 +40,8 @@ public final class SolvingResult {
   }
 
   /**
+   * Returns the determined {@link Difficulty} of the {@link Puzzle}.
+   *
    * @return the determined {@link Difficulty} of the {@link Puzzle}
    */
   public Difficulty getDifficulty() {
@@ -48,6 +49,8 @@ public final class SolvingResult {
   }
 
   /**
+   * Returns the solution to the {@link Puzzle}.
+   *
    * @return the solution to the {@link Puzzle}
    */
   public int[][] getSolution() {
@@ -55,6 +58,8 @@ public final class SolvingResult {
   }
 
   /**
+   * Returns a {@link Collection} of hints.
+   *
    * @return a {@link Collection} of hints
    */
   public Collection<Position> getHints() {
@@ -93,7 +98,8 @@ public final class SolvingResult {
 
   @Override
   public String toString() {
-    return "SolvingResult [difficulty=" + difficulty + ", solution=" + Arrays.toString(solution) + ", hints="
+    return "SolvingResult [difficulty=" + difficulty + ", solution=" + Arrays.toString(solution)
+        + ", hints="
         + hints + "]";
   }
 

@@ -1,14 +1,5 @@
 package lowe.mike.strimko.model;
 
-import lowe.mike.strimko.model.Grid.GridBuilder;
-import org.junit.BeforeClass;
-import org.junit.ClassRule;
-import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
-
-import java.io.File;
-import java.util.Collection;
-
 import static java.util.Arrays.asList;
 import static lowe.mike.strimko.model.Constants.SUDOKU_SIZE;
 import static lowe.mike.strimko.model.Constants.getSudokuStreams;
@@ -24,7 +15,17 @@ import static lowe.mike.strimko.model.Type.SUDOKU;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+import java.io.File;
+import java.util.Collection;
+import lowe.mike.strimko.model.Grid.GridBuilder;
+import org.junit.BeforeClass;
+import org.junit.ClassRule;
+import org.junit.Test;
+import org.junit.rules.TemporaryFolder;
+
 /**
+ * {@link FileHandler} tests.
+ *
  * @author Mike Lowe
  */
 public final class FileHandlerTests {
@@ -35,25 +36,31 @@ public final class FileHandlerTests {
 
   // for loading puzzle resources
   private static final String TEST_PUZZLES_RESOURCE_NAME = "/test-puzzles.txt";
-  private static final Collection<String> PATHS_TO_PUZZLES = asList("Strimko/Easy/Test-Strimko-1.txt",
+  private static final Collection<String> PATHS_TO_PUZZLES = asList(
+      "Strimko/Easy/Test-Strimko-1.txt",
       "Strimko/Easy/Test-Strimko-2.txt", "Strimko/Medium/Test-Invalid-Strimko-1.txt",
-      "Strimko/Hard/Test-Strimko-1.txt", "Sudoku/Easy/Test-Sudoku-1.txt", "Sudoku/Medium/Test-Sudoku-1.txt",
+      "Strimko/Hard/Test-Strimko-1.txt", "Sudoku/Easy/Test-Sudoku-1.txt",
+      "Sudoku/Medium/Test-Sudoku-1.txt",
       "Sudoku/Hard/Test-Sudoku-1.txt");
 
   // test strimko puzzle
   private static final int STRIMKO_SIZE = 4;
-  private static final int[][] STRIMKO_STREAMS = {{1, 2, 2, 3}, {2, 1, 3, 2}, {4, 3, 1, 4}, {3, 4, 4, 1}};
-  private static final int[][] STRIMKO_NUMBERS = {{0, 0, 0, 2}, {0, 0, 0, 0}, {0, 0, 0, 0}, {4, 0, 0, 1}};
+  private static final int[][] STRIMKO_STREAMS = {{1, 2, 2, 3}, {2, 1, 3, 2}, {4, 3, 1, 4},
+      {3, 4, 4, 1}};
+  private static final int[][] STRIMKO_NUMBERS = {{0, 0, 0, 2}, {0, 0, 0, 0}, {0, 0, 0, 0},
+      {4, 0, 0, 1}};
   private static final Grid STRIMKO_GRID = new GridBuilder(STRIMKO_SIZE).setStreams(STRIMKO_STREAMS)
       .setNumbers(STRIMKO_NUMBERS).build();
   private static final Puzzle STRIMKO_PUZZLE = new Puzzle(STRIMKO, STRIMKO_GRID);
 
   // test sudoku puzzle
-  private static final int[][] SUDOKU_NUMBERS = {{8, 0, 0, 0, 0, 0, 4, 6, 0}, {0, 9, 7, 6, 0, 1, 2, 0, 8},
+  private static final int[][] SUDOKU_NUMBERS = {{8, 0, 0, 0, 0, 0, 4, 6, 0},
+      {0, 9, 7, 6, 0, 1, 2, 0, 8},
       {0, 4, 0, 8, 0, 5, 0, 1, 0}, {0, 0, 0, 2, 7, 9, 0, 0, 4}, {0, 5, 0, 0, 0, 0, 0, 2, 0},
       {1, 0, 0, 4, 5, 3, 0, 0, 0}, {0, 7, 0, 3, 0, 6, 0, 9, 0}, {3, 0, 2, 9, 0, 7, 5, 4, 0},
       {0, 6, 1, 0, 0, 0, 0, 0, 2}};
-  private static final Grid SUDOKU_GRID = new GridBuilder(SUDOKU_SIZE).setStreams(getSudokuStreams())
+  private static final Grid SUDOKU_GRID = new GridBuilder(SUDOKU_SIZE)
+      .setStreams(getSudokuStreams())
       .setNumbers(SUDOKU_NUMBERS).build();
   private static final Puzzle SUDOKU_PUZZLE = new Puzzle(SUDOKU, SUDOKU_GRID);
 
@@ -90,7 +97,8 @@ public final class FileHandlerTests {
     test_listPuzzleFileNames_noPuzzles(STRIMKO, null);
   }
 
-  private void test_listPuzzleFileNames_noPuzzles(Type type, Difficulty difficulty) throws FileHandlingException {
+  private void test_listPuzzleFileNames_noPuzzles(Type type, Difficulty difficulty)
+      throws FileHandlingException {
     // execution
     Collection<String> result = listPuzzleFileNames(TEST_PUZZLE_DIRECTORY, type, difficulty);
 
@@ -147,7 +155,8 @@ public final class FileHandlerTests {
     test_write(SUDOKU_PUZZLE, "Sudoku-1");
   }
 
-  private void test_write(Puzzle expectedPuzzle, String expectedFileName) throws FileHandlingException {
+  private void test_write(Puzzle expectedPuzzle, String expectedFileName)
+      throws FileHandlingException {
     // setup
     Type type = expectedPuzzle.getType();
     Difficulty difficulty = expectedPuzzle.getDifficulty();

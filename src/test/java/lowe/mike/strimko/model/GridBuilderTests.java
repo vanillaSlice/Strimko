@@ -1,13 +1,15 @@
 package lowe.mike.strimko.model;
 
-import lowe.mike.strimko.model.Grid.GridBuilder;
-import org.junit.Test;
-
 import static lowe.mike.strimko.model.Constants.NO_NUMBER;
 import static lowe.mike.strimko.model.Constants.NO_STREAM_INDEX;
 import static org.junit.Assert.assertEquals;
 
+import lowe.mike.strimko.model.Grid.GridBuilder;
+import org.junit.Test;
+
 /**
+ * {@link GridBuilder} tests.
+ *
  * @author Mike Lowe
  */
 public final class GridBuilderTests {

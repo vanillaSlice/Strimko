@@ -1,11 +1,5 @@
 package lowe.mike.strimko.model;
 
-import lowe.mike.strimko.model.Grid.GridBuilder;
-import org.junit.Before;
-import org.junit.Test;
-
-import java.util.Collection;
-
 import static java.util.Arrays.asList;
 import static lowe.mike.strimko.model.Constants.NO_NUMBER;
 import static lowe.mike.strimko.model.Grid.copyOf;
@@ -15,7 +9,14 @@ import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.assertTrue;
 
+import java.util.Collection;
+import lowe.mike.strimko.model.Grid.GridBuilder;
+import org.junit.Before;
+import org.junit.Test;
+
 /**
+ * {@link Grid} tests.
+ *
  * @author Mike Lowe
  */
 public final class GridTests {

@@ -1,5 +1,20 @@
 package lowe.mike.strimko.controller;
 
+import static javafx.beans.binding.Bindings.when;
+import static javafx.scene.layout.GridPane.getColumnIndex;
+import static javafx.scene.layout.GridPane.getRowIndex;
+import static lowe.mike.strimko.controller.Alerts.showMessageAndWait;
+import static lowe.mike.strimko.controller.Alerts.showWarningAndWait;
+import static lowe.mike.strimko.model.Constants.MIN_STRIMKO_SIZE;
+import static lowe.mike.strimko.model.Constants.NO_NUMBER;
+import static lowe.mike.strimko.model.Constants.SUDOKU_SIZE;
+import static lowe.mike.strimko.model.Constants.getStrimkoPuzzleSizes;
+import static lowe.mike.strimko.model.Constants.getSudokuStreams;
+import static lowe.mike.strimko.model.FileHandler.write;
+import static lowe.mike.strimko.model.Type.STRIMKO;
+import static lowe.mike.strimko.model.Type.SUDOKU;
+
+import java.util.concurrent.ExecutionException;
 import javafx.beans.property.ReadOnlyIntegerProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -20,22 +35,6 @@ import lowe.mike.strimko.model.FileHandlingException;
 import lowe.mike.strimko.model.Grid;
 import lowe.mike.strimko.model.Grid.GridBuilder;
 import lowe.mike.strimko.model.Puzzle;
-
-import java.util.concurrent.ExecutionException;
-
-import static javafx.beans.binding.Bindings.when;
-import static javafx.scene.layout.GridPane.getColumnIndex;
-import static javafx.scene.layout.GridPane.getRowIndex;
-import static lowe.mike.strimko.controller.Alerts.showMessageAndWait;
-import static lowe.mike.strimko.controller.Alerts.showWarningAndWait;
-import static lowe.mike.strimko.model.Constants.MIN_STRIMKO_SIZE;
-import static lowe.mike.strimko.model.Constants.NO_NUMBER;
-import static lowe.mike.strimko.model.Constants.SUDOKU_SIZE;
-import static lowe.mike.strimko.model.Constants.getStrimkoPuzzleSizes;
-import static lowe.mike.strimko.model.Constants.getSudokuStreams;
-import static lowe.mike.strimko.model.FileHandler.write;
-import static lowe.mike.strimko.model.Type.STRIMKO;
-import static lowe.mike.strimko.model.Type.SUDOKU;
 
 /**
  * Controller class for Solve Mode View.
@@ -191,16 +190,19 @@ public final class SolveModeViewController extends ModeViewController {
   }
 
   private ObservableStringValue getNumberLabelTextProperty(int columnIndex, int rowIndex) {
-    ReadOnlyIntegerProperty numberProperty = gameState.getGridBuilder().numberProperty(rowIndex, columnIndex);
+    ReadOnlyIntegerProperty numberProperty = gameState.getGridBuilder()
+        .numberProperty(rowIndex, columnIndex);
     ObservableBooleanValue cellIsSet = numberProperty.greaterThan(NO_NUMBER);
     ObservableStringValue number = numberProperty.asString();
     ObservableStringValue noNumber = new SimpleStringProperty();
     return when(cellIsSet).then(number).otherwise(noNumber);
   }
 
-  private void addStreamIndexPropertyChangeListener(StackPane cellPane, int columnIndex, int rowIndex) {
-    ObservableIntegerValue streamIndexProperty = gameState.getGridBuilder().streamIndexProperty(rowIndex,
-        columnIndex);
+  private void addStreamIndexPropertyChangeListener(StackPane cellPane, int columnIndex,
+      int rowIndex) {
+    ObservableIntegerValue streamIndexProperty = gameState.getGridBuilder()
+        .streamIndexProperty(rowIndex,
+            columnIndex);
     streamIndexProperty.addListener((observable, oldValue, newValue) -> {
       removeStreamStyleClass(cellPane, (int) oldValue);
       addStreamStyleClass(cellPane, (int) newValue);
@@ -250,8 +252,10 @@ public final class SolveModeViewController extends ModeViewController {
   }
 
   private void addStreamButton(GridBuilder gridBuilder, int size, int streamIndex) {
-    ObservableIntegerValue occurrenceProperty = gridBuilder.streamIndexOccurrenceProperty(streamIndex);
-    ToggleButton streamButton = newNumberedToggleButton(size, streamIndex, controlsToggleGroup, occurrenceProperty);
+    ObservableIntegerValue occurrenceProperty = gridBuilder
+        .streamIndexOccurrenceProperty(streamIndex);
+    ToggleButton streamButton = newNumberedToggleButton(size, streamIndex, controlsToggleGroup,
+        occurrenceProperty);
     addStreamButtonStyle(streamButton, streamIndex);
     streamsPane.addColumn(streamIndex - 1, streamButton);
   }
@@ -272,7 +276,8 @@ public final class SolveModeViewController extends ModeViewController {
 
   private void addNumberButton(GridBuilder gridBuilder, int size, int number) {
     ObservableIntegerValue occurrenceProperty = gridBuilder.numberOccurrenceProperty(number);
-    ToggleButton numberButton = newNumberedToggleButton(size, number, controlsToggleGroup, occurrenceProperty);
+    ToggleButton numberButton = newNumberedToggleButton(size, number, controlsToggleGroup,
+        occurrenceProperty);
     numbersPane.addColumn(number - 1, numberButton);
   }
 
@@ -290,7 +295,8 @@ public final class SolveModeViewController extends ModeViewController {
 
   @FXML
   private void solutionButtonAction() {
-    Node[] nodes = {streamsPane, numbersPane, streamsRadioButton, numbersRadioButton, clearStreamButton,
+    Node[] nodes = {streamsPane, numbersPane, streamsRadioButton, numbersRadioButton,
+        clearStreamButton,
         clearNumberButton};
 
     if (showSolution()) {

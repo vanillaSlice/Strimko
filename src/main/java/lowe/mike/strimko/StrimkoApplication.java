@@ -1,5 +1,11 @@
 package lowe.mike.strimko;
 
+import static javafx.application.Platform.exit;
+import static lowe.mike.strimko.controller.Alerts.showErrorAndWait;
+import static lowe.mike.strimko.model.FileHandler.copyPuzzlesToUserDirectory;
+
+import java.io.IOException;
+import java.net.URL;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -9,13 +15,6 @@ import javafx.stage.Stage;
 import lowe.mike.strimko.controller.MainViewController;
 import lowe.mike.strimko.model.FileHandlingException;
 import lowe.mike.strimko.model.GameState;
-
-import java.io.IOException;
-import java.net.URL;
-
-import static javafx.application.Platform.exit;
-import static lowe.mike.strimko.controller.Alerts.showErrorAndWait;
-import static lowe.mike.strimko.model.FileHandler.copyPuzzlesToUserDirectory;
 
 /**
  * Entry point for Strimko application.
@@ -69,12 +68,12 @@ public final class StrimkoApplication extends Application {
     FXMLLoader loader = new FXMLLoader();
     URL location = MainViewController.class.getResource(MAIN_VIEW_RESOURCE_PATH);
     loader.setLocation(location);
-    mainView = loadFXML(loader);
+    mainView = loadFxml(loader);
     MainViewController controller = loader.getController();
     controller.setGameState(gameState);
   }
 
-  private static <T> T loadFXML(FXMLLoader loader) {
+  private static <T> T loadFxml(FXMLLoader loader) {
     try {
       return loader.load();
     } catch (IOException e) {

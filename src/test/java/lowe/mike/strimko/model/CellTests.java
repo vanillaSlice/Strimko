@@ -1,9 +1,5 @@
 package lowe.mike.strimko.model;
 
-import org.junit.Test;
-
-import java.util.Collection;
-
 import static java.util.Arrays.asList;
 import static lowe.mike.strimko.model.Cell.copyOf;
 import static lowe.mike.strimko.model.Cell.newInstance;
@@ -14,7 +10,12 @@ import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.assertTrue;
 
+import java.util.Collection;
+import org.junit.Test;
+
 /**
+ * {@link Cell} tests.
+ *
  * @author Mike Lowe
  */
 public final class CellTests {

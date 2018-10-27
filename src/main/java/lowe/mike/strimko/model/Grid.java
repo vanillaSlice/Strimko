@@ -1,20 +1,5 @@
 package lowe.mike.strimko.model;
 
-import com.google.common.collect.Multimap;
-import javafx.beans.property.ReadOnlyBooleanProperty;
-import javafx.beans.property.ReadOnlyBooleanWrapper;
-import javafx.beans.property.ReadOnlyIntegerProperty;
-import javafx.beans.property.ReadOnlyIntegerWrapper;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeSet;
-
 import static com.google.common.collect.LinkedHashMultimap.create;
 import static java.util.Arrays.deepEquals;
 import static java.util.Objects.hash;
@@ -27,9 +12,23 @@ import static lowe.mike.strimko.model.Validation.checkStreamIndex;
 import static lowe.mike.strimko.model.Validation.checkStreams;
 import static lowe.mike.strimko.model.Validation.checkUniqueNumbersInGroups;
 
+import com.google.common.collect.Multimap;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeSet;
+import javafx.beans.property.ReadOnlyBooleanProperty;
+import javafx.beans.property.ReadOnlyBooleanWrapper;
+import javafx.beans.property.ReadOnlyIntegerProperty;
+import javafx.beans.property.ReadOnlyIntegerWrapper;
+
 /**
- * {@code Grid} instances are intended to provide information about grids which
- * make up {@link Puzzle}s.
+ * {@code Grid} instances are intended to provide information about grids which make up {@link
+ * Puzzle}s.
  *
  * @author Mike Lowe
  */
@@ -40,8 +39,8 @@ public final class Grid {
   private final List<Cell> cells = new ArrayList<>();
 
   /**
-   * Used for easy iteration over cells so it's much simpler to iterate over a
-   * specific row, column or stream.
+   * Used for easy iteration over cells so it's much simpler to iterate over a specific row, column
+   * or stream.
    */
   private final Multimap<Integer, Cell> rows = create();
   private final Multimap<Integer, Cell> columns = create();
@@ -127,7 +126,8 @@ public final class Grid {
   }
 
   private boolean checkIsSolved() {
-    return containsAllNumbers(getRows()) && containsAllNumbers(getColumns()) && containsAllNumbers(getStreams());
+    return containsAllNumbers(getRows()) && containsAllNumbers(getColumns()) && containsAllNumbers(
+        getStreams());
   }
 
   private boolean containsAllNumbers(Collection<Collection<Cell>> group) {
@@ -179,11 +179,11 @@ public final class Grid {
 
   private void updatePossibleNumbersInSameGroups(Cell cell) {
     if (cell.isSet()) {
+      cell.getPossibleNumbers().clear();
       int number = cell.getNumber();
       int rowIndex = cell.getRowIndex();
       int columnIndex = cell.getColumnIndex();
       int streamIndex = cell.getStreamIndex();
-      cell.getPossibleNumbers().clear();
       removePossibleNumberFromCellsInGroup(number, getRow(rowIndex));
       removePossibleNumberFromCellsInGroup(number, getColumn(columnIndex));
       removePossibleNumberFromCellsInGroup(number, getStream(streamIndex));
@@ -234,6 +234,8 @@ public final class Grid {
   ///////////////////////////
 
   /**
+   * Returns the size of this {@code Grid}.
+   *
    * @return the size of this {@code Grid}
    */
   public int getSize() {
@@ -241,10 +243,13 @@ public final class Grid {
   }
 
   /**
-   * @param rowIndex    row index of the {@link Cell}
+   * Returns the {@link Cell} at the position indicated by the {@code rowIndex} and {@code
+   * columnIndex}.
+   *
+   * @param rowIndex row index of the {@link Cell}
    * @param columnIndex column index of the {@link Cell}
-   * @return the {@link Cell} at the position indicated by the
-   * {@code rowIndex} and {@code columnIndex}
+   * @return the {@link Cell} at the position indicated by the {@code rowIndex} and {@code
+   *     columnIndex}
    */
   public Cell getCell(int rowIndex, int columnIndex) {
     int position = rowIndex * size + columnIndex;
@@ -252,6 +257,8 @@ public final class Grid {
   }
 
   /**
+   * Returns the {@link Cell} at the given {@link Position}.
+   *
    * @param position the {@link Position} of the {@link Cell}
    * @return the {@link Cell} at the given {@link Position}
    */
@@ -260,6 +267,8 @@ public final class Grid {
   }
 
   /**
+   * Returns the {@link Collection} of all {@link Cell}s.
+   *
    * @return the {@link Collection} of all {@link Cell}s
    */
   public Collection<Cell> getCells() {
@@ -267,6 +276,8 @@ public final class Grid {
   }
 
   /**
+   * Returns the {@link Collection} of rows.
+   *
    * @return the {@link Collection} of rows
    */
   public Collection<Collection<Cell>> getRows() {
@@ -274,15 +285,18 @@ public final class Grid {
   }
 
   /**
+   * Returns the {@link Collection} of {@link Cell}s with the given {@code rowIndex}.
+   *
    * @param rowIndex row index to get {@link Cell}s from
-   * @return the {@link Collection} of {@link Cell}s with the given
-   * {@code rowIndex}
+   * @return the {@link Collection} of {@link Cell}s with the given {@code rowIndex}
    */
   public Collection<Cell> getRow(int rowIndex) {
     return rows.get(rowIndex);
   }
 
   /**
+   * Returns the {@link Collection} of columns.
+   *
    * @return the {@link Collection} of columns
    */
   public Collection<Collection<Cell>> getColumns() {
@@ -290,15 +304,18 @@ public final class Grid {
   }
 
   /**
+   * Returns the {@link Collection} of {@link Cell}s with the given {@code columnIndex}.
+   *
    * @param columnIndex column index to get {@link Cell}s from
-   * @return the {@link Collection} of {@link Cell}s with the given
-   * {@code columnIndex}
+   * @return the {@link Collection} of {@link Cell}s with the given {@code columnIndex}
    */
   public Collection<Cell> getColumn(int columnIndex) {
     return columns.get(columnIndex);
   }
 
   /**
+   * Returns the {@link Collection} of streams.
+   *
    * @return the {@link Collection} of streams
    */
   public Collection<Collection<Cell>> getStreams() {
@@ -306,15 +323,18 @@ public final class Grid {
   }
 
   /**
+   * Returns the {@link Collection} of {@link Cell}s with the given {@code streamIndex}.
+   *
    * @param streamIndex stream index to get {@link Cell}s from
-   * @return the {@link Collection} of {@link Cell}s with the given
-   * {@code streamIndex}
+   * @return the {@link Collection} of {@link Cell}s with the given {@code streamIndex}
    */
   public Collection<Cell> getStream(int streamIndex) {
     return streams.get(streamIndex);
   }
 
   /**
+   * Returns the total occurrences of a number in this {@code Grid}.
+   *
    * @param number the number to get occurrences for
    * @return the total occurrences of a number in this {@code Grid}
    */
@@ -323,33 +343,37 @@ public final class Grid {
   }
 
   /**
+   * Returns the {@link ReadOnlyIntegerProperty} indicating the number of times a number occurs in
+   * this {@code Grid}.
+   *
    * @param number the number to return the property for
-   * @return the {@link ReadOnlyIntegerProperty} indicating the number of
-   * times a number occurs in this {@code Grid}
+   * @return the {@link ReadOnlyIntegerProperty} indicating the number of times a number occurs in
+   *     this {@code Grid}
    */
   public ReadOnlyIntegerProperty numberOccurrenceProperty(int number) {
     return numberOccurrences.get(number).getReadOnlyProperty();
   }
 
   /**
-   * @return {@code true} if this {@code Grid} is solved; {@code false}
-   * otherwise
+   * Returns {@code true} if this {@code Grid} is solved; {@code false} otherwise.
+   *
+   * @return {@code true} if this {@code Grid} is solved; {@code false} otherwise
    */
   public boolean isSolved() {
     return isSolved.get();
   }
 
   /**
-   * @return the {@link ReadOnlyBooleanProperty} indicating if this
-   * {@code Grid} has been solved
+   * Returns the {@link ReadOnlyBooleanProperty} indicating if this {@code Grid} has been solved.
+   *
+   * @return the {@link ReadOnlyBooleanProperty} indicating if this {@code Grid} has been solved
    */
   public ReadOnlyBooleanProperty isSolvedProperty() {
     return isSolved.getReadOnlyProperty();
   }
 
   /**
-   * Resets this {@code Grid} by clearing numbers from {@link Cell}s which are
-   * not locked.
+   * Resets this {@code Grid} by clearing numbers from {@link Cell}s which are not locked.
    */
   public void reset() {
     for (Collection<Cell> row : getRows()) {
@@ -388,9 +412,9 @@ public final class Grid {
   }
 
   /**
-   * {@code GridBuilder} instances are used to create {@link Grid} objects.
-   * Validation is carried out on the streams when the {@link #build()} method
-   * is called to ensure that a valid {@link Grid} is created.
+   * {@code GridBuilder} instances are used to create {@link Grid} objects. Validation is carried
+   * out on the streams when the {@link #build()} method is called to ensure that a valid {@link
+   * Grid} is created.
    *
    * @author Mike Lowe
    */
@@ -405,8 +429,7 @@ public final class Grid {
     private final Map<Integer, ReadOnlyIntegerWrapper> numberOccurrences = new HashMap<>();
 
     /**
-     * Creates a new {@code GridBuilder} instance given the size of the
-     * {@link Grid} to create.
+     * Creates a new {@code GridBuilder} instance given the size of the {@link Grid} to create.
      *
      * @param size the size of the {@link Grid} to create
      * @throws IllegalArgumentException if the size passed in is invalid
@@ -442,17 +465,20 @@ public final class Grid {
     private void addPropertyChangeListener(ReadOnlyIntegerWrapper property,
         Map<Integer, ReadOnlyIntegerWrapper> occurrences) {
       property.addListener(
-          (observable, oldValue, newValue) -> updateOccurrences(occurrences, (int) oldValue, (int) newValue));
+          (observable, oldValue, newValue) -> updateOccurrences(occurrences, (int) oldValue,
+              (int) newValue));
     }
 
-    private void initializeOccurrences(Map<Integer, ReadOnlyIntegerWrapper> occurrences, int noOccurrences) {
+    private void initializeOccurrences(Map<Integer, ReadOnlyIntegerWrapper> occurrences,
+        int noOccurrences) {
       for (int number = 1; number <= size; number++) {
         occurrences.put(number, new ReadOnlyIntegerWrapper());
       }
       occurrences.put(noOccurrences, new ReadOnlyIntegerWrapper(size * size));
     }
 
-    private void updateOccurrences(Map<Integer, ReadOnlyIntegerWrapper> occurrences, int oldValue, int newValue) {
+    private void updateOccurrences(Map<Integer, ReadOnlyIntegerWrapper> occurrences, int oldValue,
+        int newValue) {
       ReadOnlyIntegerWrapper oldOccurrence = occurrences.get(oldValue);
       ReadOnlyIntegerWrapper newOccurence = occurrences.get(newValue);
       oldOccurrence.set(oldOccurrence.get() - 1);
@@ -460,6 +486,8 @@ public final class Grid {
     }
 
     /**
+     * Returns the size of this {@code GridBuilder}.
+     *
      * @return the size of this {@code GridBuilder}
      */
     public int getSize() {
@@ -467,7 +495,9 @@ public final class Grid {
     }
 
     /**
-     * @param rowIndex    the row index
+     * Returns the stream index at the given row index and column index.
+     *
+     * @param rowIndex the row index
      * @param columnIndex the column index
      * @return the stream index at the given row index and column index
      */
@@ -476,7 +506,9 @@ public final class Grid {
     }
 
     /**
-     * @param rowIndex    the row index
+     * Sets the stream index.
+     *
+     * @param rowIndex the row index
      * @param columnIndex the column index
      * @param streamIndex the stream index
      * @return this {@code GridBuilder}
@@ -490,6 +522,8 @@ public final class Grid {
     }
 
     /**
+     * Sets the array of stream indexes.
+     *
      * @param streams array of stream indexes
      * @return this {@code GridBuilder}
      * @throws IllegalArgumentException if {@code streams} contains an invalid stream index
@@ -505,10 +539,11 @@ public final class Grid {
     }
 
     /**
-     * @param rowIndex    the row index
+     * Returns the {@link ReadOnlyIntegerProperty} indicating the stream index.
+     *
+     * @param rowIndex the row index
      * @param columnIndex the stream index
-     * @return the {@link ReadOnlyIntegerProperty} indicating the stream
-     * index
+     * @return the {@link ReadOnlyIntegerProperty} indicating the stream index
      */
     public ReadOnlyIntegerProperty streamIndexProperty(int rowIndex, int columnIndex) {
       return streamProperties[rowIndex][columnIndex].getReadOnlyProperty();
@@ -517,7 +552,7 @@ public final class Grid {
     /**
      * Clears the stream index at the given row index and column index.
      *
-     * @param rowIndex    the row index
+     * @param rowIndex the row index
      * @param columnIndex the column index
      * @return this {@code GridBuilder}
      */
@@ -541,7 +576,9 @@ public final class Grid {
     }
 
     /**
-     * @param rowIndex    the row index
+     * Returns the number at the given row index and stream index.
+     *
+     * @param rowIndex the row index
      * @param columnIndex the column index
      * @return the number at the given row index and stream index
      */
@@ -550,9 +587,11 @@ public final class Grid {
     }
 
     /**
-     * @param rowIndex    the row index
+     * Sets the number at a given row and column index.
+     *
+     * @param rowIndex the row index
      * @param columnIndex the column index
-     * @param number      the number
+     * @param number the number
      * @return this {@code GridBuilder}
      * @throws IllegalArgumentException if the number is invalid
      */
@@ -564,6 +603,8 @@ public final class Grid {
     }
 
     /**
+     * Sets the array of numbers.
+     *
      * @param numbers array of numbers
      * @return this {@code GridBuilder}
      * @throws IllegalArgumentException if {@code numbers} contains an invalid number
@@ -579,7 +620,9 @@ public final class Grid {
     }
 
     /**
-     * @param rowIndex    the row index
+     * Returns the {@link ReadOnlyIntegerProperty} indicating the number.
+     *
+     * @param rowIndex the row index
      * @param columnIndex the column index
      * @return the {@link ReadOnlyIntegerProperty} indicating the number
      */
@@ -590,7 +633,7 @@ public final class Grid {
     /**
      * Clears the number at the given row index and column index.
      *
-     * @param rowIndex    the row index
+     * @param rowIndex the row index
      * @param columnIndex the column index
      * @return this {@code GridBuilder}
      */
@@ -614,24 +657,30 @@ public final class Grid {
     }
 
     /**
+     * Returns the total occurrences of a stream index in this {@code GridBuilder}.
+     *
      * @param streamIndex the streamIndex to get occurrences for
-     * @return the total occurrences of a stream index in this
-     * {@code GridBuilder}
+     * @return the total occurrences of a stream index in this {@code GridBuilder}
      */
     public int getStreamIndexOccurrences(int streamIndex) {
       return streamIndexOccurrenceProperty(streamIndex).get();
     }
 
     /**
+     * Returns the {@link ReadOnlyIntegerProperty} indicating the number of times a stream index
+     * occurs in this {@code GridBuilder}.
+     *
      * @param streamIndex the streamIndex to return the property for
-     * @return the {@link ReadOnlyIntegerProperty} indicating the number of
-     * times a stream index occurs in this {@code GridBuilder}
+     * @return the {@link ReadOnlyIntegerProperty} indicating the number of times a stream index
+     *     occurs in this {@code GridBuilder}
      */
     public ReadOnlyIntegerProperty streamIndexOccurrenceProperty(int streamIndex) {
       return streamIndexOccurrences.get(streamIndex).getReadOnlyProperty();
     }
 
     /**
+     * Returns the total occurrences of a number in this {@code GridBuilder}.
+     *
      * @param number the number to get occurrences for
      * @return the total occurrences of a number in this {@code GridBuilder}
      */
@@ -640,18 +689,23 @@ public final class Grid {
     }
 
     /**
+     * Returns the {@link ReadOnlyIntegerProperty} indicating the number of times a number occurs in
+     * this {@code GridBuilder}.
+     *
      * @param number the number to return the property for
-     * @return the {@link ReadOnlyIntegerProperty} indicating the number of
-     * times a number occurs in this {@code GridBuilder}
+     * @return the {@link ReadOnlyIntegerProperty} indicating the number of times a number occurs in
+     *     this {@code GridBuilder}
      */
     public ReadOnlyIntegerProperty numberOccurrenceProperty(int number) {
       return numberOccurrences.get(number).getReadOnlyProperty();
     }
 
     /**
+     * Builds a new {@link Grid} instance.
+     *
      * @return a new {@link Grid} instance
      * @throws IllegalArgumentException if the array of stream indexes is invalid or if any row,
-     *                                  column or stream does not contain unique numbers
+     *     column or stream does not contain unique numbers
      */
     public Grid build() {
       checkStreams(streams);
@@ -683,7 +737,8 @@ public final class Grid {
 
     @Override
     public String toString() {
-      return "GridBuilder [streams=" + Arrays.toString(streams) + ", numbers=" + Arrays.toString(numbers) + "]";
+      return "GridBuilder [streams=" + Arrays.toString(streams) + ", numbers=" + Arrays
+          .toString(numbers) + "]";
     }
 
   }

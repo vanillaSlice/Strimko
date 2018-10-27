@@ -1,14 +1,13 @@
 package lowe.mike.strimko.model;
 
+import static java.util.Objects.hash;
+
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import lowe.mike.strimko.model.Grid.GridBuilder;
 
-import static java.util.Objects.hash;
-
 /**
- * {@code GameState} instances contain information about the current state of
- * the game.
+ * {@code GameState} instances contain information about the current state of the game.
  *
  * @author Mike Lowe
  */
@@ -18,6 +17,8 @@ public final class GameState {
   private final ReadOnlyObjectWrapper<GridBuilder> gridBuilder = new ReadOnlyObjectWrapper<>();
 
   /**
+   * Returns the {@link Puzzle} being played.
+   *
    * @return the {@link Puzzle} being played
    */
   public Puzzle getPuzzle() {
@@ -25,6 +26,8 @@ public final class GameState {
   }
 
   /**
+   * Sets the {@link Puzzle} being played.
+   *
    * @param puzzle the {@link Puzzle} being played
    */
   public void setPuzzle(Puzzle puzzle) {
@@ -34,14 +37,17 @@ public final class GameState {
   }
 
   /**
-   * @return the {@link ReadOnlyObjectProperty} of the {@link Puzzle} being
-   * played
+   * Returns the {@link ReadOnlyObjectProperty} of the {@link Puzzle} being played.
+   *
+   * @return the {@link ReadOnlyObjectProperty} of the {@link Puzzle} being played
    */
   public ReadOnlyObjectProperty<Puzzle> puzzleProperty() {
     return puzzle.getReadOnlyProperty();
   }
 
   /**
+   * Returns the {@link GridBuilder}.
+   *
    * @return the {@link GridBuilder}
    */
   public GridBuilder getGridBuilder() {
@@ -49,6 +55,8 @@ public final class GameState {
   }
 
   /**
+   * Sets the {@link GridBuilder}.
+   *
    * @param gridBuilder the {@link GridBuilder}
    */
   public void setGridBuilder(GridBuilder gridBuilder) {
@@ -58,6 +66,8 @@ public final class GameState {
   }
 
   /**
+   * Returns the {@link ReadOnlyObjectProperty} of the {@link GridBuilder}.
+   *
    * @return the {@link ReadOnlyObjectProperty} of the {@link GridBuilder}
    */
   public ReadOnlyObjectProperty<GridBuilder> gridBuilderProperty() {

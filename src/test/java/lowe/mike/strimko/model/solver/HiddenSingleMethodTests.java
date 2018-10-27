@@ -1,12 +1,5 @@
 package lowe.mike.strimko.model.solver;
 
-import lowe.mike.strimko.model.Grid;
-import lowe.mike.strimko.model.Position;
-import org.junit.Test;
-
-import java.util.Collection;
-import java.util.LinkedHashSet;
-
 import static lowe.mike.strimko.model.solver.HiddenSingleMethod.run;
 import static lowe.mike.strimko.model.solver.HiddenSingleMethod.runOverColumns;
 import static lowe.mike.strimko.model.solver.HiddenSingleMethod.runOverRows;
@@ -15,7 +8,15 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import java.util.Collection;
+import java.util.LinkedHashSet;
+import lowe.mike.strimko.model.Grid;
+import lowe.mike.strimko.model.Position;
+import org.junit.Test;
+
 /**
+ * {@link HiddenSingleMethod} tests.
+ *
  * @author Mike Lowe
  */
 public final class HiddenSingleMethodTests extends SolvingMethodTests {
@@ -88,10 +89,12 @@ public final class HiddenSingleMethodTests extends SolvingMethodTests {
     assertFalse(changed);
   }
 
-  private static void assertConditions(Grid grid, Collection<Position> hints, boolean changed, int number,
+  private static void assertConditions(Grid grid, Collection<Position> hints, boolean changed,
+      int number,
       Position changedPosition) {
     assertTrue(changed);
-    assertEquals(number, grid.getCell(changedPosition.getRowIndex(), changedPosition.getColumnIndex()).getNumber());
+    assertEquals(number,
+        grid.getCell(changedPosition.getRowIndex(), changedPosition.getColumnIndex()).getNumber());
     assertTrue(hints.contains(changedPosition));
   }
 

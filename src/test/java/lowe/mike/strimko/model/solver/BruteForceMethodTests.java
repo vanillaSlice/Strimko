@@ -1,12 +1,14 @@
 package lowe.mike.strimko.model.solver;
 
-import lowe.mike.strimko.model.Grid;
-import org.junit.Test;
-
 import static lowe.mike.strimko.model.solver.BruteForceMethod.run;
 import static org.junit.Assert.assertTrue;
 
+import lowe.mike.strimko.model.Grid;
+import org.junit.Test;
+
 /**
+ * {@link BruteForceMethod} tests.
+ *
  * @author Mike Lowe
  */
 public final class BruteForceMethodTests extends SolvingMethodTests {
@@ -56,9 +58,11 @@ public final class BruteForceMethodTests extends SolvingMethodTests {
   public void test_run_filled() {
     // setup
     int size = 6;
-    int[][] streams = {{1, 2, 3, 4, 5, 6}, {1, 2, 3, 4, 5, 6}, {1, 2, 3, 4, 5, 6}, {1, 2, 3, 4, 5, 6},
+    int[][] streams = {{1, 2, 3, 4, 5, 6}, {1, 2, 3, 4, 5, 6}, {1, 2, 3, 4, 5, 6},
+        {1, 2, 3, 4, 5, 6},
         {1, 2, 3, 4, 5, 6}, {1, 2, 3, 4, 5, 6}};
-    int[][] numbers = {{1, 2, 3, 4, 5, 6}, {1, 2, 3, 4, 5, 6}, {1, 2, 3, 4, 5, 6}, {1, 2, 3, 4, 5, 6},
+    int[][] numbers = {{1, 2, 3, 4, 5, 6}, {1, 2, 3, 4, 5, 6}, {1, 2, 3, 4, 5, 6},
+        {1, 2, 3, 4, 5, 6},
         {1, 2, 3, 4, 5, 6}, {1, 2, 3, 4, 5, 6}};
     Grid grid = newStrimkoGrid(size, streams, numbers);
 

@@ -1,20 +1,25 @@
 package lowe.mike.strimko.model;
 
-import lowe.mike.strimko.model.Grid.GridBuilder;
-import org.junit.Before;
-import org.junit.Test;
-
 import static lowe.mike.strimko.model.Type.STRIMKO;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
+import lowe.mike.strimko.model.Grid.GridBuilder;
+import org.junit.Before;
+import org.junit.Test;
+
 /**
+ * {@link Puzzle} tests.
+ *
  * @author Mike Lowe
  */
 public final class PuzzleTests {
 
   private Puzzle puzzle;
 
+  /**
+   * Test setup.
+   */
   @Before
   public void setup() {
     int size = 3;

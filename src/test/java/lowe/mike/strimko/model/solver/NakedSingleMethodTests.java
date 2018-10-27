@@ -1,18 +1,19 @@
 package lowe.mike.strimko.model.solver;
 
-import lowe.mike.strimko.model.Grid;
-import lowe.mike.strimko.model.Position;
-import org.junit.Test;
-
-import java.util.Collection;
-import java.util.LinkedHashSet;
-
 import static lowe.mike.strimko.model.solver.NakedSingleMethod.run;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import java.util.Collection;
+import java.util.LinkedHashSet;
+import lowe.mike.strimko.model.Grid;
+import lowe.mike.strimko.model.Position;
+import org.junit.Test;
+
 /**
+ * {@link NakedSingleMethod} tests.
+ *
  * @author Mike Lowe
  */
 public final class NakedSingleMethodTests extends SolvingMethodTests {

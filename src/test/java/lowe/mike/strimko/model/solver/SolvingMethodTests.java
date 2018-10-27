@@ -1,17 +1,18 @@
 package lowe.mike.strimko.model.solver;
 
-import lowe.mike.strimko.model.Cell;
-import lowe.mike.strimko.model.Grid;
-import lowe.mike.strimko.model.Grid.GridBuilder;
-
-import java.util.Collection;
-import java.util.Map;
-
 import static lowe.mike.strimko.model.Constants.SUDOKU_SIZE;
 import static lowe.mike.strimko.model.Constants.getSudokuStreams;
 import static org.junit.Assert.assertTrue;
 
+import java.util.Collection;
+import java.util.Map;
+import lowe.mike.strimko.model.Cell;
+import lowe.mike.strimko.model.Grid;
+import lowe.mike.strimko.model.Grid.GridBuilder;
+
 /**
+ * {@link SolvingMethod} tests.
+ *
  * @author Mike Lowe
  */
 class SolvingMethodTests {

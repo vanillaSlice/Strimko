@@ -1,10 +1,5 @@
 package lowe.mike.strimko.model;
 
-import lowe.mike.strimko.model.Grid.GridBuilder;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.ExpectedException;
-
 import static lowe.mike.strimko.model.Constants.MAX_GRID_SIZE;
 import static lowe.mike.strimko.model.Constants.MIN_GRID_SIZE;
 import static lowe.mike.strimko.model.Constants.NO_NUMBER;
@@ -14,7 +9,14 @@ import static lowe.mike.strimko.model.Validation.checkNumber;
 import static lowe.mike.strimko.model.Validation.checkStreamIndex;
 import static lowe.mike.strimko.model.Validation.checkStreams;
 
+import lowe.mike.strimko.model.Grid.GridBuilder;
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.rules.ExpectedException;
+
 /**
+ * {@link Validation} tests.
+ *
  * @author Mike Lowe
  */
 public final class ValidationTests {

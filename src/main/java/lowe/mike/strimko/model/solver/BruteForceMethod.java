@@ -1,18 +1,19 @@
 package lowe.mike.strimko.model.solver;
 
-import lowe.mike.strimko.model.Cell;
-import lowe.mike.strimko.model.Grid;
-
 import static com.google.common.base.Preconditions.checkArgument;
 import static lowe.mike.strimko.model.Grid.copyOf;
 
+import lowe.mike.strimko.model.Cell;
+import lowe.mike.strimko.model.Grid;
+
 /**
  * {@code BruteForceMethod} represents a brute-force solving method.
- * <p>
- * A depth-first search algorithm is used to test each possible number for a
- * cell until a solution has been found.
- * <p>
- * Instances of {@code BruteForceMethod} cannot be created.
+ *
+ * <p>A depth-first search algorithm is used to test each possible number for a cell until a
+ * solution
+ * has been found.
+ *
+ * <p>Instances of {@code BruteForceMethod} cannot be created.
  *
  * @author Mike Lowe
  */
@@ -106,6 +107,7 @@ final class BruteForceMethod extends SolvingMethod {
   }
 
   private static class Note {
+
     private boolean foundSolution;
     private boolean foundMultipleSolutions;
     private Grid solution;

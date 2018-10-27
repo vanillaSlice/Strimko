@@ -1,6 +1,14 @@
 package lowe.mike.strimko.model;
 
-import lowe.mike.strimko.model.Grid.GridBuilder;
+import static java.lang.Integer.parseInt;
+import static java.nio.file.Files.copy;
+import static java.nio.file.Paths.get;
+import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
+import static lowe.mike.strimko.model.Constants.PUZZLES_RESOURCE_NAME;
+import static lowe.mike.strimko.model.Constants.SUDOKU_SIZE;
+import static lowe.mike.strimko.model.Constants.USER_PUZZLE_DIRECTORY;
+import static lowe.mike.strimko.model.Constants.getSudokuStreams;
+import static lowe.mike.strimko.model.Type.STRIMKO;
 
 import java.io.File;
 import java.io.IOException;
@@ -14,22 +22,12 @@ import java.util.InputMismatchException;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
-
-import static java.lang.Integer.parseInt;
-import static java.nio.file.Files.copy;
-import static java.nio.file.Paths.get;
-import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
-import static lowe.mike.strimko.model.Constants.PUZZLES_RESOURCE_NAME;
-import static lowe.mike.strimko.model.Constants.SUDOKU_SIZE;
-import static lowe.mike.strimko.model.Constants.USER_PUZZLE_DIRECTORY;
-import static lowe.mike.strimko.model.Constants.getSudokuStreams;
-import static lowe.mike.strimko.model.Type.STRIMKO;
+import lowe.mike.strimko.model.Grid.GridBuilder;
 
 /**
- * {@code FileHandler} provides useful methods for interacting with puzzle
- * files.
- * <p>
- * Instances of {@code FileHandler} cannot be created.
+ * {@code FileHandler} provides useful methods for interacting with puzzle files.
+ *
+ * <p>Instances of {@code FileHandler} cannot be created.
  *
  * @author Mike Lowe
  */
@@ -42,8 +40,7 @@ public final class FileHandler {
   }
 
   /**
-   * Reads the resource file with the given name and returns the paths to the
-   * puzzle files.
+   * Reads the resource file with the given name and returns the paths to the puzzle files.
    *
    * @param resourceName the name of the resource file
    * @return the {@link Collection} of paths to puzzle files
@@ -66,7 +63,7 @@ public final class FileHandler {
    * Copies puzzles to a given output directory.
    *
    * @param outputDirectory directory to output the puzzle files to
-   * @param pathsToPuzzles  the {@link Collection} of paths to puzzle files
+   * @param pathsToPuzzles the {@link Collection} of paths to puzzle files
    * @throws FileHandlingException if the puzzles could not be copied to the output directory
    */
   static void copyPuzzlesToDirectory(String outputDirectory, Collection<String> pathsToPuzzles)
@@ -90,8 +87,10 @@ public final class FileHandler {
     }
   }
 
-  private static void copyPuzzle(String pathToPuzzle, Path outputPath) throws FileHandlingException {
-    try (InputStream inputStream = FileHandler.class.getResourceAsStream("/puzzles/" + pathToPuzzle)) {
+  private static void copyPuzzle(String pathToPuzzle, Path outputPath)
+      throws FileHandlingException {
+    try (InputStream inputStream = FileHandler.class
+        .getResourceAsStream("/puzzles/" + pathToPuzzle)) {
       copy(inputStream, outputPath, REPLACE_EXISTING);
     } catch (UnsupportedOperationException | SecurityException | IOException e) {
       throw new FileHandlingException("Could not copy puzzles to '" + outputPath + "'");
@@ -109,16 +108,31 @@ public final class FileHandler {
   }
 
   /**
-   * Returns a {@link Collection} of puzzle file names given the puzzle
-   * directory, {@link Type} and {@link Difficulty}.
+   * Returns a {@link Collection} of puzzle file names given the {@link Type} and {@link
+   * Difficulty}.
    *
-   * @param puzzleDirectory the directory where the puzzles are stored
-   * @param type            the {@link Type}
-   * @param difficulty      the {@link Difficulty}
+   * @param type the {@link Type}
+   * @param difficulty the {@link Difficulty}
    * @return the {@link Collection} of puzzle file names
    * @throws FileHandlingException if the puzzle file names could not be listed
    */
-  static Collection<String> listPuzzleFileNames(String puzzleDirectory, Type type, Difficulty difficulty)
+  public static Collection<String> listPuzzleFileNames(Type type, Difficulty difficulty)
+      throws FileHandlingException {
+    return listPuzzleFileNames(USER_PUZZLE_DIRECTORY, type, difficulty);
+  }
+
+  /**
+   * Returns a {@link Collection} of puzzle file names given the puzzle directory, {@link Type} and
+   * {@link Difficulty}.
+   *
+   * @param puzzleDirectory the directory where the puzzles are stored
+   * @param type the {@link Type}
+   * @param difficulty the {@link Difficulty}
+   * @return the {@link Collection} of puzzle file names
+   * @throws FileHandlingException if the puzzle file names could not be listed
+   */
+  static Collection<String> listPuzzleFileNames(String puzzleDirectory, Type type,
+      Difficulty difficulty)
       throws FileHandlingException {
     if (type == null || difficulty == null) {
       return new ArrayList<>();
@@ -131,11 +145,13 @@ public final class FileHandler {
     return validPuzzleFileNames;
   }
 
-  private static Path getPathToPuzzleSubDirectory(String puzzleDirectory, Type type, Difficulty difficulty) {
+  private static Path getPathToPuzzleSubDirectory(String puzzleDirectory, Type type,
+      Difficulty difficulty) {
     return get(puzzleDirectory, type.toString(), difficulty.toString());
   }
 
-  private static List<String> getValidPuzzleFileNames(Path puzzleSubDirectoryPath) throws FileHandlingException {
+  private static List<String> getValidPuzzleFileNames(Path puzzleSubDirectoryPath)
+      throws FileHandlingException {
     File[] files = listFiles(puzzleSubDirectoryPath);
 
     List<String> puzzleFileNames = new ArrayList<>();
@@ -192,33 +208,35 @@ public final class FileHandler {
   }
 
   /**
-   * Returns a {@link Collection} of puzzle file names given the {@link Type}
-   * and {@link Difficulty}.
+   * Reads a {@link Puzzle} from a file given the {@link Puzzle}'s {@link Type}, {@link Difficulty}
+   * and name.
    *
-   * @param type       the {@link Type}
+   * @param type the {@link Type}
    * @param difficulty the {@link Difficulty}
-   * @return the {@link Collection} of puzzle file names
-   * @throws FileHandlingException if the puzzle file names could not be listed
+   * @param name the name of the {@link Puzzle}
+   * @return the {@link Puzzle}
+   * @throws FileHandlingException if a {@link Puzzle} could not be read from the file
    */
-  public static Collection<String> listPuzzleFileNames(Type type, Difficulty difficulty)
+  public static Puzzle read(Type type, Difficulty difficulty, String name)
       throws FileHandlingException {
-    return listPuzzleFileNames(USER_PUZZLE_DIRECTORY, type, difficulty);
+    return read(USER_PUZZLE_DIRECTORY, type, difficulty, name);
   }
 
   /**
-   * Reads a {@link Puzzle} from a file given the puzzle directory, the
-   * {@link Puzzle}'s {@link Type}, {@link Difficulty} and name.
+   * Reads a {@link Puzzle} from a file given the puzzle directory, the {@link Puzzle}'s {@link
+   * Type}, {@link Difficulty} and name.
    *
    * @param puzzleDirectory the directory where the puzzles are stored
-   * @param type            the {@link Type}
-   * @param difficulty      the {@link Difficulty}
-   * @param name            the name of the {@link Puzzle}
+   * @param type the {@link Type}
+   * @param difficulty the {@link Difficulty}
+   * @param name the name of the {@link Puzzle}
    * @return the {@link Puzzle}
    * @throws FileHandlingException if a {@link Puzzle} could not be read from the file
    */
   static Puzzle read(String puzzleDirectory, Type type, Difficulty difficulty, String name)
       throws FileHandlingException {
-    Path pathToFileToReadFrom = getPathToFileToReadPuzzleFrom(puzzleDirectory, type, difficulty, name);
+    Path pathToFileToReadFrom = getPathToFileToReadPuzzleFrom(puzzleDirectory, type, difficulty,
+        name);
     try (Scanner scanner = new Scanner(pathToFileToReadFrom)) {
       Grid grid = readGrid(scanner, type);
       return createPuzzle(type, grid);
@@ -227,9 +245,11 @@ public final class FileHandler {
     }
   }
 
-  private static Path getPathToFileToReadPuzzleFrom(String puzzleDirectory, Type type, Difficulty difficulty,
+  private static Path getPathToFileToReadPuzzleFrom(String puzzleDirectory, Type type,
+      Difficulty difficulty,
       String name) {
-    return get(getPathToPuzzleSubDirectory(puzzleDirectory, type, difficulty).toString(), name + EXTENSION);
+    return get(getPathToPuzzleSubDirectory(puzzleDirectory, type, difficulty).toString(),
+        name + EXTENSION);
   }
 
   private static Grid readGrid(Scanner scanner, Type type) throws FileHandlingException {
@@ -262,11 +282,13 @@ public final class FileHandler {
     return array;
   }
 
-  private static Grid buildGrid(int size, int[][] streams, int[][] numbers) throws FileHandlingException {
+  private static Grid buildGrid(int size, int[][] streams, int[][] numbers)
+      throws FileHandlingException {
     try {
       return new GridBuilder(size).setStreams(streams).setNumbers(numbers).build();
     } catch (IllegalArgumentException e) {
-      throw new FileHandlingException("File contains invalid puzzle information: " + e.getMessage());
+      throw new FileHandlingException(
+          "File contains invalid puzzle information: " + e.getMessage());
     }
   }
 
@@ -279,24 +301,21 @@ public final class FileHandler {
   }
 
   /**
-   * Reads a {@link Puzzle} from a file given the {@link Puzzle}'s
-   * {@link Type}, {@link Difficulty} and name.
+   * Writes a {@link Puzzle} to file.
    *
-   * @param type       the {@link Type}
-   * @param difficulty the {@link Difficulty}
-   * @param name       the name of the {@link Puzzle}
-   * @return the {@link Puzzle}
-   * @throws FileHandlingException if a {@link Puzzle} could not be read from the file
+   * @param puzzle the {@link Puzzle} to write
+   * @return the name of the {@link Puzzle} written to file
+   * @throws FileHandlingException if the {@link Puzzle} could not be written to file
    */
-  public static Puzzle read(Type type, Difficulty difficulty, String name) throws FileHandlingException {
-    return read(USER_PUZZLE_DIRECTORY, type, difficulty, name);
+  public static String write(Puzzle puzzle) throws FileHandlingException {
+    return write(USER_PUZZLE_DIRECTORY, puzzle);
   }
 
   /**
    * Writes a {@link Puzzle} to file given the puzzle directory.
    *
    * @param puzzleDirectory the directory where the puzzles are stored
-   * @param puzzle          the {@link Puzzle} to write
+   * @param puzzle the {@link Puzzle} to write
    * @return the name of the {@link Puzzle} written to file
    * @throws FileHandlingException if the {@link Puzzle} could not be written to file
    */
@@ -332,7 +351,8 @@ public final class FileHandler {
     return get(pathToPuzzleSubDirectory.toString(), fileName + EXTENSION);
   }
 
-  private static void writePuzzle(Puzzle puzzle, Path pathToFileToWriteTo) throws FileHandlingException {
+  private static void writePuzzle(Puzzle puzzle, Path pathToFileToWriteTo)
+      throws FileHandlingException {
     String puzzleString = getPuzzleString(puzzle);
     try {
       Files.write(pathToFileToWriteTo, puzzleString.trim().getBytes());
@@ -363,17 +383,6 @@ public final class FileHandler {
     for (Cell cell : grid.getCells()) {
       builder.append(cell.getNumber()).append(" ");
     }
-  }
-
-  /**
-   * Writes a {@link Puzzle} to file.
-   *
-   * @param puzzle the {@link Puzzle} to write
-   * @return the name of the {@link Puzzle} written to file
-   * @throws FileHandlingException if the {@link Puzzle} could not be written to file
-   */
-  public static String write(Puzzle puzzle) throws FileHandlingException {
-    return write(USER_PUZZLE_DIRECTORY, puzzle);
   }
 
 }

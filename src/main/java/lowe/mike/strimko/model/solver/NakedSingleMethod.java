@@ -1,18 +1,17 @@
 package lowe.mike.strimko.model.solver;
 
+import java.util.Collection;
 import lowe.mike.strimko.model.Cell;
 import lowe.mike.strimko.model.Grid;
 import lowe.mike.strimko.model.Position;
 
-import java.util.Collection;
-
 /**
  * {@code NakedSingleMethod} represents the 'Naked Single' solving method.
- * <p>
- * When a cell has only one candidate in its set of possible numbers, then it
- * must be this number.
- * <p>
- * Instances of {@code NakedSingleMethod} cannot be created.
+ *
+ * <p>When a cell has only one candidate in its set of possible numbers, then it must be this
+ * number.
+ *
+ * <p>Instances of {@code NakedSingleMethod} cannot be created.
  *
  * @author Mike Lowe
  */
@@ -25,10 +24,9 @@ final class NakedSingleMethod extends SolvingMethod {
   /**
    * Runs 'Naked Single' method.
    *
-   * @param grid  the {@link Grid} to run method over
+   * @param grid the {@link Grid} to run method over
    * @param hints the {@link Collection} of hints to update
-   * @return {@code true} if any changes where made to the {@link Grid},
-   * {@code false} otherwise
+   * @return {@code true} if any changes where made to the {@link Grid}, {@code false} otherwise
    */
   static boolean run(Grid grid, Collection<Position> hints) {
     for (Cell cell : grid.getCells()) {

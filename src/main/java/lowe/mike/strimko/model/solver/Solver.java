@@ -1,23 +1,22 @@
 package lowe.mike.strimko.model.solver;
 
-import lowe.mike.strimko.model.Difficulty;
-import lowe.mike.strimko.model.Grid;
-import lowe.mike.strimko.model.Position;
-
-import java.util.Collection;
-import java.util.LinkedHashSet;
-
 import static lowe.mike.strimko.model.Difficulty.EASY;
 import static lowe.mike.strimko.model.Difficulty.HARD;
 import static lowe.mike.strimko.model.Difficulty.MEDIUM;
 import static lowe.mike.strimko.model.Grid.copyOf;
 
+import java.util.Collection;
+import java.util.LinkedHashSet;
+import lowe.mike.strimko.model.Difficulty;
+import lowe.mike.strimko.model.Grid;
+import lowe.mike.strimko.model.Position;
+
 /**
- * {@code Solver} class provides a single method {@link #solve(Grid)} which
- * attempts to solve a given {@link Grid} and returns a {@link SolvingResult}
- * object which contains details about the solution etc.
- * <p>
- * Various methods are used to attempt to solve a {@link Grid}, these include:
+ * {@code Solver} class provides a single method {@link #solve(Grid)} which attempts to solve a
+ * given {@link Grid} and returns a {@link SolvingResult} object which contains details about the
+ * solution etc.
+ *
+ * <p>Various methods are used to attempt to solve a {@link Grid}, these include:
  * <ul>
  * <li>'Naked Singles'</li>
  * <li>'Hidden Singles'</li>
@@ -34,8 +33,8 @@ import static lowe.mike.strimko.model.Grid.copyOf;
  * <li>Brute-force (as a last resort)</li>
  * </ul>
  * Details about each of these methods can be found online.
- * <p>
- * Instances of {@code Solver} cannot be created.
+ *
+ * <p>Instances of {@code Solver} cannot be created.
  *
  * @author Mike Lowe
  */
@@ -46,12 +45,10 @@ public final class Solver {
   }
 
   /**
-   * Attempts to solve the given {@link Grid} and returns a
-   * {@link SolvingResult} object.
+   * Attempts to solve the given {@link Grid} and returns a {@link SolvingResult} object.
    *
    * @param grid the {@link Grid} to solve
-   * @return the {@link SolvingResult} containing useful information from
-   * solving
+   * @return the {@link SolvingResult} containing useful information from solving
    * @throws IllegalArgumentException if {@code grid} is not solvable or has multiple solutions
    */
   public static SolvingResult solve(Grid grid) {

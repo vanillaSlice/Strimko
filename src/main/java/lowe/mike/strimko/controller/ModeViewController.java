@@ -1,5 +1,13 @@
 package lowe.mike.strimko.controller;
 
+import static java.lang.Double.MAX_VALUE;
+import static java.lang.Integer.parseInt;
+import static javafx.scene.layout.GridPane.setFillWidth;
+import static javafx.scene.layout.GridPane.setHgrow;
+import static javafx.scene.layout.Priority.SOMETIMES;
+import static lowe.mike.strimko.controller.Alerts.showErrorAndWait;
+
+import java.util.Iterator;
 import javafx.beans.value.ObservableBooleanValue;
 import javafx.beans.value.ObservableIntegerValue;
 import javafx.beans.value.ObservableStringValue;
@@ -17,15 +25,6 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import lowe.mike.strimko.model.GameState;
 import lowe.mike.strimko.model.Type;
-
-import java.util.Iterator;
-
-import static java.lang.Double.MAX_VALUE;
-import static java.lang.Integer.parseInt;
-import static javafx.scene.layout.GridPane.setFillWidth;
-import static javafx.scene.layout.GridPane.setHgrow;
-import static javafx.scene.layout.Priority.SOMETIMES;
-import static lowe.mike.strimko.controller.Alerts.showErrorAndWait;
 
 /**
  * Abstract Controller class for Mode Views.
@@ -87,6 +86,8 @@ public abstract class ModeViewController {
   }
 
   /**
+   * Returns the selected {@link Type}.
+   *
    * @return the selected {@link Type}
    */
   protected final Type getTypeComboBoxValue() {
@@ -110,10 +111,9 @@ public abstract class ModeViewController {
   }
 
   /**
-   * Creates a new cell pane given the size of the grid and the stream index
-   * of the cell.
+   * Creates a new cell pane given the size of the grid and the stream index of the cell.
    *
-   * @param size        the size of the grid
+   * @param size the size of the grid
    * @param streamIndex the stream index of the cell
    * @return the new cell pane
    */
@@ -130,7 +130,7 @@ public abstract class ModeViewController {
   /**
    * Adds the stream style class to the given {@link Node}.
    *
-   * @param node        the {@link Node} to add the style to
+   * @param node the {@link Node} to add the style to
    * @param streamIndex the stream index
    */
   protected static void addStreamStyleClass(Node node, int streamIndex) {
@@ -141,7 +141,7 @@ public abstract class ModeViewController {
   /**
    * Removes the stream style class from the given {@link Node}.
    *
-   * @param node        the {@link Node} to remove the style class from
+   * @param node the {@link Node} to remove the style class from
    * @param streamIndex the stream index
    */
   protected static void removeStreamStyleClass(Node node, int streamIndex) {
@@ -156,11 +156,12 @@ public abstract class ModeViewController {
   /**
    * Adds a number {@link Label} to the given cell pane.
    *
-   * @param cellPane           the cell pane to add the number {@link Label} to
-   * @param textProperty       the {@link ObservableStringValue} text property
+   * @param cellPane the cell pane to add the number {@link Label} to
+   * @param textProperty the {@link ObservableStringValue} text property
    * @param visibilityProperty the {@link ObservableBooleanValue} visibility property
    */
-  protected static void addNumberLabelToCellPane(StackPane cellPane, ObservableStringValue textProperty,
+  protected static void addNumberLabelToCellPane(StackPane cellPane,
+      ObservableStringValue textProperty,
       ObservableBooleanValue visibilityProperty) {
     Label numberLabel = new Label();
 
@@ -169,7 +170,8 @@ public abstract class ModeViewController {
     addLabelToCellPane(cellPane, numberLabel, visibilityProperty, NUMBER_LABEL_STYLE_CLASS);
   }
 
-  private static void addLabelToCellPane(StackPane cellPane, Label label, ObservableBooleanValue visibilityProperty,
+  private static void addLabelToCellPane(StackPane cellPane, Label label,
+      ObservableBooleanValue visibilityProperty,
       String styleClass) {
     label.visibleProperty().bind(visibilityProperty);
     label.setPrefSize(cellPane.getPrefWidth(), cellPane.getPrefHeight());
@@ -181,8 +183,8 @@ public abstract class ModeViewController {
   /**
    * Adds a solution {@link Label} to the given cell pane.
    *
-   * @param cellPane           the cell pane to add the solution {@link Label} to
-   * @param number             the solution number
+   * @param cellPane the cell pane to add the solution {@link Label} to
+   * @param number the solution number
    * @param visibilityProperty the {@link ObservableBooleanValue} visibility property
    */
   protected static void addSolutionLabelToCellPane(StackPane cellPane, int number,
@@ -208,20 +210,19 @@ public abstract class ModeViewController {
   }
 
   /**
-   * Adds the cell pane to the grid pane at the given column index and row
-   * index.
+   * Adds the cell pane to the grid pane at the given column index and row index.
    *
-   * @param cellPane    the cell pane to add
+   * @param cellPane the cell pane to add
    * @param columnIndex the column index
-   * @param rowIndex    the row index
+   * @param rowIndex the row index
    */
   protected final void addCellPaneToGridPane(StackPane cellPane, int columnIndex, int rowIndex) {
     gridPane.add(cellPane, columnIndex, rowIndex);
   }
 
   /**
-   * Returns the selected {@link ToggleButton} in a given {@link Pane},
-   * {@code null} if one is not selected.
+   * Returns the selected {@link ToggleButton} in a given {@link Pane}, {@code null} if one is not
+   * selected.
    *
    * @param pane the {@link Pane}
    * @return the selected {@link ToggleButton}
@@ -237,6 +238,8 @@ public abstract class ModeViewController {
   }
 
   /**
+   * Returns the number on a given {@link ToggleButton}.
+   *
    * @param button the {@link ToggleButton} to get the number from
    * @return the number on a given {@link ToggleButton}
    */
@@ -245,8 +248,11 @@ public abstract class ModeViewController {
   }
 
   /**
-   * @return {@code true} if the clear number {@link ToggleButton} is
-   * selected; {@code false} otherwise
+   * Returns{@code true} if the clear number {@link ToggleButton} is selected; {@code false}
+   * otherwise.
+   *
+   * @return {@code true} if the clear number {@link ToggleButton} is selected; {@code false}
+   *     otherwise
    */
   protected final boolean clearNumber() {
     return clearNumberButton.isSelected();
@@ -299,7 +305,7 @@ public abstract class ModeViewController {
   /**
    * Removes each {@link Pane}'s children from a {@link ToggleGroup}.
    *
-   * @param panes       an array of {@link Pane}s
+   * @param panes an array of {@link Pane}s
    * @param toggleGroup the {@link ToggleGroup}
    */
   protected static void removeChildrenFromToggleGroup(ToggleGroup toggleGroup, Pane... panes) {
@@ -322,13 +328,14 @@ public abstract class ModeViewController {
   /**
    * Returns a new numbered {@link ToggleButton}.
    *
-   * @param size               the size of the grid
-   * @param number             the number of the {@link ToggleButton}
-   * @param toggleGroup        the {@link ToggleGroup}
+   * @param size the size of the grid
+   * @param number the number of the {@link ToggleButton}
+   * @param toggleGroup the {@link ToggleGroup}
    * @param occurrenceProperty the number or stream occurrence property
    * @return a new numbered {@link ToggleButton}
    */
-  protected static ToggleButton newNumberedToggleButton(int size, int number, ToggleGroup toggleGroup,
+  protected static ToggleButton newNumberedToggleButton(int size, int number,
+      ToggleGroup toggleGroup,
       ObservableIntegerValue occurrenceProperty) {
     ToggleButton numberedButton = new ToggleButton(Integer.toString(number));
 
@@ -354,7 +361,8 @@ public abstract class ModeViewController {
   private static void addOccurrencePropertyChangeListener(ToggleButton numberedButton, int size,
       ObservableIntegerValue occurrenceProperty) {
     occurrenceProperty.addListener(
-        (observable) -> setNumberedToggleButtonDisableProperty(numberedButton, size, occurrenceProperty));
+        (observable) -> setNumberedToggleButtonDisableProperty(numberedButton, size,
+            occurrenceProperty));
   }
 
   private static void addNumberedButtonStyle(ToggleButton numberedButton) {
@@ -365,8 +373,10 @@ public abstract class ModeViewController {
   }
 
   /**
-   * @return {@code true} if the solution {@link ToggleButton} is selected;
-   * {@code false} otherwise
+   * Returns {@code true} if the solution {@link ToggleButton} is selected; {@code false}
+   * otherwise.
+   *
+   * @return {@code true} if the solution {@link ToggleButton} is selected; {@code false} otherwise
    */
   protected final boolean showSolution() {
     return solutionButton.isSelected();
