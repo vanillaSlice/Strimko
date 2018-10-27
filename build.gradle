@@ -24,16 +24,16 @@ dependencies {
 }
 
 testSets {
-  e2eTest
+    e2eTest
 }
 
 test {
-  useJUnitPlatform()
-  dependsOn e2eTest
+    useJUnitPlatform()
+    dependsOn e2eTest
 }
 
 e2eTest {
-  useJUnitPlatform()
+    useJUnitPlatform()
 }
 
 checkstyle {
