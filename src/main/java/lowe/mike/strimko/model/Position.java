@@ -3,10 +3,9 @@ package lowe.mike.strimko.model;
 import static java.util.Objects.hash;
 
 /**
- * {@code Position} instances contain the row index and the column index for a
- * {@link Cell}.
- * <p>
- * {@code Position} instances are immutable.
+ * {@code Position} instances contain the row index and the column index for a {@link Cell}.
+ *
+ * <p>{@code Position} instances are immutable.
  *
  * @author Mike Lowe
  */
@@ -16,10 +15,9 @@ public final class Position {
   private final int columnIndex;
 
   /**
-   * Creates a new {@code Position} instance given the row index and column
-   * index.
+   * Creates a new {@code Position} instance given the row index and column index.
    *
-   * @param rowIndex    the row index
+   * @param rowIndex the row index
    * @param columnIndex the column index
    */
   public Position(int rowIndex, int columnIndex) {
@@ -28,6 +26,8 @@ public final class Position {
   }
 
   /**
+   * Returns the row index.
+   *
    * @return the row index
    */
   public int getRowIndex() {
@@ -35,6 +35,8 @@ public final class Position {
   }
 
   /**
+   * Returns the column index.
+   *
    * @return the column index
    */
   public int getColumnIndex() {

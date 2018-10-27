@@ -1,21 +1,19 @@
 package lowe.mike.strimko.model;
 
+import static java.util.Objects.hash;
+import static lowe.mike.strimko.model.solver.Solver.solve;
+
+import java.util.Collection;
+import java.util.LinkedHashSet;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import lowe.mike.strimko.model.solver.SolvingResult;
 
-import java.util.Collection;
-import java.util.LinkedHashSet;
-
-import static java.util.Objects.hash;
-import static lowe.mike.strimko.model.solver.Solver.solve;
-
 /**
- * {@code Puzzle} instances are intended to represent Strimko and Sudoku
- * puzzles.
- * <p>
- * Instance information includes the {@code Puzzle}'s {@link Type},
- * {@link Difficulty}, {@link Grid} and solution.
+ * {@code Puzzle} instances are intended to represent Strimko and Sudoku puzzles.
+ *
+ * <p>Instance information includes the {@code Puzzle}'s {@link Type}, {@link Difficulty}, {@link
+ * Grid} and solution.
  *
  * @author Mike Lowe
  */
@@ -85,6 +83,8 @@ public final class Puzzle {
   }
 
   /**
+   * Returns this {@code Puzzle}'s {@link Type}.
+   *
    * @return this {@code Puzzle}'s {@link Type}
    */
   public Type getType() {
@@ -92,6 +92,8 @@ public final class Puzzle {
   }
 
   /**
+   * Returns this {@code Puzzle}'s {@link Difficulty}.
+   *
    * @return this {@code Puzzle}'s {@link Difficulty}
    */
   public Difficulty getDifficulty() {
@@ -99,6 +101,8 @@ public final class Puzzle {
   }
 
   /**
+   * Returns this {@code Puzzle}'s {@link Grid}.
+   *
    * @return this {@code Puzzle}'s {@link Grid}
    */
   public Grid getGrid() {
@@ -106,6 +110,8 @@ public final class Puzzle {
   }
 
   /**
+   * Returns the solution for the {@link Cell}.
+   *
    * @param cell the {@link Cell}
    * @return the solution for the {@link Cell}
    */
@@ -114,14 +120,17 @@ public final class Puzzle {
   }
 
   /**
-   * @return the next {@link Cell} hint or {@code null} if there are no hints
-   * left
+   * Returns the next {@link Cell} hint or {@code null} if there are no hints left.
+   *
+   * @return the next {@link Cell} hint or {@code null} if there are no hints left
    */
   public Cell getNextHint() {
     return nextHint.get();
   }
 
   /**
+   * Returns the next hint {@link ReadOnlyObjectProperty}.
+   *
    * @return the next hint {@link ReadOnlyObjectProperty}
    */
   public ReadOnlyObjectProperty<Cell> nextHintProperty() {

@@ -1,14 +1,14 @@
 package lowe.mike.strimko.model;
 
+import static java.lang.System.getProperty;
+
 import java.util.Collection;
 import java.util.LinkedHashSet;
 
-import static java.lang.System.getProperty;
-
 /**
  * {@code Constants} defines constant values that are useful for the data model.
- * <p>
- * Instances of {@code Constants} cannot be created.
+ *
+ * <p>Instances of {@code Constants} cannot be created.
  *
  * @author Mike Lowe
  */
@@ -29,6 +29,8 @@ public final class Constants {
   public static final String PUZZLES_RESOURCE_NAME = "/puzzles.txt";
 
   /**
+   * Returns a {@link Collection} of possible sizes a Strimko puzzle can be.
+   *
    * @return a {@link Collection} of possible sizes a Strimko puzzle can be
    */
   public static Collection<Integer> getStrimkoPuzzleSizes() {
@@ -40,6 +42,8 @@ public final class Constants {
   }
 
   /**
+   * Returns the {@code int} array representing Sudoku streams.
+   *
    * @return the {@code int} array representing Sudoku streams
    */
   public static int[][] getSudokuStreams() {

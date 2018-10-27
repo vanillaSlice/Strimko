@@ -1,5 +1,11 @@
 package lowe.mike.strimko.model;
 
+import static java.util.Objects.hash;
+import static javafx.collections.FXCollections.observableSet;
+import static lowe.mike.strimko.model.Constants.NO_NUMBER;
+
+import java.util.Collection;
+import java.util.HashSet;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.ReadOnlyBooleanProperty;
 import javafx.beans.property.ReadOnlyBooleanWrapper;
@@ -7,21 +13,13 @@ import javafx.beans.property.ReadOnlyIntegerProperty;
 import javafx.beans.property.ReadOnlyIntegerWrapper;
 import javafx.collections.ObservableSet;
 
-import java.util.Collection;
-import java.util.HashSet;
-
-import static java.util.Objects.hash;
-import static javafx.collections.FXCollections.observableSet;
-import static lowe.mike.strimko.model.Constants.NO_NUMBER;
-
 /**
- * {@code Cell} instances are to intended to provide information about cells
- * that make up a {@link Grid}.
- * <p>
- * Information about the {@code Cell} includes the row index, the column index,
- * the stream index, the number contained in the {@code Cell}, if the
- * {@code Cell} is set, an {@link ObservableSet} of possible numbers and if the
- * {@code Cell} is locked.
+ * {@code Cell} instances are to intended to provide information about cells that make up a {@link
+ * Grid}.
+ *
+ * <p>Information about the {@code Cell} includes the row index, the column index, the stream
+ * index, the number contained in the {@code Cell}, if the {@code Cell} is set, an {@link
+ * ObservableSet} of possible numbers and if the {@code Cell} is locked.
  *
  * @author Mike Lowe
  */
@@ -36,14 +34,13 @@ public final class Cell {
   private final boolean isLocked;
 
   /**
-   * Creates a new {@code Cell} instance given the row index, the column
-   * index, the stream index, the number and a {@link Collection} of possible
-   * numbers.
+   * Creates a new {@code Cell} instance given the row index, the column index, the stream index,
+   * the number and a {@link Collection} of possible numbers.
    *
-   * @param rowIndex        the row index
-   * @param columnIndex     the column index
-   * @param streamIndex     the stream index
-   * @param number          the number
+   * @param rowIndex the row index
+   * @param columnIndex the column index
+   * @param streamIndex the stream index
+   * @param number the number
    * @param possibleNumbers a {@link Collection} of possible numbers
    * @return a {@code Cell} instance
    */
@@ -62,7 +59,8 @@ public final class Cell {
     return new Cell(cell);
   }
 
-  private Cell(int rowIndex, int columnIndex, int streamIndex, int number, Collection<Integer> possibleNumbers) {
+  private Cell(int rowIndex, int columnIndex, int streamIndex, int number,
+      Collection<Integer> possibleNumbers) {
     this.rowIndex = rowIndex;
     this.columnIndex = columnIndex;
     this.streamIndex = streamIndex;
@@ -91,6 +89,8 @@ public final class Cell {
   }
 
   /**
+   * Returns this {@code Cell}'s row index.
+   *
    * @return this {@code Cell}'s row index
    */
   public int getRowIndex() {
@@ -98,6 +98,8 @@ public final class Cell {
   }
 
   /**
+   * Returns this {@code Cell}'s column index.
+   *
    * @return this {@code Cell}'s column index
    */
   public int getColumnIndex() {
@@ -105,6 +107,8 @@ public final class Cell {
   }
 
   /**
+   * Returns this {@code Cell}'s stream index.
+   *
    * @return this {@code Cell}'s stream index
    */
   public int getStreamIndex() {
@@ -112,6 +116,8 @@ public final class Cell {
   }
 
   /**
+   * Returns this {@code Cell}'s number, 0 if it is not set.
+   *
    * @return this {@code Cell}'s number, 0 if it is not set
    */
   public int getNumber() {
@@ -130,6 +136,8 @@ public final class Cell {
   }
 
   /**
+   * Returns this {@code Cell}'s number as an {@link ReadOnlyIntegerProperty}.
+   *
    * @return this {@code Cell}'s number as an {@link ReadOnlyIntegerProperty}
    */
   public ReadOnlyIntegerProperty numberProperty() {
@@ -144,22 +152,28 @@ public final class Cell {
   }
 
   /**
-   * @return {@code true} if this {@code Cell}'s number has been set;
-   * {@code false} otherwise
+   * Returns {@code true} if this {@code Cell}'s number has been set; {@code false} otherwise.
+   *
+   * @return {@code true} if this {@code Cell}'s number has been set; {@code false} otherwise
    */
   public boolean isSet() {
     return isSet.get();
   }
 
   /**
-   * @return this {@code Cell}'s {@link ReadOnlyBooleanProperty} indicating if
-   * the number has been set
+   * Returns this {@code Cell}'s {@link ReadOnlyBooleanProperty} indicating if the number has been
+   * set.
+   *
+   * @return this {@code Cell}'s {@link ReadOnlyBooleanProperty} indicating if the number has been
+   *     set
    */
   public ReadOnlyBooleanProperty setProperty() {
     return isSet.getReadOnlyProperty();
   }
 
   /**
+   * Returns this {@code Cell}'s {@link ObservableSet} of possible numbers.
+   *
    * @return this {@code Cell}'s {@link ObservableSet} of possible numbers
    */
   public ObservableSet<Integer> getPossibleNumbers() {
@@ -167,8 +181,9 @@ public final class Cell {
   }
 
   /**
-   * @return {@code true} if this {@code Cell} is locked; {@code false}
-   * otherwise
+   * Returns {@code true} if this {@code Cell} is locked; {@code false} otherwise.
+   *
+   * @return {@code true} if this {@code Cell} is locked; {@code false} otherwise
    */
   public boolean isLocked() {
     return isLocked;
@@ -176,7 +191,8 @@ public final class Cell {
 
   @Override
   public int hashCode() {
-    return hash(getRowIndex(), getColumnIndex(), getStreamIndex(), getNumber(), getPossibleNumbers(), isLocked());
+    return hash(getRowIndex(), getColumnIndex(), getStreamIndex(), getNumber(),
+        getPossibleNumbers(), isLocked());
   }
 
   @Override
@@ -215,7 +231,8 @@ public final class Cell {
 
   @Override
   public String toString() {
-    return "Cell [rowIndex=" + getRowIndex() + ", columnIndex=" + getColumnIndex() + ", streamIndex="
+    return "Cell [rowIndex=" + getRowIndex() + ", columnIndex=" + getColumnIndex()
+        + ", streamIndex="
         + getStreamIndex() + ", number=" + getNumber() + ", possibleNumbers=" + getPossibleNumbers()
         + ", isLocked=" + isLocked() + "]";
   }

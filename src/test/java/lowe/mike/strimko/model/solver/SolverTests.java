@@ -1,16 +1,18 @@
 package lowe.mike.strimko.model.solver;
 
-import lowe.mike.strimko.model.Difficulty;
-import lowe.mike.strimko.model.Grid;
-import org.junit.Test;
-
 import static lowe.mike.strimko.model.Difficulty.EASY;
 import static lowe.mike.strimko.model.Difficulty.HARD;
 import static lowe.mike.strimko.model.Difficulty.MEDIUM;
 import static lowe.mike.strimko.model.solver.Solver.solve;
 import static org.junit.Assert.assertEquals;
 
+import lowe.mike.strimko.model.Difficulty;
+import lowe.mike.strimko.model.Grid;
+import org.junit.Test;
+
 /**
+ * {@link Solver} tests.
+ *
  * @author Mike Lowe
  */
 public final class SolverTests extends SolvingMethodTests {
@@ -30,7 +32,8 @@ public final class SolverTests extends SolvingMethodTests {
   @Test
   public void test_solve_easySudoku() {
     // setup
-    int[][] numbers = {{8, 0, 0, 0, 0, 0, 4, 6, 0}, {0, 9, 7, 6, 0, 1, 2, 0, 8}, {0, 4, 0, 8, 0, 5, 0, 1, 0},
+    int[][] numbers = {{8, 0, 0, 0, 0, 0, 4, 6, 0}, {0, 9, 7, 6, 0, 1, 2, 0, 8},
+        {0, 4, 0, 8, 0, 5, 0, 1, 0},
         {0, 0, 0, 2, 7, 9, 0, 0, 4}, {0, 5, 0, 0, 0, 0, 0, 2, 0}, {1, 0, 0, 4, 5, 3, 0, 0, 0},
         {0, 7, 0, 3, 0, 6, 0, 9, 0}, {3, 0, 2, 9, 0, 7, 5, 4, 0}, {0, 6, 1, 0, 0, 0, 0, 0, 2}};
     Grid grid = newSudokuGrid(numbers);
@@ -56,7 +59,8 @@ public final class SolverTests extends SolvingMethodTests {
   @Test
   public void test_solve_mediumSudoku() {
     // setup
-    int[][] numbers = {{0, 7, 0, 0, 0, 6, 0, 0, 0}, {5, 0, 0, 0, 0, 8, 0, 2, 0}, {8, 1, 0, 0, 2, 4, 0, 0, 0},
+    int[][] numbers = {{0, 7, 0, 0, 0, 6, 0, 0, 0}, {5, 0, 0, 0, 0, 8, 0, 2, 0},
+        {8, 1, 0, 0, 2, 4, 0, 0, 0},
         {0, 6, 5, 0, 0, 0, 0, 0, 7}, {3, 0, 0, 7, 0, 1, 0, 0, 6}, {7, 0, 0, 0, 0, 0, 5, 1, 0},
         {0, 0, 0, 2, 4, 0, 0, 7, 1}, {0, 8, 0, 3, 0, 0, 0, 0, 5}, {0, 0, 0, 6, 0, 0, 0, 9, 0}};
     Grid grid = newSudokuGrid(numbers);
@@ -82,7 +86,8 @@ public final class SolverTests extends SolvingMethodTests {
   @Test
   public void test_solve_hardSudoku() {
     // setups
-    int[][] numbers = {{2, 0, 0, 0, 1, 0, 0, 0, 8}, {0, 4, 0, 8, 0, 9, 0, 2, 0}, {0, 0, 1, 0, 0, 0, 9, 0, 0},
+    int[][] numbers = {{2, 0, 0, 0, 1, 0, 0, 0, 8}, {0, 4, 0, 8, 0, 9, 0, 2, 0},
+        {0, 0, 1, 0, 0, 0, 9, 0, 0},
         {0, 3, 0, 2, 0, 1, 0, 7, 0}, {4, 0, 0, 0, 0, 0, 0, 0, 1}, {0, 9, 0, 4, 0, 8, 0, 3, 0},
         {0, 0, 4, 0, 0, 0, 3, 0, 0}, {0, 7, 0, 1, 0, 5, 0, 9, 0}, {6, 0, 0, 0, 9, 0, 0, 0, 2}};
     Grid grid = newSudokuGrid(numbers);

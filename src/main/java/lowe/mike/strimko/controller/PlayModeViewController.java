@@ -1,5 +1,12 @@
 package lowe.mike.strimko.controller;
 
+import static javafx.application.Platform.runLater;
+import static javafx.beans.binding.Bindings.when;
+import static lowe.mike.strimko.controller.Alerts.showMessageAndWait;
+import static lowe.mike.strimko.model.FileHandler.listPuzzleFileNames;
+import static lowe.mike.strimko.model.FileHandler.read;
+
+import java.util.Collection;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableBooleanValue;
@@ -23,14 +30,6 @@ import lowe.mike.strimko.model.Difficulty;
 import lowe.mike.strimko.model.FileHandlingException;
 import lowe.mike.strimko.model.Grid;
 import lowe.mike.strimko.model.Puzzle;
-
-import java.util.Collection;
-
-import static javafx.application.Platform.runLater;
-import static javafx.beans.binding.Bindings.when;
-import static lowe.mike.strimko.controller.Alerts.showMessageAndWait;
-import static lowe.mike.strimko.model.FileHandler.listPuzzleFileNames;
-import static lowe.mike.strimko.model.FileHandler.read;
 
 /**
  * Controller class for Play Mode View.
@@ -257,7 +256,8 @@ public final class PlayModeViewController extends ModeViewController {
     return height / NUMBER_OF_PENCIL_MARK_COLUMNS;
   }
 
-  private static void addPencilMarkLabel(GridPane pencilMarksPane, Cell cell, int number, double width,
+  private static void addPencilMarkLabel(GridPane pencilMarksPane, Cell cell, int number,
+      double width,
       double height) {
     Label pencilMarkLabel = new Label(Integer.toString(number));
 
@@ -272,16 +272,19 @@ public final class PlayModeViewController extends ModeViewController {
     pencilMarksPane.add(pencilMarkLabel, columnIndex, rowIndex);
   }
 
-  private static void setPencilMarkLabelVisibility(Label pencilMarkLabel, ObservableSet<Integer> possibleNumbers,
+  private static void setPencilMarkLabelVisibility(Label pencilMarkLabel,
+      ObservableSet<Integer> possibleNumbers,
       int number) {
     boolean containsNumber = possibleNumbers.contains(number);
     pencilMarkLabel.setVisible(containsNumber);
   }
 
-  private static void addPossibleNumbersChangeListener(Label pencilMarkLabel, ObservableSet<Integer> possibleNumbers,
+  private static void addPossibleNumbersChangeListener(Label pencilMarkLabel,
+      ObservableSet<Integer> possibleNumbers,
       int number) {
-    possibleNumbers.addListener((Change<? extends Integer> change) -> setPencilMarkLabelVisibility(pencilMarkLabel,
-        possibleNumbers, number));
+    possibleNumbers.addListener(
+        (Change<? extends Integer> change) -> setPencilMarkLabelVisibility(pencilMarkLabel,
+            possibleNumbers, number));
   }
 
   private static void addPencilMarkLabelStyle(Label pencilMarkLabel, double width, double height) {
@@ -305,7 +308,8 @@ public final class PlayModeViewController extends ModeViewController {
     return pencilMarksButton.selectedProperty();
   }
 
-  private static void addPencilMarksPaneStyle(GridPane pencilMarksPane, double width, double height) {
+  private static void addPencilMarksPaneStyle(GridPane pencilMarksPane, double width,
+      double height) {
     pencilMarksPane.setPrefSize(width, height);
     pencilMarksPane.getStyleClass().add(PENCIL_MARKS_PANE_STYLE_CLASS);
   }
@@ -345,7 +349,8 @@ public final class PlayModeViewController extends ModeViewController {
   private void updateControls() {
     deselectToggleInToggleGroup(controlsToggleGroup);
     deselectToggles(pencilMarksButton, hintButton);
-    enableNodes(numbersPane, clearNumberButton, solveCellButton, pencilMarksButton, hintButton, solutionButton);
+    enableNodes(numbersPane, clearNumberButton, solveCellButton, pencilMarksButton, hintButton,
+        solutionButton);
     removeChildrenFromToggleGroup(controlsToggleGroup, numbersPane);
     clearChildren(numbersPane);
     addNumberButtons();
@@ -363,7 +368,8 @@ public final class PlayModeViewController extends ModeViewController {
 
   private void addNumberButton(Grid grid, int size, int number) {
     ObservableIntegerValue occurrenceProperty = grid.numberOccurrenceProperty(number);
-    ToggleButton numberButton = newNumberedToggleButton(size, number, controlsToggleGroup, occurrenceProperty);
+    ToggleButton numberButton = newNumberedToggleButton(size, number, controlsToggleGroup,
+        occurrenceProperty);
     numbersPane.addColumn(number - 1, numberButton);
   }
 
@@ -429,7 +435,8 @@ public final class PlayModeViewController extends ModeViewController {
     gameState.getPuzzle().getGrid().reset();
     deselectToggleInToggleGroup(controlsToggleGroup);
     deselectToggles(pencilMarksButton, hintButton);
-    enableNodes(numbersPane, clearNumberButton, solveCellButton, pencilMarksButton, hintButton, solutionButton);
+    enableNodes(numbersPane, clearNumberButton, solveCellButton, pencilMarksButton, hintButton,
+        solutionButton);
     checkIsSolved();
   }
 

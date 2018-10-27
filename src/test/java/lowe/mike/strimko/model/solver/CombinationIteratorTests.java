@@ -1,17 +1,18 @@
 package lowe.mike.strimko.model.solver;
 
-import org.junit.Before;
-import org.junit.Test;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-
 import static java.util.Arrays.asList;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import org.junit.Before;
+import org.junit.Test;
+
 /**
+ * {@link CombinationIterator} tests.
+ *
  * @author Mike Lowe
  */
 public final class CombinationIteratorTests {

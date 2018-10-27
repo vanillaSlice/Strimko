@@ -1,18 +1,18 @@
 package lowe.mike.strimko.controller;
 
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
-import javafx.scene.control.ButtonType;
-
 import static javafx.scene.control.Alert.AlertType.ERROR;
 import static javafx.scene.control.Alert.AlertType.NONE;
 import static javafx.scene.control.Alert.AlertType.WARNING;
 import static javafx.scene.control.ButtonType.OK;
 
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.ButtonType;
+
 /**
  * {@code Alerts} provides methods for showing different types of alerts.
- * <p>
- * Instances of {@code Alerts} cannot be created.
+ *
+ * <p>Instances of {@code Alerts} cannot be created.
  *
  * @author Mike Lowe
  */
@@ -41,8 +41,7 @@ public final class Alerts {
   }
 
   /**
-   * Show an error alert box, which gets the message from {@code throwable},
-   * and wait.
+   * Show an error alert box, which gets the message from {@code throwable}, and wait.
    *
    * @param throwable the {@link Throwable} to get the message from
    */
@@ -60,8 +59,7 @@ public final class Alerts {
   }
 
   /**
-   * Show a warning alert box, which gets the message from {@code throwable},
-   * and wait.
+   * Show a warning alert box, which gets the message from {@code throwable}, and wait.
    *
    * @param throwable the {@link Throwable} to get the message from
    */
@@ -69,7 +67,8 @@ public final class Alerts {
     showWarningAndWait(throwable.getMessage());
   }
 
-  private static void showAlertAndWait(AlertType alertType, String message, ButtonType... buttonTypes) {
+  private static void showAlertAndWait(AlertType alertType, String message,
+      ButtonType... buttonTypes) {
     Alert alert = new Alert(alertType, message, buttonTypes);
     alert.showAndWait();
   }
