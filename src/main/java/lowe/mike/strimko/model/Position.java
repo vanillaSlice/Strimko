@@ -66,9 +66,4 @@ public final class Position {
     return columnIndex == other.columnIndex;
   }
 
-  @Override
-  public String toString() {
-    return "Position [rowIndex=" + rowIndex + ", columnIndex=" + columnIndex + "]";
-  }
-
 }

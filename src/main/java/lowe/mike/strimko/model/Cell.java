@@ -229,12 +229,4 @@ public final class Cell {
     return isLocked() == other.isLocked();
   }
 
-  @Override
-  public String toString() {
-    return "Cell [rowIndex=" + getRowIndex() + ", columnIndex=" + getColumnIndex()
-        + ", streamIndex="
-        + getStreamIndex() + ", number=" + getNumber() + ", possibleNumbers=" + getPossibleNumbers()
-        + ", isLocked=" + isLocked() + "]";
-  }
-
 }
