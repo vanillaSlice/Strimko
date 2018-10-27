@@ -51,7 +51,7 @@ public final class FileHandler {
     InputStream inputStream = FileHandler.class.getResourceAsStream(resourceName);
     Scanner scanner = new Scanner(inputStream);
     while (scanner.hasNextLine()) {
-      String pathToPuzzle = scanner.next();
+      String pathToPuzzle = scanner.nextLine();
       pathsToPuzzles.add(pathToPuzzle);
     }
     scanner.close();
@@ -355,7 +355,7 @@ public final class FileHandler {
       throws FileHandlingException {
     String puzzleString = getPuzzleString(puzzle);
     try {
-      Files.write(pathToFileToWriteTo, puzzleString.trim().getBytes());
+      Files.write(pathToFileToWriteTo, puzzleString.trim().concat("\n").getBytes());
     } catch (IOException | UnsupportedOperationException | SecurityException e) {
       throw new FileHandlingException("Could not write puzzle to '" + pathToFileToWriteTo + "'");
     }
