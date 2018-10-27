@@ -24,7 +24,7 @@ import lowe.mike.strimko.model.GameState;
 public final class StrimkoApplication extends Application {
 
   private static final String APP_NAME = "Strimko";
-  private static final String MAIN_VIEW_RESOURCE_PATH = "/view/MainView.fxml";
+  private static final String MAIN_VIEW_RESOURCE_PATH = "/view/main-view.fxml";
   private static final Image ICON = new Image("/view/icon.png");
 
   private GameState gameState;

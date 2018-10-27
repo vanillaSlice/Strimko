@@ -8,10 +8,10 @@
          fx:controller="lowe.mike.strimko.controller.MainViewController">
   <tabs>
     <Tab style="-fx-font-size: 12;" text="Play">
-      <fx:include fx:id="playModeView" source="PlayModeView.fxml"/>
+      <fx:include fx:id="playModeView" source="play-mode-view.fxml"/>
     </Tab>
     <Tab style="-fx-font-size: 12;" text="Solve">
-      <fx:include fx:id="solveModeView" source="SolveModeView.fxml"/>
+      <fx:include fx:id="solveModeView" source="solve-mode-view.fxml"/>
     </Tab>
   </tabs>
 </TabPane>

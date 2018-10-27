@@ -56,7 +56,7 @@ public final class SolveModeViewController extends ModeViewController {
   @FXML
   private Button saveButton;
 
-  private static final String STREAM_BUTTON_STYLE_CLASS = "streamButton";
+  private static final String STREAM_BUTTON_STYLE_CLASS = "stream-button";
 
   @Override
   protected void initialize() {

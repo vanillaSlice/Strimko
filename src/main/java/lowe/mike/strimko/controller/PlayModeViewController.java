@@ -51,8 +51,8 @@ public final class PlayModeViewController extends ModeViewController {
   @FXML
   private ToggleButton hintButton;
 
-  private static final String PENCIL_MARK_LABEL_STYLE_CLASS = "pencilMarkLabel";
-  private static final String PENCIL_MARKS_PANE_STYLE_CLASS = "pencilMarksPane";
+  private static final String PENCIL_MARK_LABEL_STYLE_CLASS = "pencil-mark-label";
+  private static final String PENCIL_MARKS_PANE_STYLE_CLASS = "pencil-marks-pane";
   private static final int NUMBER_OF_PENCIL_MARK_ROWS = 3;
   private static final int NUMBER_OF_PENCIL_MARK_COLUMNS = 3;
   private static final Effect GLOW = new Glow(0.7);
