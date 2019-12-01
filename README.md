@@ -1,7 +1,7 @@
 # Strimko
 
 [![Latest Release](https://img.shields.io/github/release/vanillaSlice/Strimko.svg)](https://github.com/vanillaSlice/Strimko/releases/latest)
-[![Build Status](https://img.shields.io/travis/vanillaSlice/Strimko/master.svg)](https://travis-ci.org/vanillaSlice/Strimko)
+[![Build Status](https://img.shields.io/travis/com/vanillaSlice/Strimko/master.svg)](https://travis-ci.com/vanillaSlice/Strimko)
 [![Coverage Status](https://img.shields.io/coveralls/github/vanillaSlice/Strimko/master.svg)](https://coveralls.io/github/vanillaSlice/Strimko?branch=master)
 [![License](https://img.shields.io/github/license/mashape/apistatus.svg)](LICENSE)
 
